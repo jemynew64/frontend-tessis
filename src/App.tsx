@@ -5,6 +5,7 @@ import Aprender from './pages/Aprender'; // Importamos la página Aprender
 import Sidebar from './components/Sidebar'; // Importamos el Sidebar
 import Tienda from './pages/Tienda';
 import Matematicas from './pages/Matematicas';
+import RetoLeccion from './pages/RetoLeccion'; // Importa la nueva página
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         {/* Ruta de Login */}
         <Route path="/" element={<Login />} /> 
+        <Route path="/reto-leccion" element={<RetoLeccion />} /> 
 
         {/* Ruta de Aprender */}
         <Route path="/aprender" element={

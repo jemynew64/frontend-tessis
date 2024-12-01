@@ -3,15 +3,15 @@ import { FaCheck, FaStar, FaLock } from 'react-icons/fa';
 
 interface LessonButtonProps {
   id: number;
-  title: string;
-  isLocked: boolean;
-  isCompleted: boolean;
+  titulo: string;
+  estaBloqueada: boolean;
+  estaCompletada: boolean;
   totalCount: number;
   index: number;
 }
 
-const LessonButton = ({ id, title, isLocked, isCompleted, totalCount, index }: LessonButtonProps) => {
-  const Icon = isCompleted ? FaCheck : isLocked ? FaLock : FaStar;
+const LessonButton = ({ id, titulo, estaBloqueada, estaCompletada, totalCount, index }: LessonButtonProps) => {
+  const Icon = estaCompletada ? FaCheck : estaBloqueada ? FaLock : FaStar;
 
   // Cálculo para la posición de cada ícono, para el "camino"
   const rightPosition = (index / totalCount) * 100;
@@ -26,13 +26,21 @@ const LessonButton = ({ id, title, isLocked, isCompleted, totalCount, index }: L
       >
         <button
           className={`w-16 h-16 rounded-full flex items-center justify-center 
-            ${isLocked ? 'bg-gray-400' : 'bg-green-500'} shadow-md`}
-          disabled={isLocked}
+            ${estaBloqueada ? 'bg-gray-400' : 'bg-green-500'} shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-110`}
+          disabled={estaBloqueada}
+          style={{
+            boxShadow: estaBloqueada
+              ? 'inset 0px 2px 5px rgba(0,0,0,0.2), 0px 4px 6px rgba(0,0,0,0.2)'
+              : '0px 10px 20px rgba(0, 0, 0, 0.15), 0px 5px 15px rgba(0, 0, 0, 0.15)',
+            background: estaBloqueada
+              ? 'linear-gradient(145deg, #f0f0f0, #e0e0e0)'  // Sombra más sutil para los bloqueados
+              : 'linear-gradient(145deg, #6ee7b7, #34d399)', // Gradiente verde para las lecciones
+          }}
         >
-          <Icon className={`text-2xl ${isLocked ? 'text-gray-700' : 'text-white'}`} />
+          <Icon className={`text-2xl ${estaBloqueada ? 'text-gray-700' : 'text-white'}`} />
         </button>
         {/* Mantener el color del texto del título con texto blanco cuando no está bloqueado */}
-        <p className={`mt-2 text-center text-lg ${isLocked ? 'text-gray-500' : 'text-gray-900'}`}>{title}</p>
+        <p className={`mt-2 text-center text-lg ${estaBloqueada ? 'text-gray-500' : 'text-gray-900'}`}>{titulo}</p>
       </div>
     </Link>
   );

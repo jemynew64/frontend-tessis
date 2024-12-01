@@ -7,7 +7,7 @@ const Aprender = () => {
     <div className="flex min-h-screen">
       {/* Mostrar barra de progreso en la parte superior solo en pantallas pequeñas */}
       <div className="block lg:hidden">
-        <UserProgress points={500} lives={4} />
+        <UserProgress puntos={500} vidas={4} />
       </div>
 
       {/* Contenido principal */}
@@ -40,7 +40,7 @@ const Aprender = () => {
 
       {/* Barra de progreso en el lado derecho solo visible en pantallas grandes */}
       <div className="hidden lg:block w-[250px] bg-white p-4">
-        <UserProgress points={500} lives={4} />
+        <UserProgress puntos={500} vidas={4} />
         <MissionsCard />
       </div>
     </div>
