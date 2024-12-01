@@ -26,7 +26,7 @@ const Aprender = () => {
             </Link>
 
             {/* Mundo de las Palabras */}
-            <Link to="/palabras" className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition w-full lg:w-auto">
+            <Link to="/comunicacion" className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition w-full lg:w-auto">
               <img 
                 src="/images/iconolibro.png" 
                 alt="Mundo de las Palabras" 

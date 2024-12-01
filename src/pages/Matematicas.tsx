@@ -3,9 +3,12 @@ import MissionsCard from '../components/MissionsCard';
 import UnitBanner from '../components/UnitBanner';
 import Header from '../components/Header';
 import LessonTrack from '../components/LessonTrack';
+import { useNavigate } from 'react-router-dom';
 
 const Matematicas = () => {
-  // Suponiendo que este JSON lo tienes en un archivo o lo obtienes de una API
+  const navigate = useNavigate();
+
+  // JSON del curso
   const cursoMatematicas = {
     "id": 1,
     "titulo": "Matemáticas",
@@ -57,7 +60,7 @@ const Matematicas = () => {
           {
             "id": 2,
             "titulo": "Resta de Números",
-            "estaBloqueada": true,
+            "estaBloqueada": false,
             "estaCompletada": false,
             "reto": [
               {
@@ -102,7 +105,7 @@ const Matematicas = () => {
           {
             "id": 1,
             "titulo": "Multiplicación Básica",
-            "estaBloqueada": true,
+            "estaBloqueada": false,
             "estaCompletada": false,
             "reto": [
               {
@@ -142,6 +145,11 @@ const Matematicas = () => {
     ]
   };
 
+  const handleStartLesson = (reto: unknown) => {
+    // Navega a la página del reto y pasa el JSON como estado
+    navigate('/reto-leccion', { state: { reto } });
+  };
+
   return (
     <div className="flex min-h-screen">
       <div className="block lg:hidden">
@@ -151,7 +159,6 @@ const Matematicas = () => {
       <div className="flex-1 p-8 lg:pl-[256px]">
         <Header titulo={cursoMatematicas.titulo} />
 
-        {/* Mostrar las unidades y lecciones directamente */}
         {cursoMatematicas.unidades.map((unidad) => (
           <div key={unidad.id} className="mb-8">
             <UnitBanner 
@@ -160,7 +167,7 @@ const Matematicas = () => {
             />
             <LessonTrack
               lecciones={unidad.lecciones}
-              onLeccionSeleccionada={() => {} /* No se necesita este método */}  
+              onLeccionSeleccionada={(leccion) => handleStartLesson(leccion.reto)}
             />
           </div>
         ))}

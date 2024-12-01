@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import BarraProgreso from '../components/BarraProgreso';
 import MostrarCorazones from '../components/MostrarCorazones';
@@ -17,53 +17,9 @@ interface Pregunta {
 }
 
 const RetoLeccion = () => {
-  const reto: Pregunta[] = [
-    {
-      id: 1,
-      pregunta: "¿Cuánto es 3 x 4?",
-      opciones: [
-        { id: 1, texto: "12", esCorrecta: true },
-        { id: 2, texto: "10", esCorrecta: false },
-        { id: 3, texto: "14", esCorrecta: false }
-      ]
-    },
-    {
-      id: 2,
-      pregunta: "¿Cuánto es 6 x 5?",
-      opciones: [
-        { id: 1, texto: "30", esCorrecta: true },
-        { id: 2, texto: "28", esCorrecta: false },
-        { id: 3, texto: "35", esCorrecta: false }
-      ]
-    },
-    {
-      id: 3,
-      pregunta: "¿Cuánto es 2 x 8?",
-      opciones: [
-        { id: 1, texto: "16", esCorrecta: true },
-        { id: 2, texto: "14", esCorrecta: false },
-        { id: 3, texto: "18", esCorrecta: false }
-      ]
-    },
-    {
-      id: 4,
-      pregunta: "¿Cuánto es 12 x 1?",
-      opciones: [
-        { id: 1, texto: "12", esCorrecta: true },
-        { id: 2, texto: "14", esCorrecta: false },
-        { id: 3, texto: "18", esCorrecta: false }
-      ]
-    },
-    {
-      id: 5,
-      pregunta: "¿Cuánto es 1 x 8?",
-      opciones: [
-        { id: 1, texto: "8", esCorrecta: true },
-        { id: 2, texto: "14", esCorrecta: false },
-        { id: 3, texto: "18", esCorrecta: false }
-      ]
-    },
-  ];
+  const navigate = useNavigate();
+  const location = useLocation();
+  const reto: Pregunta[] = location.state?.reto || []; // Recibe el JSON desde la navegación
 
   const [preguntaActual, setPreguntaActual] = useState<Pregunta | null>(reto[0]);
   const [preguntasRestantes, setPreguntasRestantes] = useState<Pregunta[]>(reto);
@@ -73,7 +29,6 @@ const RetoLeccion = () => {
   const [botonDeshabilitado, setBotonDeshabilitado] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [mensajeFelicidades, setMensajeFelicidades] = useState(false);
-  const navigate = useNavigate();
 
   const manejarRespuesta = (preguntaId: number, esCorrecta: boolean) => {
     if (botonDeshabilitado || isGameOver || mensajeFelicidades) return;
@@ -106,7 +61,6 @@ const RetoLeccion = () => {
                 style: { background: '#dc3545', color: '#fff' },
             });
         } else {
-            // Si las vidas llegan a 1, actualiza a Game Over
             setIsGameOver(true);
             toast.error('¡Game Over! Has perdido todas tus vidas.', {
                 duration: 3000,
@@ -136,9 +90,9 @@ const RetoLeccion = () => {
         setMensajeFelicidades(true);
         setTimeout(() => {
             navigate('/matematicas');
-        }, 2000); // Esperamos 2 segundos para mostrar el mensaje de "Game Over"
+        }, 2000);
     }
-}, [isGameOver, todasLasPreguntasRespondidas, mensajeFelicidades, navigate]);
+  }, [isGameOver, todasLasPreguntasRespondidas, mensajeFelicidades, navigate]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
@@ -164,26 +118,19 @@ const RetoLeccion = () => {
 
         {!isGameOver && !mensajeFelicidades && preguntaActual && (
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Responde la siguiente pregunta:</h2>
-            <div className="mb-6">
-              <h3 className="text-lg font-medium text-gray-800 mb-3">{preguntaActual.pregunta}</h3>
-              <div className="space-y-2">
-                {preguntaActual.opciones.map((opcion) => (
-                  <button
-                    key={opcion.id}
-                    className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                    onClick={() => manejarRespuesta(preguntaActual.id, opcion.esCorrecta)}
-                    disabled={botonDeshabilitado}
-                  >
-                    {opcion.texto}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <h3 className="text-lg font-medium mb-3">{preguntaActual.pregunta}</h3>
+            {preguntaActual.opciones.map((opcion) => (
+              <button
+                key={opcion.id}
+                onClick={() => manejarRespuesta(preguntaActual.id, opcion.esCorrecta)}
+                className="block w-full p-2 mb-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                {opcion.texto}
+              </button>
+            ))}
           </div>
         )}
       </div>
-
       <Toaster />
     </div>
   );
