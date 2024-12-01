@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import BarraProgreso from '../components/BarraProgreso';
 import MostrarCorazones from '../components/MostrarCorazones';
+import { Bolt } from 'lucide-react'; // Importar el icono de rayo de Lucide
+import { FaHeart } from 'react-icons/fa'; // Importamos el icono de corazón
 
 interface Opcion {
   id: number;
@@ -22,6 +24,9 @@ const RetoLeccion = () => {
   const reto: Pregunta[] = location.state?.reto || []; // Recibe el JSON desde la navegación
   const origen = location.state?.origin;  // Lee el origen de la página (matematicas o comunicacion)
 
+
+
+  
   const [preguntaActual, setPreguntaActual] = useState<Pregunta | null>(reto[0]);
   const [preguntasRestantes, setPreguntasRestantes] = useState<Pregunta[]>(reto);
   const [respuestasCorrectas, setRespuestasCorrectas] = useState<number>(0);
@@ -109,19 +114,46 @@ const RetoLeccion = () => {
         <BarraProgreso porcentaje={progreso} color="bg-green-500" />
         <MostrarCorazones vidas={vidas} />
 
-        {mensajeFelicidades && !isGameOver && (
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold text-green-600">¡Felicidades, has completado el reto!</h2>
-            <p className="text-lg text-gray-700">¡Lo has hecho muy bien! Redirigiendo...</p>
-          </div>
-        )}
 
-        {isGameOver && (
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold text-red-600">¡Game Over!</h2>
-            <p className="text-lg text-gray-700">¡Perdiste todas las vidas! Inténtalo nuevamente más tarde.</p>
-          </div>
-        )}
+        {mensajeFelicidades && !isGameOver && (
+  <div className="text-center mb-6 p-6 bg-green-50 border border-green-300 rounded-xl shadow-lg">
+    <h2 className="text-2xl font-semibold text-green-600 mb-4">
+      ¡Felicidades, has completado el reto!
+    </h2>
+
+    {/* Aquí mostramos los dos íconos: el de +50 puntos con el ícono de Bolt y el SVG */}
+    <div className="flex justify-center items-center space-x-2 mb-4">
+      {/* Puntos con el texto +50 */}
+      <span className="text-3xl font-bold text-yellow-500 animate-pulse">
+        +25
+      </span>
+      
+      {/* Icono de Bolt */}
+      <Bolt className="h-8 w-8 text-yellow-500 animate-bounce" />
+
+      <span className="text-3xl font-bold text-yellow-500 animate-pulse">
+        +50
+      </span>
+      {/* Icono de mis puntos desde el archivo SVG */}
+      <img src="/points.svg" alt="Points icon" className="h-8 w-8 animate-bounce" />
+    </div>
+    
+    <p className="text-lg text-gray-700">¡Lo has hecho muy bien! Redirigiendo...</p>
+  </div>
+)}
+
+{isGameOver && (
+  <div className="text-center p-6 bg-red-50 border border-red-300 rounded-xl shadow-lg">
+    <h2 className="text-2xl font-semibold text-red-600 mb-4 animate-pulse">¡Game Over!</h2>
+    
+    {/* Icono de corazón con animación */}
+    <div className="flex justify-center items-center mb-4">
+      <FaHeart className="text-red-600 h-10 w-10 animate-bounce" />
+    </div>
+
+    <p className="text-lg text-gray-700">¡Perdiste todas las vidas! Inténtalo nuevamente más tarde.</p>
+  </div>
+)}
 
         {!isGameOver && !mensajeFelicidades && preguntaActual && (
           <div>

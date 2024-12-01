@@ -1,5 +1,3 @@
-import { Bolt } from 'lucide-react'; // Importar el icono de rayo de Lucide
-
 const MissionsCard = () => {
   // Ejemplo de misiones
   const missions = [
@@ -14,7 +12,9 @@ const MissionsCard = () => {
       <div className="space-y-4">
         {missions.map((mission, index) => (
           <div key={index} className="flex items-center space-x-4">
-            <Bolt className="h-6 w-6 text-yellow-500" /> {/* Icono de rayo */}
+            {/* Reemplaza el icono de Bolt con el SVG */}
+            <img src="/points.svg" alt="Points icon" className="h-6 w-6 text-yellow-500" /> {/* Usando el SVG del public */}
+            
             <div className="flex-1">
               <span className="text-gray-700">{mission.description}</span>
               {/* Barra de progreso ficticia */}
