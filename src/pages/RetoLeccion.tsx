@@ -20,6 +20,7 @@ const RetoLeccion = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const reto: Pregunta[] = location.state?.reto || []; // Recibe el JSON desde la navegación
+  const origen = location.state?.origin;  // Lee el origen de la página (matematicas o comunicacion)
 
   const [preguntaActual, setPreguntaActual] = useState<Pregunta | null>(reto[0]);
   const [preguntasRestantes, setPreguntasRestantes] = useState<Pregunta[]>(reto);
@@ -35,64 +36,70 @@ const RetoLeccion = () => {
 
     setBotonDeshabilitado(true);
     setTimeout(() => {
-        setBotonDeshabilitado(false);
+      setBotonDeshabilitado(false);
     }, 1000);
 
     if (esCorrecta) {
-        setRespuestasCorrectas((prev) => prev + 1);
-        toast.success('¡Respuesta correcta!', {
-            duration: 3000,
-            position: 'top-center',
-            style: { background: '#28a745', color: '#fff' },
-        });
+      setRespuestasCorrectas((prev) => prev + 1);
+      toast.success('¡Respuesta correcta!', {
+        duration: 3000,
+        position: 'top-center',
+        style: { background: '#28a745', color: '#fff' },
+      });
 
-        const porcentajeProgreso = Math.min(
-            (respuestasCorrectas + 1) / reto.length * 100,
-            100
-        );
-        setProgreso(porcentajeProgreso);
-        setPreguntasRestantes((prev) => prev.filter((pregunta) => pregunta.id !== preguntaId));
+      const porcentajeProgreso = Math.min(
+        (respuestasCorrectas + 1) / reto.length * 100,
+        100
+      );
+      setProgreso(porcentajeProgreso);
+      setPreguntasRestantes((prev) => prev.filter((pregunta) => pregunta.id !== preguntaId));
     } else {
-        if (vidas > 1) {
-            setVidas((prev) => prev - 1);
-            toast.error('¡Respuesta incorrecta! Intenta nuevamente.', {
-                duration: 3000,
-                position: 'top-center',
-                style: { background: '#dc3545', color: '#fff' },
-            });
-        } else {
-            setIsGameOver(true);
-            toast.error('¡Game Over! Has perdido todas tus vidas.', {
-                duration: 3000,
-                position: 'top-center',
-                style: { background: '#dc3545', color: '#fff' },
-            });
-        }
+      if (vidas > 1) {
+        setVidas((prev) => prev - 1);
+        toast.error('¡Respuesta incorrecta! Intenta nuevamente.', {
+          duration: 3000,
+          position: 'top-center',
+          style: { background: '#dc3545', color: '#fff' },
+        });
+      } else {
+        setIsGameOver(true);
+        toast.error('¡Game Over! Has perdido todas tus vidas.', {
+          duration: 3000,
+          position: 'top-center',
+          style: { background: '#dc3545', color: '#fff' },
+        });
+      }
 
-        const preguntaIncorrecta = preguntasRestantes.find((pregunta) => pregunta.id === preguntaId);
-        if (preguntaIncorrecta) {
-            setPreguntasRestantes((prev) => [...prev.filter((pregunta) => pregunta.id !== preguntaId), preguntaIncorrecta]);
-        }
+      const preguntaIncorrecta = preguntasRestantes.find((pregunta) => pregunta.id === preguntaId);
+      if (preguntaIncorrecta) {
+        setPreguntasRestantes((prev) => [...prev.filter((pregunta) => pregunta.id !== preguntaId), preguntaIncorrecta]);
+      }
     }
 
     if (preguntasRestantes.length === 1) {
-        setPreguntaActual(preguntasRestantes[0]);
+      setPreguntaActual(preguntasRestantes[0]);
     } else {
-        const siguientePregunta = preguntasRestantes.find((pregunta) => pregunta.id !== preguntaId) || null;
-        setPreguntaActual(siguientePregunta);
+      const siguientePregunta = preguntasRestantes.find((pregunta) => pregunta.id !== preguntaId) || null;
+      setPreguntaActual(siguientePregunta);
     }
-};
+  };
 
   const todasLasPreguntasRespondidas = preguntasRestantes.length === 0 && respuestasCorrectas === reto.length;
 
   useEffect(() => {
     if ((isGameOver || todasLasPreguntasRespondidas) && !mensajeFelicidades) {
-        setMensajeFelicidades(true);
-        setTimeout(() => {
-            navigate('/matematicas');
-        }, 2000);
+      setMensajeFelicidades(true);
+      setTimeout(() => {
+        if (origen === 'matematicas') {
+          navigate('/matematicas');
+        } else if (origen === 'comunicacion') {
+          navigate('/comunicacion');
+        } else {
+          navigate('/');  // Si no se encuentra el origen, redirige al login o a la página principal
+        }
+      }, 2000);
     }
-  }, [isGameOver, todasLasPreguntasRespondidas, mensajeFelicidades, navigate]);
+  }, [isGameOver, todasLasPreguntasRespondidas, mensajeFelicidades, origen, navigate]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
@@ -110,10 +117,10 @@ const RetoLeccion = () => {
         )}
 
         {isGameOver && (
-            <div className="text-center">
-                <h2 className="text-2xl font-semibold text-red-600">¡Game Over!</h2>
-                <p className="text-lg text-gray-700">¡Perdiste todas las vidas! Inténtalo nuevamente más tarde.</p>
-            </div>
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold text-red-600">¡Game Over!</h2>
+            <p className="text-lg text-gray-700">¡Perdiste todas las vidas! Inténtalo nuevamente más tarde.</p>
+          </div>
         )}
 
         {!isGameOver && !mensajeFelicidades && preguntaActual && (

@@ -147,7 +147,7 @@ const Matematicas = () => {
 
   const handleStartLesson = (reto: unknown) => {
     // Navega a la página del reto y pasa el JSON como estado
-    navigate('/reto-leccion', { state: { reto } });
+    navigate('/reto-leccion', { state: { reto: reto , origin: 'matematicas'} });
   };
 
   return (
