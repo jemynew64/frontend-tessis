@@ -10,14 +10,12 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-4 shadow-lg max-w-lg w-full relative">
+    <div className="fixed inset-0  flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-lg p-7 shadow-lg max-w-lg w-full relative">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 p-1 text-gray-600 hover:text-gray-900 focus:outline-none"
         >
-          <span aria-hidden="true">&times;</span>
-          <span className="sr-only">Close</span>
         </button>
         {children}
       </div>

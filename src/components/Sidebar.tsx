@@ -36,10 +36,10 @@ const Sidebar = () => {
         </Link>
         <Link to="/leaderboard" className="flex flex-col justify-center items-center text-white w-full h-full py-3 hover:bg-indigo-800">
           <img src="/leaderboard.svg" alt="Leaderboard" className="h-8 w-8" />
-          <span className="text-xs mt-1">Ranking de Campeones</span>
+          <span className="text-xs mt-1 items-center">Campeones</span>
         </Link>
         <Link to="/quests" className="flex flex-col justify-center items-center text-white w-full h-full py-3 hover:bg-indigo-800">
-          <img src="/perfil.png" alt="Quests" className="h-8 w-8" />
+          <img src="/perfil.svg" alt="Quests" className="h-8 w-8" />
           <span className="text-xs mt-1">Perfil</span>
         </Link>
       </div>

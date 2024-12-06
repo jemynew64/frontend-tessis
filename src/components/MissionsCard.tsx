@@ -12,16 +12,14 @@ const MissionsCard = () => {
       <div className="space-y-4">
         {missions.map((mission, index) => (
           <div key={index} className="flex items-center space-x-4">
-            {/* Reemplaza el icono de Bolt con el SVG */}
             <img src="/points.svg" alt="Points icon" className="h-6 w-6 text-yellow-500" /> {/* Usando el SVG del public */}
             
             <div className="flex-1">
               <span className="text-gray-700">{mission.description}</span>
-              {/* Barra de progreso ficticia */}
               <div className="w-full bg-gray-200 h-2 mt-2 rounded">
                 <div
                   className="bg-blue-500 h-full rounded"
-                  style={{ width: `${mission.progress * 100}%` }} // Progreso dinámico
+                  style={{ width: `${mission.progress * 100}%` }} 
                 ></div>
               </div>
             </div>
