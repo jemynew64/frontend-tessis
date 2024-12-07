@@ -7,10 +7,12 @@ import Tienda from './pages/Tienda';
 import Matematicas from './pages/Matematicas';
 import RetoLeccion from './pages/RetoLeccion'; // Importa la nueva página
 import Comunicacion from './pages/Comunicacion'; // Importa la nueva página
+import { Toaster } from 'react-hot-toast';  // Importamos Toaster
 
 function App() {
   return (
     <Router>
+            <Toaster /> 
       <Routes>
         {/* Ruta de Login */}
         <Route path="/" element={<Login />} /> 
