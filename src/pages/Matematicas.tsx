@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { curso_detalle_matematicas } from "../services/listar_cursos_detalle"; // Importa la función para obtener los detalles
 import { UserProgress } from '../components/UserProgress';
 import MissionsCard from '../components/MissionsCard';
 import UnitBanner from '../components/UnitBanner';
@@ -8,152 +10,72 @@ import { useNavigate } from 'react-router-dom';
 const Matematicas = () => {
   const navigate = useNavigate();
 
-  // JSON del curso
-  const cursoMatematicas = {
-    "id": 1,
-    "titulo": "Matemáticas",
-    "descripcion": "Aprende sobre operaciones matemáticas, números y más.",
-    "unidades": [
-      {
-        "id": 1,
-        "titulo": "Suma y Resta",
-        "descripcion": "Aprende a sumar y restar números.",
-        "lecciones": [
-          {
-            "id": 1,
-            "titulo": "Suma de Números",
-            "estaBloqueada": false,
-            "estaCompletada": false,
-            "reto": [
-              {
-                "id": 1,
-                "pregunta": "¿Cuánto es 5 + 3?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "7", "esCorrecta": false },
-                  { "id": 2, "texto": "8", "esCorrecta": true },
-                  { "id": 3, "texto": "9", "esCorrecta": false }
-                ]
-              },
-              {
-                "id": 2,
-                "pregunta": "¿Cuánto es 8 + 6?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "13", "esCorrecta": false },
-                  { "id": 2, "texto": "14", "esCorrecta": true },
-                  { "id": 3, "texto": "15", "esCorrecta": false }
-                ]
-              },
-              {
-                "id": 3,
-                "pregunta": "¿Cuánto es 10 + 5?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "14", "esCorrecta": false },
-                  { "id": 2, "texto": "15", "esCorrecta": true },
-                  { "id": 3, "texto": "16", "esCorrecta": false }
-                ]
-              }
-            ]
-          },
-          {
-            "id": 2,
-            "titulo": "Resta de Números",
-            "estaBloqueada": false,
-            "estaCompletada": false,
-            "reto": [
-              {
-                "id": 1,
-                "pregunta": "¿Cuánto es 10 - 4?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "5", "esCorrecta": false },
-                  { "id": 2, "texto": "6", "esCorrecta": true },
-                  { "id": 3, "texto": "7", "esCorrecta": false }
-                ]
-              },
-              {
-                "id": 2,
-                "pregunta": "¿Cuánto es 15 - 7?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "8", "esCorrecta": true },
-                  { "id": 2, "texto": "7", "esCorrecta": false },
-                  { "id": 3, "texto": "6", "esCorrecta": false }
-                ]
-              },
-              {
-                "id": 3,
-                "pregunta": "¿Cuánto es 20 - 10?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "9", "esCorrecta": false },
-                  { "id": 2, "texto": "10", "esCorrecta": true },
-                  { "id": 3, "texto": "11", "esCorrecta": false }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": 2,
-        "titulo": "Multiplicación de Números",
-        "descripcion": "Aprende a multiplicar números.",
-        "lecciones": [
-          {
-            "id": 1,
-            "titulo": "Multiplicación Básica",
-            "estaBloqueada": false,
-            "estaCompletada": false,
-            "reto": [
-              {
-                "id": 1,
-                "pregunta": "¿Cuánto es 3 x 4?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "12", "esCorrecta": true },
-                  { "id": 2, "texto": "10", "esCorrecta": false },
-                  { "id": 3, "texto": "14", "esCorrecta": false }
-                ]
-              },
-              {
-                "id": 2,
-                "pregunta": "¿Cuánto es 6 x 5?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "30", "esCorrecta": true },
-                  { "id": 2, "texto": "28", "esCorrecta": false },
-                  { "id": 3, "texto": "35", "esCorrecta": false }
-                ]
-              },
-              {
-                "id": 3,
-                "pregunta": "¿Cuánto es 2 x 8?",
-                "tipo": "SELECCIONAR",
-                "opciones": [
-                  { "id": 1, "texto": "16", "esCorrecta": true },
-                  { "id": 2, "texto": "14", "esCorrecta": false },
-                  { "id": 3, "texto": "18", "esCorrecta": false }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  };
 
-  const handleStartLesson = (reto: unknown) => {
-    // Navega a la página del reto y pasa el JSON como estado
-    navigate('/reto-leccion', { state: { reto: reto , origin: 'matematicas'} });
+// types/curso.ts
+ interface Leccion {
+  id: number;
+  titulo: string;
+  estaBloqueada: boolean;
+  estaCompletada: boolean;
+}
+
+ interface Unidad {
+  id: number;
+  titulo: string;
+  descripcion: string;
+  lecciones: Leccion[];
+}
+
+ interface Curso {
+  id: number;
+  titulo: string;
+  unidades: Unidad[];
+}
+
+
+  // Estado para almacenar los detalles del curso de Matemáticas
+  const [cursoMatematicas, setCursoMatematicas] = useState<Curso | null>(null); // Especifica el tipo Curso | null
+
+  // Estado para manejar el estado de carga
+  const [loading, setLoading] = useState(true);
+
+  // Función para obtener los detalles del curso de Matemáticas cuando el componente se monta
+  useEffect(() => {
+    const fetchCursoMatematicas = async () => {
+      try {
+        const response = await curso_detalle_matematicas(); // Llamada a la API
+        setCursoMatematicas(response); // Almacena los datos del curso en el estado
+        console.log(response);
+        setLoading(false); // Marca como cargado
+      } catch (error) {
+        console.error("Error al obtener los detalles del curso de Matemáticas:", error);
+        setLoading(false); // Marca como cargado aunque haya error
+      }
+    };
+
+    fetchCursoMatematicas(); // Llama a la función para obtener los detalles del curso
+  }, []); // El array vacío significa que solo se ejecutará una vez al montar el componente
+
+  // Si está cargando, muestra un mensaje de carga
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  // Si no hay datos, muestra un mensaje de error
+  if (!cursoMatematicas) {
+    return <div>No se pudo cargar el curso de Matemáticas.</div>;
+  }
+
+  const handleStartLesson = (leccion: Leccion) => {
+    navigate('/reto-leccion', { state: { leccionId: leccion.id, origin: 'matematicas' } });
   };
+  
+  
 
   return (
     <div className="flex min-h-screen">
       <div className="block lg:hidden">
-        <UserProgress puntos={500} vidas={4} />
+        <UserProgress />
       </div>
 
       <div className="flex-1 p-8 lg:pl-[256px]">
@@ -167,14 +89,14 @@ const Matematicas = () => {
             />
             <LessonTrack
               lecciones={unidad.lecciones}
-              onLeccionSeleccionada={(leccion) => handleStartLesson(leccion.reto)}
+              onLeccionSeleccionada={handleStartLesson}  // Pasar la lección completa
             />
           </div>
         ))}
       </div>
 
       <div className="hidden lg:block w-[250px] bg-white p-4">
-        <UserProgress puntos={500} vidas={4} />
+        <UserProgress />
         <MissionsCard />
       </div>
     </div>

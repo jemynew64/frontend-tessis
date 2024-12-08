@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { curso_detalle_comunicacion } from "../services/listar_cursos_detalle"; // Importa la función para obtener los detalles
 import { UserProgress } from '../components/UserProgress';
 import MissionsCard from '../components/MissionsCard';
 import UnitBanner from '../components/UnitBanner';
@@ -5,125 +7,71 @@ import Header from '../components/Header';
 import LessonTrack from '../components/LessonTrack';
 import { useNavigate } from 'react-router-dom';
 
+// types/curso.ts
+interface Leccion {
+  id: number;
+  titulo: string;
+  estaBloqueada: boolean;
+  estaCompletada: boolean;
+}
+
+interface Unidad {
+  id: number;
+  titulo: string;
+  descripcion: string;
+  lecciones: Leccion[];
+}
+
+interface Curso {
+  id: number;
+  titulo: string;
+  unidades: Unidad[];
+}
+
 const Comunicacion = () => {
   const navigate = useNavigate();
 
-  // JSON del curso
-  const cursoComunicacion = {
-    id: 2,
-    titulo: "Comunicación",
-    descripcion: "Desarrolla tus habilidades de expresión verbal y no verbal.",
-    unidades: [
-      {
-        id: 1,
-        titulo: "Comunicación Verbal",
-        descripcion: "Aprende a expresarte de manera efectiva con palabras.",
-        lecciones: [
-          {
-            id: 1,
-            titulo: "Técnicas de Habla en Público",
-            estaBloqueada: false,
-            estaCompletada: false,
-            reto: [
-              {
-                id: 1,
-                pregunta: "¿Qué es lo más importante al hablar en público?",
-                tipo: "SELECCIONAR",
-                opciones: [
-                  { id: 1, texto: "Tener un tono claro y seguro", esCorrecta: true },
-                  { id: 2, texto: "Hablar rápidamente", esCorrecta: false },
-                  { id: 3, texto: "Evitar el contacto visual", esCorrecta: false },
-                ],
-              },
-              {
-                id: 2,
-                pregunta: "¿Cuál de estos es un buen consejo para hablar en público?",
-                tipo: "SELECCIONAR",
-                opciones: [
-                  { id: 1, texto: "Leer todo el discurso", esCorrecta: false },
-                  { id: 2, texto: "Mantener contacto visual", esCorrecta: true },
-                  { id: 3, texto: "Hablar sin pausas", esCorrecta: false },
-                ],
-              },
-            ],
-          },
-          {
-            id: 2,
-            titulo: "Escucha Activa",
-            estaBloqueada: false,
-            estaCompletada: false,
-            reto: [
-              {
-                id: 1,
-                pregunta: "¿Qué significa escucha activa?",
-                tipo: "SELECCIONAR",
-                opciones: [
-                  { id: 1, texto: "Solo oír al interlocutor", esCorrecta: false },
-                  { id: 2, texto: "Mostrar interés y dar retroalimentación", esCorrecta: true },
-                  { id: 3, texto: "Interrumpir con tus ideas", esCorrecta: false },
-                ],
-              },
-              {
-                id: 2,
-                pregunta: "¿Qué no es parte de la escucha activa?",
-                tipo: "SELECCIONAR",
-                opciones: [
-                  { id: 1, texto: "Evitar interrumpir", esCorrecta: false },
-                  { id: 2, texto: "Ignorar el lenguaje corporal", esCorrecta: true },
-                  { id: 3, texto: "Reformular lo que escuchas", esCorrecta: false },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: 2,
-        titulo: "Comunicación No Verbal",
-        descripcion: "Aprende a comunicarte más allá de las palabras.",
-        lecciones: [
-          {
-            id: 1,
-            titulo: "Lenguaje Corporal",
-            estaBloqueada: false,
-            estaCompletada: false,
-            reto: [
-              {
-                id: 1,
-                pregunta: "¿Qué es importante en el lenguaje corporal?",
-                tipo: "SELECCIONAR",
-                opciones: [
-                  { id: 1, texto: "Postura abierta y segura", esCorrecta: true },
-                  { id: 2, texto: "Cruzar los brazos", esCorrecta: false },
-                  { id: 3, texto: "Evitar gestos", esCorrecta: false },
-                ],
-              },
-              {
-                id: 2,
-                pregunta: "¿Qué comunica un apretón de manos firme?",
-                tipo: "SELECCIONAR",
-                opciones: [
-                  { id: 1, texto: "Confianza", esCorrecta: true },
-                  { id: 2, texto: "Indiferencia", esCorrecta: false },
-                  { id: 3, texto: "Inseguridad", esCorrecta: false },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
+  // Estado para almacenar los detalles del curso de Comunicación
+  const [cursoComunicacion, setCursoComunicacion] = useState<Curso | null>(null);
 
-  const handleStartLesson = (reto: unknown) => {
-    // Navega a la página del reto y pasa el JSON como estado
-    navigate('/reto-leccion', { state: { reto: reto, origin: 'comunicacion'} });
+  // Estado para manejar el estado de carga
+  const [loading, setLoading] = useState(true);
+
+  // Función para obtener los detalles del curso de Comunicación cuando el componente se monta
+  useEffect(() => {
+    const fetchCursoComunicacion = async () => {
+      try {
+        const response = await curso_detalle_comunicacion(); // Llamada a la API
+        setCursoComunicacion(response); // Almacena los datos del curso en el estado
+        console.log(response);
+        setLoading(false); // Marca como cargado
+      } catch (error) {
+        console.error("Error al obtener los detalles del curso de Comunicación:", error);
+        setLoading(false); // Marca como cargado aunque haya error
+      }
+    };
+
+    fetchCursoComunicacion(); // Llama a la función para obtener los detalles del curso
+  }, []); // El array vacío significa que solo se ejecutará una vez al montar el componente
+
+  // Si está cargando, muestra un mensaje de carga
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  // Si no hay datos, muestra un mensaje de error
+  if (!cursoComunicacion) {
+    return <div>No se pudo cargar el curso de Comunicación.</div>;
+  }
+
+  const handleStartLesson = (leccion: Leccion) => {
+    navigate('/reto-leccion', { state: { leccionId: leccion.id, origin: 'comunicacion' } });
   };
 
   return (
     <div className="flex min-h-screen">
       <div className="block lg:hidden">
-        <UserProgress puntos={500} vidas={4} />
+        <UserProgress />
       </div>
 
       <div className="flex-1 p-8 lg:pl-[256px]">
@@ -137,14 +85,14 @@ const Comunicacion = () => {
             />
             <LessonTrack
               lecciones={unidad.lecciones}
-              onLeccionSeleccionada={(leccion) => handleStartLesson(leccion.reto)}
+              onLeccionSeleccionada={handleStartLesson}  // Pasar la lección completa
             />
           </div>
         ))}
       </div>
 
       <div className="hidden lg:block w-[250px] bg-white p-4">
-        <UserProgress puntos={500} vidas={4} />
+        <UserProgress />
         <MissionsCard />
       </div>
     </div>

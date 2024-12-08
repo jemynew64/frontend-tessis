@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import BarraProgreso from '../components/BarraProgreso';
-import MostrarCorazones from '../components/MostrarCorazones';
+import BarraProgreso from '../components/BarraProgreso'; 
+import MostrarCorazones from '../components/MostrarCorazones'; 
+import { IoCloseCircleOutline } from 'react-icons/io5'; 
+import { ExitModal } from '../components/modals/exit-modal'; 
+import { useExitModal } from '../store/use-exit-modal'; 
+import { obtenerLeccionConRetos } from '../services/leccionesService'; 
+import { FaHeart } from 'react-icons/fa';
 import { Bolt } from 'lucide-react'; // Importar el icono de rayo de Lucide
-import { FaHeart } from 'react-icons/fa'; // Icono de corazón
-import { IoCloseCircleOutline } from 'react-icons/io5'; // Icono de salida (x)
-import { ExitModal } from '../components/modals/exit-modal'; // Modal de salida
-import { useExitModal } from '../store/use-exit-modal'; // Estado para abrir el modal
 
 interface Opcion {
   id: number;
@@ -15,86 +16,53 @@ interface Opcion {
   esCorrecta: boolean;
 }
 
-interface Pregunta {
+interface Reto {
   id: number;
+  tipo: string;
   pregunta: string;
   opciones: Opcion[];
+}
+
+interface LeccionConRetos {
+  id: number;
+  titulo: string;
+  retos: Reto[];
 }
 
 const RetoLeccion = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const reto: Pregunta[] = location.state?.reto || []; // Recibe el JSON desde la navegación
-  const origen = location.state?.origin; // Lee el origen de la página (matematicas o comunicacion)
+  const leccionId: number = location.state?.leccionId || 1; 
+  const origen = location.state?.origin; 
 
-  const [preguntaActual, setPreguntaActual] = useState<Pregunta | null>(reto[0]);
-  const [preguntasRestantes, setPreguntasRestantes] = useState<Pregunta[]>(reto);
-  const [respuestasCorrectas, setRespuestasCorrectas] = useState<number>(0);
+  const [leccion, setLeccion] = useState<LeccionConRetos | null>(null);
+  const [preguntasRestantes, setPreguntasRestantes] = useState<Reto[]>([]);
+  const [preguntaActualIndex, setPreguntaActualIndex] = useState<number>(0);
   const [progreso, setProgreso] = useState(0);
-  const [vidas, setVidas] = useState(5);
+  const [vidas, setVidas] = useState(5); 
   const [botonDeshabilitado, setBotonDeshabilitado] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [mensajeFelicidades, setMensajeFelicidades] = useState(false);
+  const [mensajeFelicidades, setMensajeFelicidades] = useState(false); 
+  const [isGameOver, setIsGameOver] = useState(false); 
 
-  const { open } = useExitModal(); // Hook para abrir el modal de salida
-
-  const manejarRespuesta = (preguntaId: number, esCorrecta: boolean) => {
-    if (botonDeshabilitado || isGameOver || mensajeFelicidades) return;
-
-    setBotonDeshabilitado(true);
-    setTimeout(() => {
-      setBotonDeshabilitado(false);
-    }, 1000);
-
-    if (esCorrecta) {
-      setRespuestasCorrectas((prev) => prev + 1);
-      toast.success('¡Respuesta correcta!', {
-        duration: 3000,
-        position: 'top-center',
-        style: { background: '#28a745', color: '#fff' },
-      });
-
-      const porcentajeProgreso = Math.min(
-        (respuestasCorrectas + 1) / reto.length * 100,
-        100
-      );
-      setProgreso(porcentajeProgreso);
-      setPreguntasRestantes((prev) => prev.filter((pregunta) => pregunta.id !== preguntaId));
-    } else {
-      if (vidas > 1) {
-        setVidas((prev) => prev - 1);
-        toast.error('¡Respuesta incorrecta! Intenta nuevamente.', {
-          duration: 3000,
-          position: 'top-center',
-          style: { background: '#dc3545', color: '#fff' },
-        });
-      } else {
-        setIsGameOver(true);
-        toast.error('¡Game Over! Has perdido todas tus vidas.', {
-          duration: 3000,
-          position: 'top-center',
-          style: { background: '#dc3545', color: '#fff' },
-        });
-      }
-
-      const preguntaIncorrecta = preguntasRestantes.find((pregunta) => pregunta.id === preguntaId);
-      if (preguntaIncorrecta) {
-        setPreguntasRestantes((prev) => [...prev.filter((pregunta) => pregunta.id !== preguntaId), preguntaIncorrecta]);
-      }
-    }
-
-    if (preguntasRestantes.length === 1) {
-      setPreguntaActual(preguntasRestantes[0]);
-    } else {
-      const siguientePregunta = preguntasRestantes.find((pregunta) => pregunta.id !== preguntaId) || null;
-      setPreguntaActual(siguientePregunta);
-    }
-  };
-
-  const todasLasPreguntasRespondidas = preguntasRestantes.length === 0 && respuestasCorrectas === reto.length;
+  const { open } = useExitModal(); 
 
   useEffect(() => {
-    if ((isGameOver || todasLasPreguntasRespondidas) && !mensajeFelicidades) {
+    const obtenerLeccion = async () => {
+      try {
+        const data = await obtenerLeccionConRetos(leccionId); 
+        setLeccion(data);
+        setPreguntasRestantes(data.retos); // Inicializa las preguntas restantes
+      } catch (error) {
+        console.error('Error al obtener la lección:', error);
+      }
+    };
+
+    obtenerLeccion();
+  }, [leccionId]);
+
+  useEffect(() => {
+    // Verificar si el progreso ha alcanzado el 100%
+    if (progreso >= 100) {
       setMensajeFelicidades(true);
       setTimeout(() => {
         if (origen === 'matematicas') {
@@ -102,21 +70,62 @@ const RetoLeccion = () => {
         } else if (origen === 'comunicacion') {
           navigate('/comunicacion');
         } else {
-          navigate('/'); // Si no se encuentra el origen, redirige al login o a la página principal
+          navigate('/');
         }
-      }, 2000);
+      }, 2000); // Redirigir después de 2 segundos
     }
-  }, [isGameOver, todasLasPreguntasRespondidas, mensajeFelicidades, origen, navigate]);
+  }, [progreso, navigate, origen]); // Este efecto se ejecuta cada vez que el progreso cambia
+  
+  const manejarRespuesta = (esCorrecta: boolean) => {
+    if (botonDeshabilitado) return;
+    setBotonDeshabilitado(true);
+    setTimeout(() => setBotonDeshabilitado(false), 1000);
+  
+    if (esCorrecta) {
+      toast.success('¡Respuesta correcta!');
+      setProgreso((prev) => Math.min(prev + (100 / leccion!.retos.length), 100));
+  
+      // Avanzar a la siguiente pregunta
+      if (preguntaActualIndex < preguntasRestantes.length - 1) {
+        setPreguntaActualIndex(preguntaActualIndex + 1);
+      }
+    } else {
+      toast.error('¡Respuesta incorrecta!');
+      if (vidas > 1) {
+        setVidas((prev) => prev - 1);
+        // Mantener la pregunta en la lista
+        const preguntaIncorrecta = preguntasRestantes[preguntaActualIndex];
+        setPreguntasRestantes((prev) => [...prev.filter((pregunta) => pregunta.id !== preguntaIncorrecta.id), preguntaIncorrecta]);
+      } else {
+        setIsGameOver(true);
+        toast.error('¡Game Over!');
+      }
+    }
+  };
+  
+
+  useEffect(() => {
+    if (isGameOver) {
+      setTimeout(() => {
+        if (origen === 'matematicas') {
+          navigate('/matematicas');
+        } else if (origen === 'comunicacion') {
+          navigate('/comunicacion');
+        } else {
+          navigate('/');
+        }
+      }, 2000); 
+    }
+  }, [isGameOver, navigate, origen]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
       <div className="w-full max-w-xl bg-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center justify-between mb-4">
           <BarraProgreso porcentaje={progreso} color="bg-green-500" />
-          {/* Icono de salida */}
           <button onClick={() => open()} className="text-red-500 hover:text-red-700">
-        <IoCloseCircleOutline size={32} />
-      </button>
+            <IoCloseCircleOutline size={32} />
+          </button>
         </div>
 
         <MostrarCorazones vidas={vidas} />
@@ -146,13 +155,14 @@ const RetoLeccion = () => {
           </div>
         )}
 
-        {!isGameOver && !mensajeFelicidades && preguntaActual && (
+        {leccion && preguntasRestantes.length > 0 && !mensajeFelicidades && !isGameOver && (
           <div>
-            <h3 className="text-lg font-medium mb-3">{preguntaActual.pregunta}</h3>
-            {preguntaActual.opciones.map((opcion) => (
+            <h3 className="text-lg font-medium mb-3">{preguntasRestantes[preguntaActualIndex]?.pregunta}</h3>
+            {preguntasRestantes[preguntaActualIndex]?.opciones.map((opcion) => (
               <button
                 key={opcion.id}
-                onClick={() => manejarRespuesta(preguntaActual.id, opcion.esCorrecta)}
+                onClick={() => manejarRespuesta(opcion.esCorrecta)}
+                disabled={botonDeshabilitado}
                 className="block w-full p-2 mb-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 {opcion.texto}
@@ -161,20 +171,21 @@ const RetoLeccion = () => {
           </div>
         )}
       </div>
+
       <Toaster />
-      {/* Modal de salida */}
+
       <ExitModal
         onConfirm={() => {
-          if (origen === "matematicas") {
-            navigate("/matematicas");
-          } else if (origen === "comunicacion") {
-            navigate("/comunicacion");
+          if (origen === 'matematicas') {
+            navigate('/matematicas');
+          } else if (origen === 'comunicacion') {
+            navigate('/comunicacion');
           } else {
-            navigate("/"); // Ruta predeterminada
+            navigate('/');
           }
         }}
-      />    
-      </div>
+      />
+    </div>
   );
 };
 

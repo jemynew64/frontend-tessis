@@ -7,7 +7,7 @@ const Tienda = () => {
     <div className="flex min-h-screen">
       {/* Contenido principal (en el centro) */}
       <div className="block lg:hidden">
-        <UserProgress puntos={500} vidas={4} />
+        <UserProgress  />
       </div>
 
       <div className="flex-1 p-8 lg:pl-[256px]">
@@ -43,7 +43,7 @@ const Tienda = () => {
 
       {/* Barra de progreso (a la derecha) */}
       <div className="hidden lg:block w-[250px] bg-white p-4">
-        <UserProgress puntos={500} vidas={4} />
+        <UserProgress  />
         <MissionsCard />
       </div>
     </div>
