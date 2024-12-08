@@ -22,7 +22,7 @@ const Sidebar = () => {
         <SidebarItem label="Aprender" to="/aprender" iconSrc="/learn.svg" />
         <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
         <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
-        <SidebarItem label="Perfil" to="/quests" iconSrc="/perfil.svg" />
+        <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
       </div>
 
       {/* Barra de navegación en pantallas pequeñas (visible solo en móviles) */}
@@ -39,7 +39,7 @@ const Sidebar = () => {
           <img src="/leaderboard.svg" alt="Leaderboard" className="h-8 w-8" />
           <span className="text-xs mt-1">Campeones</span>
         </Link>
-        <Link to="/quests" className={`flex flex-col justify-center items-center text-white w-full h-full py-3 ${location.pathname === '/quests' ? 'bg-indigo-700 text-green-500' : 'hover:bg-indigo-800'}`}>
+        <Link to="/perfil" className={`flex flex-col justify-center items-center text-white w-full h-full py-3 ${location.pathname === '/perfil' ? 'bg-indigo-700 text-green-500' : 'hover:bg-indigo-800'}`}>
           <img src="/perfil.svg" alt="Perfil" className="h-8 w-8" />
           <span className="text-xs mt-1">Perfil</span>
         </Link>
