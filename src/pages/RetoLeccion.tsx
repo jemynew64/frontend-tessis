@@ -119,51 +119,66 @@ const RetoLeccion = () => {
   }, [isGameOver, navigate, origen]);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
-      <div className="w-full max-w-xl bg-white p-8 rounded-xl shadow-lg">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-200 flex flex-col items-center justify-center py-10">
+      <div className="w-full max-w-xl bg-white p-8 rounded-xl shadow-2xl border-4 border-blue-300">
         <div className="flex items-center justify-between mb-4">
-          <BarraProgreso porcentaje={progreso} color="bg-green-500" />
-          <button onClick={() => open()} className="text-red-500 hover:text-red-700">
+          <BarraProgreso porcentaje={progreso} color="bg-gradient-to-r from-green-400 to-green-600" />
+          <button
+            onClick={() => open()}
+            className="text-red-500 hover:text-red-700 transition-transform transform hover:scale-110"
+          >
             <IoCloseCircleOutline size={32} />
           </button>
         </div>
-
-        <MostrarCorazones vidas={vidas} />
-
+  
+        <MostrarCorazones vidas={vidas} className="animate-pulse" />
+  
         {mensajeFelicidades && !isGameOver && (
-          <div className="text-center mb-6 p-6 bg-green-50 border border-green-300 rounded-xl shadow-lg">
+          <div className="text-center mb-6 p-6 bg-green-50 border border-green-300 rounded-xl shadow-lg animate-fade-in">
             <h2 className="text-2xl font-semibold text-green-600 mb-4">
-              ¡Felicidades, has completado el reto!
+              🎉 ¡Felicidades, has completado el reto! 🎉
             </h2>
             <div className="flex justify-center items-center space-x-2 mb-4">
               <span className="text-3xl font-bold text-yellow-500 animate-pulse">+25</span>
               <Bolt className="h-8 w-8 text-yellow-500 animate-bounce" />
               <span className="text-3xl font-bold text-yellow-500 animate-pulse">+50</span>
-              <img src="/points.svg" alt="Points icon" className="h-8 w-8 animate-bounce" />
+              <img
+                src="/points.svg"
+                alt="Points icon"
+                className="h-8 w-8 animate-spin-slow"
+              />
             </div>
-            <p className="text-lg text-gray-700">¡Lo has hecho muy bien! Redirigiendo...</p>
+            <p className="text-lg text-gray-700">
+              ¡Lo has hecho muy bien! Redirigiendo...
+            </p>
           </div>
         )}
-
+  
         {isGameOver && (
-          <div className="text-center p-6 bg-red-50 border border-red-300 rounded-xl shadow-lg">
-            <h2 className="text-2xl font-semibold text-red-600 mb-4 animate-pulse">¡Game Over!</h2>
+          <div className="text-center p-6 bg-red-50 border border-red-300 rounded-xl shadow-lg animate-fade-in">
+            <h2 className="text-2xl font-semibold text-red-600 mb-4 animate-pulse">
+              💔 ¡Game Over! 💔
+            </h2>
             <div className="flex justify-center items-center mb-4">
-              <FaHeart className="text-red-600 h-10 w-10 animate-bounce" />
+              <FaHeart className="text-red-600 h-10 w-10 animate-beat" />
             </div>
-            <p className="text-lg text-gray-700">¡Perdiste todas las vidas! Inténtalo nuevamente más tarde.</p>
+            <p className="text-lg text-gray-700">
+              ¡Perdiste todas las vidas! Inténtalo nuevamente más tarde.
+            </p>
           </div>
         )}
-
+  
         {leccion && preguntasRestantes.length > 0 && !mensajeFelicidades && !isGameOver && (
           <div>
-            <h3 className="text-lg font-medium mb-3">{preguntasRestantes[preguntaActualIndex]?.pregunta}</h3>
+            <h3 className="text-lg font-medium mb-3 text-gray-800 underline decoration-wavy decoration-blue-500">
+              {preguntasRestantes[preguntaActualIndex]?.pregunta}
+            </h3>
             {preguntasRestantes[preguntaActualIndex]?.opciones.map((opcion) => (
               <button
                 key={opcion.id}
                 onClick={() => manejarRespuesta(opcion.esCorrecta)}
                 disabled={botonDeshabilitado}
-                className="block w-full p-2 mb-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="block w-full p-3 mb-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 hover:scale-105 transition-transform transform"
               >
                 {opcion.texto}
               </button>
@@ -171,22 +186,23 @@ const RetoLeccion = () => {
           </div>
         )}
       </div>
-
+  
       <Toaster />
-
+  
       <ExitModal
         onConfirm={() => {
-          if (origen === 'matematicas') {
-            navigate('/matematicas');
-          } else if (origen === 'comunicacion') {
-            navigate('/comunicacion');
+          if (origen === "matematicas") {
+            navigate("/matematicas");
+          } else if (origen === "comunicacion") {
+            navigate("/comunicacion");
           } else {
-            navigate('/');
+            navigate("/");
           }
         }}
       />
     </div>
   );
+  
 };
 
 export default RetoLeccion;
