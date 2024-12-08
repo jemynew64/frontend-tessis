@@ -9,6 +9,7 @@ import { useExitModal } from '../store/use-exit-modal';
 import { obtenerLeccionConRetos } from '../services/leccionesService'; 
 import { FaHeart } from 'react-icons/fa';
 import { Bolt } from 'lucide-react'; // Importar el icono de rayo de Lucide
+import "../App.css"
 
 interface Opcion {
   id: number;
@@ -43,6 +44,7 @@ const RetoLeccion = () => {
   const [botonDeshabilitado, setBotonDeshabilitado] = useState(false);
   const [mensajeFelicidades, setMensajeFelicidades] = useState(false); 
   const [isGameOver, setIsGameOver] = useState(false); 
+  const [respuestaCorrecta, setRespuestaCorrecta] = useState<boolean | null>(null); // Guardar si la respuesta es correcta o incorrecta
 
   const { open } = useExitModal(); 
 
@@ -79,6 +81,7 @@ const RetoLeccion = () => {
   const manejarRespuesta = (esCorrecta: boolean) => {
     if (botonDeshabilitado) return;
     setBotonDeshabilitado(true);
+    setRespuestaCorrecta(esCorrecta); // Almacenar si la respuesta es correcta o incorrecta
     setTimeout(() => setBotonDeshabilitado(false), 1000);
   
     if (esCorrecta) {
@@ -101,7 +104,13 @@ const RetoLeccion = () => {
         toast.error('¡Game Over!');
       }
     }
+  
+    // Resetear el color de fondo después de un tiempo corto
+    setTimeout(() => {
+      setRespuestaCorrecta(null); // Esto restablecerá el color a su estado original
+    }, 500); // Cambiar el color durante 1 segundo, luego lo restaura
   };
+  
   
 
   useEffect(() => {
@@ -145,7 +154,7 @@ const RetoLeccion = () => {
               <img
                 src="/points.svg"
                 alt="Points icon"
-                className="h-8 w-8 animate-spin-slow"
+                className="h-8 w-8 animate-bounce"
               />
             </div>
             <p className="text-lg text-gray-700">
@@ -178,7 +187,8 @@ const RetoLeccion = () => {
                 key={opcion.id}
                 onClick={() => manejarRespuesta(opcion.esCorrecta)}
                 disabled={botonDeshabilitado}
-                className="block w-full p-3 mb-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 hover:scale-105 transition-transform transform"
+                className={`block w-full p-3 mb-3 text-white rounded-lg hover:scale-105 transition-transform transform 
+                  ${respuestaCorrecta === true ? 'bg-green-500' : respuestaCorrecta === false ? 'bg-red-500 animate-shake' : 'bg-blue-500'}`}
               >
                 {opcion.texto}
               </button>
@@ -202,7 +212,6 @@ const RetoLeccion = () => {
       />
     </div>
   );
-  
 };
 
 export default RetoLeccion;

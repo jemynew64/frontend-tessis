@@ -7,6 +7,10 @@ module.exports = {
         "custom-purple": "#533CA6", // Agrega tu color personalizado aquí
         "custom-negro": "#3C3C3C", // Agrega tu color personalizado aquí
         "custom-botones-input": "#F7F7F7", // Agrega tu color personalizado aquí
+        // Colores personalizados para medallas
+        "custom-gold": "#FFD700", // Dorado
+        "custom-silver": "#C0C0C0", // Plateado
+        "custom-bronze": "#CD7F32", // Bronce
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"], // Aquí configuramos la fuente Roboto

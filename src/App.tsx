@@ -8,7 +8,7 @@ import Matematicas from './pages/Matematicas';
 import RetoLeccion from './pages/RetoLeccion'; // Importa la nueva página
 import Comunicacion from './pages/Comunicacion'; // Importa la nueva página
 import { Toaster } from 'react-hot-toast';  // Importamos Toaster
-
+import {Rankings} from "./pages/Rankings"
 function App() {
   return (
     <Router>
@@ -56,6 +56,16 @@ function App() {
             {/* Contenido principal de Aprender */}
             <div className="flex-1 p-8 lg:pl-[256px]"> {/* Agregar padding izquierdo en pantallas grandes */}
               <Tienda />
+            </div>
+          </div>
+        } />
+        <Route path="/ranking" element={
+          <div className="flex min-h-screen">
+            {/* Sidebar solo se muestra en Aprender */}
+            <Sidebar />
+            {/* Contenido principal de Aprender */}
+            <div className="flex-1 p-8 lg:pl-[256px]"> {/* Agregar padding izquierdo en pantallas grandes */}
+              <Rankings />
             </div>
           </div>
         } />

@@ -15,3 +15,30 @@
     height: 100%;
   }
   
+/* Animación de "temblor" al equivocarse */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+button {
+  transition: background-color 0.5s ease-in-out; /* Hacer que el cambio de color sea suave */
+}
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-pulse {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* Para hacer que el botón o área de respuesta se ponga verde o rojo */
+.bg-green-500 {
+  background-color: #48bb78;
+}
+
+.bg-red-500 {
+  background-color: #f56565;
+}
