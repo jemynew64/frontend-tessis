@@ -6,27 +6,9 @@ import UnitBanner from '../components/UnitBanner';
 import Header from '../components/Header';
 import LessonTrack from '../components/LessonTrack';
 import { useNavigate } from 'react-router-dom';
+//import de types
+import { Curso,Leccion } from '../interfaces/index';
 
-// types/curso.ts
-interface Leccion {
-  id: number;
-  titulo: string;
-  estaBloqueada: boolean;
-  estaCompletada: boolean;
-}
-
-interface Unidad {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  lecciones: Leccion[];
-}
-
-interface Curso {
-  id: number;
-  titulo: string;
-  unidades: Unidad[];
-}
 
 const Comunicacion = () => {
   const navigate = useNavigate();

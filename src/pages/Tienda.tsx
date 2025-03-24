@@ -1,6 +1,6 @@
-import { UserProgress } from '../components/UserProgress'; // Componente de progreso del usuario
-import MissionsCard from '../components/MissionsCard'; // Importar el nuevo componente de misiones
-import { FaHeart } from 'react-icons/fa'; // Icono del corazón, de react-icons
+import { UserProgress } from '../components/UserProgress'; 
+import MissionsCard from '../components/MissionsCard'; 
+import { FaHeart } from 'react-icons/fa'; 
 
 const Tienda = () => {
   return (

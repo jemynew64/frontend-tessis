@@ -1,38 +1,15 @@
 import { useEffect, useState } from "react";
-import { curso_detalle_matematicas } from "../services/listar_cursos_detalle"; // Importa la función para obtener los detalles
+import { curso_detalle_matematicas } from "../services/listar_cursos_detalle"; 
 import { UserProgress } from '../components/UserProgress';
 import MissionsCard from '../components/MissionsCard';
 import UnitBanner from '../components/UnitBanner';
 import Header from '../components/Header';
 import LessonTrack from '../components/LessonTrack';
 import { useNavigate } from 'react-router-dom';
-
+//import de types
+import { Curso,Leccion } from '../interfaces/index';
 const Matematicas = () => {
   const navigate = useNavigate();
-
-
-// types/curso.ts
- interface Leccion {
-  id: number;
-  titulo: string;
-  estaBloqueada: boolean;
-  estaCompletada: boolean;
-}
-
- interface Unidad {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  lecciones: Leccion[];
-}
-
- interface Curso {
-  id: number;
-  titulo: string;
-  unidades: Unidad[];
-}
-
-
   // Estado para almacenar los detalles del curso de Matemáticas
   const [cursoMatematicas, setCursoMatematicas] = useState<Curso | null>(null); // Especifica el tipo Curso | null
 

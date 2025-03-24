@@ -1,29 +1,10 @@
 import axios from "axios";
 
+import {Curso } from "../interfaces/index"
 // URLs de los cursos
 const URL_CURSO_MATEMATICAS = "http://127.0.0.1:8000/api/cursos/1/detalle/";
 const URL_CURSO_COMUNICACION = "http://127.0.0.1:8000/api/cursos/2/detalle/";
 
-// Interfaces para la estructura de los datos del curso
-interface Leccion {
-  id: number;
-  titulo: string;
-  estaBloqueada: boolean;
-  estaCompletada: boolean;
-}
-
-interface Unidad {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  lecciones: Leccion[];
-}
-
-interface Curso {
-  id: number;
-  titulo: string;
-  unidades: Unidad[];
-}
 
 // Función para obtener los detalles del curso de Matemáticas
 export const curso_detalle_matematicas = async (): Promise<Curso | null> => {

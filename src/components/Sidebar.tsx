@@ -8,7 +8,7 @@ const Sidebar = () => {
     <div className="flex flex-col h-full lg:w-[256px] lg:fixed left-0 top-0 px-4 border-r-2 flex-shrink-0 bg-gradient-to-b from-[#4727BD] to-[#211257] overflow-hidden z-20"> 
       {/* Imagen del logo visible solo en pantallas grandes */}
       <Link to="/aprender">
-        <div className="pt-8 pl-4 pb-7 flex justify-center items-center gap-x-3 lg:block hidden"> {/* Solo visible en pantallas grandes */}
+        <div className="pt-8 pl-4 pb-7 flex justify-center items-center gap-x-3 lg:block hidden">
           <img 
             src="/images/iconodemarca-sinfondo.png" 
             alt="Logo" 
