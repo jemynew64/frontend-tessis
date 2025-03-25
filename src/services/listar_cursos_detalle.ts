@@ -1,11 +1,11 @@
 import axios from "axios";
 
 import {Curso } from "../interfaces/index"
+const BaseURl=import.meta.env.VITE_BASE_URL
+
 // URLs de los cursos
-const URL_CURSO_MATEMATICAS = "http://127.0.0.1:8000/api/cursos/1/detalle/";
-const URL_CURSO_COMUNICACION = "http://127.0.0.1:8000/api/cursos/2/detalle/";
-
-
+const URL_CURSO_MATEMATICAS = `${BaseURl}api/cursos/1/detalle/`;
+const URL_CURSO_COMUNICACION = `${BaseURl}api/cursos/2/detalle/`;
 // Función para obtener los detalles del curso de Matemáticas
 export const curso_detalle_matematicas = async (): Promise<Curso | null> => {
   try {

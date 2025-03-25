@@ -4,17 +4,19 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';  // Añadido useState para manejar el estado local
 
 export const UserProgress = () => {
+
   const user = useAuthStore((state) => state.user);  // Obtén el usuario desde zustand
   const [corazones, setCorazones] = useState<number | null>(null);  // Para manejar el corazón localmente
   const [puntos, setPuntos] = useState<number | null>(null);  // Para manejar los puntos localmente
   const [experiencia, setExperiencia] = useState<number | null>(null);  // Para manejar la experiencia localmente
+  const BaseURl=import.meta.env.VITE_BASE_URL
 
   useEffect(() => {
     const obtenerDatosUsuario = async () => {
       if (user?.id) {
         try {
           // Realiza el GET con el ID del usuario
-          const response = await axios.get(`http://127.0.0.1:8000/api/usuario/${user.id}/datos/`);
+          const response = await axios.get(`${BaseURl}api/usuario/${user.id}/datos/`);
           // Desestructura los datos obtenidos de la respuesta
           const { corazones, puntos, experiencia } = response.data;
           

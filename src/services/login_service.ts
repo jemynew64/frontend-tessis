@@ -1,4 +1,5 @@
 import axios from 'axios';
+const BaseURl=import.meta.env.VITE_BASE_URL
 
 interface UserLogin {
   nombre: string;  // Cambiado de 'username' a 'nombre'
@@ -6,7 +7,7 @@ interface UserLogin {
 }
 
 const axiosAuth = axios.create({
-  baseURL: 'http://127.0.0.1:8000/',  // Cambia la URL según tu backend
+  baseURL: BaseURl,  // Cambia la URL según tu backend
 });
 
 export const loginPost = async (userData: UserLogin) => {
