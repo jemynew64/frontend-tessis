@@ -1,0 +1,62 @@
+# Ignorar node_modules (se instalarán dentro del contenedor)
+node_modules/
+.pnp.*
+
+# Archivos de compilación y salida
+dist/
+dist-ssr/
+.build/
+.next/
+.nuxt/
+.out/
+.svelte-kit/
+.docusaurus/
+
+# Caché y logs innecesarios
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.parcel-cache/
+.webpack/
+.cache/
+.parcel-cache/
+.fusebox/
+serverless/
+.dynamodb/
+.tern-port
+.vscode-test
+
+# Archivos de configuración innecesarios
+*.tsbuildinfo
+*.eslintcache
+*.stylelintcache
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Variables de entorno
+#.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Archivos del sistema y de editores
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
