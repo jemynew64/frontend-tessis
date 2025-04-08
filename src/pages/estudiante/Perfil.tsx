@@ -1,4 +1,4 @@
-import { useAuthStore } from '../store/auth';  // Asegúrate de importar el store
+import { useAuthStore } from '../../store/auth';  // Asegúrate de importar el store
 
 export const Perfil = () => {
   // Obtener el usuario desde la tienda zustand
@@ -19,7 +19,7 @@ export const Perfil = () => {
             alt="Perfil"
             className="w-36 h-36 rounded-full mx-auto mb-4 object-cover shadow-lg border-4 border-white"
           />
-          <h1 className="text-3xl font-semibold text-gray-800">{user.nombre}</h1>
+          <h1 className="text-3xl font-semibold text-gray-800">{user.name}</h1>
         </div>
 
         {/* Información del perfil */}
@@ -30,15 +30,15 @@ export const Perfil = () => {
           </div>
           <div className="flex justify-between items-center border-b pb-4">
             <span className="text-xl font-medium text-gray-700">Corazones:</span>
-            <span className="text-lg text-gray-500">{user.corazones}</span>
+            <span className="text-lg text-gray-500">{user.hearts}</span>
           </div>
           <div className="flex justify-between items-center border-b pb-4">
             <span className="text-xl font-medium text-gray-700">Puntos:</span>
-            <span className="text-lg text-gray-500">{user.puntos}</span>
+            <span className="text-lg text-gray-500">{user.points}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-xl font-medium text-gray-700">Experiencia:</span>
-            <span className="text-lg text-gray-500">{user.experiencia} XP</span>
+            <span className="text-lg text-gray-500">{user.experience} XP</span>
           </div>
         </div>
       </div>

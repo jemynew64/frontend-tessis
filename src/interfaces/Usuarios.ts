@@ -1,12 +1,11 @@
-
-export interface User  {
-    id: number;
-    nombre: string;
-    email: string;
-    imagen_perfil: string;
-    corazones: number;
-    puntos: number;
-    experiencia: number;
-    nivel: number;        
-    tipo_usuario: "admin" | "estudiante";  
-  };
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  profile_image: string;
+  hearts: number;
+  points: number;
+  experience: number;
+  level: number;
+  user_type: "admin" | "student";
+}

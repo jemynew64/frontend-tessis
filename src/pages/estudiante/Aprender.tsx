@@ -1,7 +1,7 @@
-import { UserProgress } from '../components/UserProgress'; 
-import MissionsCard from '../components/MissionsCard';
+import { UserProgress } from '../../components/UserProgress'; 
+import MissionsCard from '../../components/MissionsCard';
 import { Link } from 'react-router-dom'; // Importar Link desde react-router-dom
-import { useAuthStore } from '../store/auth';  // Importar el hook para obtener el estado del usuario
+import { useAuthStore } from '../../store/auth';  // Importar el hook para obtener el estado del usuario
 
 const Aprender = () => {
 
@@ -20,7 +20,7 @@ const Aprender = () => {
           <h1 className="text-center text-2xl font-bold">¿Listo para una nueva aventura?</h1>
           {/* Saludo con el nombre del usuario */}
           {user && (
-            <h2 className="text-center text-xl font-semibold mt-4">Hola, mucho gusto {user.nombre}!</h2>
+            <h2 className="text-center text-xl font-semibold mt-4">Hola, mucho gusto {user.name}!</h2>
           )}
 
           <div className="flex flex-col lg:flex-row gap-4 mt-4 w-full justify-center">

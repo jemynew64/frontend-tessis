@@ -1,6 +1,6 @@
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom"; // Importamos Outlet
-
+//la mayoria estaran dentro de este layout
 const SidebarLayout = () => {
   return (
     <div className="flex min-h-screen">
