@@ -11,7 +11,7 @@ import { AdminPanel } from "./pages/admin/AdminPanel";
 import SidebarLayout from "./layouts/MainLayout";
 import PrivateRoute from "./layouts/PrivateRoute";
 import RoleRoute from "./layouts/RoleRoute";
-
+import { PageUser } from "./pages/admin/user/PageUser";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -34,6 +34,7 @@ const AppRoutes = () => {
                      {/* Rutas Exclusivas de Administrador */}
           <Route element={<RoleRoute allowedRoles={["admin"]} />}>
            <Route path="/admin" element={<AdminPanel />} />
+           <Route path="/probando1" element={<PageUser />} />
           </Route>
         </Route>
       </Route>
