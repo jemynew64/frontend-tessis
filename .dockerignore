@@ -44,13 +44,6 @@ serverless/
 .yarn/build-state.yml
 .yarn/install-state.gz
 
-# Variables de entorno
-#.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
 # Archivos del sistema y de editores
 .DS_Store
 .idea/

@@ -16,8 +16,8 @@ const axiosAuth = axios.create({
 export const loginPost = async (userData: UserLogin) => {
   console.log('Enviando datos:', userData);  // Verifica qué datos estás enviando
   const response = await axiosAuth.post('auth/login/', {
-    email: userData.email,  // Cambié 'username' a 'nombre'
-    password: userData.password,  // Cambié 'password' a 'contraseña'
+    email: userData.email,  
+    password: userData.password, 
   });
   return response.data;
 };
