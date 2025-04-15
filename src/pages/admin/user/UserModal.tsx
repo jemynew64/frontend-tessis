@@ -2,10 +2,10 @@
 import { StudentForm, studentSchema } from "./EstudianteSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCrearUsuario } from "./usuario.mutations";
-//import {useUserIdQueryOptions } from "./UserQueryOption"
-//import { useSuspenseQuery } from "@tanstack/react-query";
-
+import { useCrearUsuario,useActualizarUsuario } from "./usuario.mutations";
+import {useUserIdQueryOptions} from "./UserQueryOption"
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 interface Props {
   isOpen: boolean;
@@ -13,34 +13,74 @@ interface Props {
   idusuario? : number;
 }
 
-export const UserModal = ({ isOpen, onClose }: Props) => {
-  //const userQuery = useSuspenseQuery(useUserIdQueryOptions(idusuario));
-  //console.log(userQuery)
-  //llamando a mi mutacion para hacer el create
-  const { mutateAsync, isPending } = useCrearUsuario();
+export const UserModal = ({ isOpen, onClose, idusuario }: Props) => {
+  // esto como ponerle una condicion al usequery si no existe el idusuario que nose ejecute
+  const enabled = !!idusuario;
+  const { data } = useQuery({...useUserIdQueryOptions(idusuario!),enabled,});
 
-  //esto de aca solo es para el formulario
+  // Decide qué mutación usar dependiendo de si hay idusuario
+  const { mutateAsync:crearusuario, isPending:usuariopendiente } = useCrearUsuario();
+  const { mutateAsync:actualizarusuario, isPending:actualizacionpendiente } = useActualizarUsuario();
+
+  //apartir de aca es el formulario
   const {register,handleSubmit,reset,formState: { errors },} = useForm<StudentForm>({
     resolver: zodResolver(studentSchema),
     defaultValues: {
-      user_type: "student", // 👈 valor por defecto aquí
+      user_type: "student",
     },
   });
   
-
-  const onSubmit = async (data: StudentForm) => {
+  // Prellenar el formulario cuando esté editando
+  useEffect(() => {
+    if (data) {
+      reset({
+        name: data.name || "",
+        email: data.email || "",
+        password: "", // normalmente no se muestra por seguridad
+        hearts: data.hearts || 5,
+        points: data.points || 0,
+        experience: data.experience || 0,
+        user_type: data.user_type || "student",
+      });
+    }
+  }, [data, reset]);
+  
+  //para cuanto se elimine los datos 
+  useEffect(() => {
+    if (!idusuario && isOpen) {
+      reset({
+        name: "",
+        email: "",
+        password: "",
+        hearts: 5,
+        points: 0,
+        experience: 0,
+        user_type: "student",
+      });
+    }
+  }, [idusuario, isOpen, reset]);
+  
+  const onSubmit = async (formData: StudentForm) => {
     try {
-      console.log("Datos enviados:", data);
-      await mutateAsync(data); // 👈 Esperamos la mutación
-      reset();     // Limpiar el formulario
-      onClose();   // Cerrar el modal
+      if (idusuario) {
+        await actualizarusuario({ id: idusuario, data: formData });      
+       } else {
+        await crearusuario(formData);
+      }
+      reset();
+      onClose();
     } catch (error) {
-      console.error("Error al crear usuario:", error);
+      console.error("Error al guardar usuario:", error);
     }
   };
 
   if (!isOpen) return null;
 
+  const handleCancel = () => {
+    reset();
+    onClose();
+  };
+  
   return (
 
 <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center">
@@ -51,18 +91,9 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
       
       {/* Header del modal */}
       <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-        <h3 className="text-lg font-semibold text-gray-900">
-          Crear Usuario
-        </h3>
-        <button
-          type="button"
-          onClick={onClose}
-          className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
-        >
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-          </svg>
-        </button>
+      <h3 className="text-lg font-semibold text-gray-900">
+        {idusuario ? "Editar Usuario" : "Crear Usuario"}
+      </h3>
       </div>
 
       {/* Body con el formulario */}
@@ -116,20 +147,24 @@ export const UserModal = ({ isOpen, onClose }: Props) => {
         </div>
 
         <div className="flex justify-end gap-2 pt-4">
-          <button type="button" onClick={onClose} className="px-4 py-2 border rounded text-gray-600">Cancelar</button>
-          <button 
-            type="submit" 
-            disabled={isPending}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            {isPending ? "Guardando..." : "Guardar"}
-          </button>
+        <button type="button" onClick={handleCancel} className="px-4 py-2 border rounded text-gray-600">
+          Cancelar
+        </button>  
+        <button
+      type="submit"
+      disabled={usuariopendiente || actualizacionpendiente}
+      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+    >
+      {(usuariopendiente || actualizacionpendiente)
+        ? "Guardando..."
+        : idusuario
+        ? "Actualizar"
+        : "Guardar"}
+    </button>
         </div>
       </form>
     </div>
   </div>
 </div>
-
-
   );
 };
