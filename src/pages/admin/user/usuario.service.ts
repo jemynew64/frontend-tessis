@@ -1,30 +1,36 @@
-import axiosAuth from '../../../libs/AxiosHeader'; // Importamos la configuración de axios con autenticación
+import axiosAuth from '../../../libs/AxiosHeader';
+import { StudentForm } from "./EstudianteSchema";
 
-// Configuración básica de axios (ajusta la URL según lo necesites)
-//const API_URL = 'http://localhost:8000/api/usuarios/'; // Asegúrate de que esta URL sea correcta
+const BaseURL = import.meta.env.VITE_BASE_URL;
 
-const BaseURl=import.meta.env.VITE_BASE_URL
-// Función para obtener todos los usuarios
-export const obtenerTodosusuarios = async (pagina:number = 1) => {
-  try {
-    const response = await axiosAuth.get(`${BaseURl}usuarios/`, {
-      params: {
-        page: pagina,
-      }
-    });    return response.data;
-  } catch (error) {
-    console.error("Error al obtener los usuarios:", error);
-    throw error;
-  }
+// Obtener todos los usuarios (paginación opcional)
+export const obtenerTodosUsuarios = async (pagina: number = 1): Promise<StudentForm[]> => {
+  const response = await axiosAuth.get(`${BaseURL}usuarios/`, {
+    params: { page: pagina }
+  });
+  return response.data;
 };
 
-// Función para obtener un usuario por ID
-export const obtenerUsuarioPorId = async (id: number) => {
-  try {
-    const response = await axiosAuth.get(`${BaseURl}usuarios/${id}/`);
-    return response.data;  // Retorna el usuario encontrado
-  } catch (error) {
-    console.error(`Error al obtener el usuario con ID ${id}:`, error);
-    throw error;
-  }
+// Obtener un usuario por ID
+export const obtenerUsuarioPorId = async (id: number): Promise<StudentForm> => {
+  const response = await axiosAuth.get(`${BaseURL}usuarios/${id}/`);
+  return response.data;
+};
+
+// Crear un nuevo usuario
+export const crearUsuario = async (usuario: StudentForm): Promise<StudentForm> => {
+  const response = await axiosAuth.post(`${BaseURL}usuarios/`, usuario);
+  return response.data;
+};
+
+// Actualizar un usuario por ID
+export const actualizarUsuario = async (id: number, usuario: Partial<StudentForm>): Promise<StudentForm> => {
+  const response = await axiosAuth.put(`${BaseURL}usuarios/${id}/`, usuario);
+  return response.data;
+};
+
+// Eliminar un usuario por ID
+export const eliminarUsuario = async (id: number): Promise<{ message: string }> => {
+  const response = await axiosAuth.delete(`${BaseURL}usuarios/${id}/`);
+  return response.data;
 };

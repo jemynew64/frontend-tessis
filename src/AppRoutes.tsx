@@ -34,7 +34,7 @@ const AppRoutes = () => {
                      {/* Rutas Exclusivas de Administrador */}
           <Route element={<RoleRoute allowedRoles={["admin"]} />}>
            <Route path="/admin" element={<AdminPanel />} />
-           <Route path="/probando1" element={<PageUser />} />
+           <Route path="/usuario" element={<PageUser />} />
           </Route>
         </Route>
       </Route>
