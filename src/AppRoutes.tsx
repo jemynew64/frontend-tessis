@@ -12,6 +12,7 @@ import SidebarLayout from "./layouts/MainLayout";
 import PrivateRoute from "./layouts/PrivateRoute";
 import RoleRoute from "./layouts/RoleRoute";
 import { PageUser } from "./pages/admin/user/PageUser";
+import {CursoListadosTotal} from "./pages/estudiante/listadotodo/CursoListadosTotal"
 const AppRoutes = () => {
   return (
     <Routes>
@@ -24,6 +25,8 @@ const AppRoutes = () => {
         <Route path="/reto-leccion" element={<RetoLeccion />} />
         
         <Route element={<SidebarLayout />}>
+        // <Route path="/todo" element={<CursoListadosTotal />} />
+
           <Route path="/aprender" element={<Aprender />} />
           <Route path="/matematicas" element={<Matematicas />} />
           <Route path="/comunicacion" element={<Comunicacion />} />
