@@ -1,7 +1,7 @@
 import { useAuthStore } from '../store/auth';  // Asegúrate de importar el store correctamente
 import { Bolt, Heart } from 'lucide-react';
 import { useEffect, useState } from 'react';  // Añadido useState para manejar el estado local
-import {getUserByIdService} from "../services/userService"
+import {getUserByIdService} from "../../services/userService"
 export const UserProgress = () => {
 
   const user = useAuthStore((state) => state.user);  // Obtén el usuario desde zustand

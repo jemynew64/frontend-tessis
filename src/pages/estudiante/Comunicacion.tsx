@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { curso_detalle_comunicacion } from "../../services/listar_cursos_detalle"; // Importa la función para obtener los detalles
-import { UserProgress } from '../../components/UserProgress';
-import MissionsCard from '../../components/MissionsCard';
+import { UserProgress } from '../../shared/components/UserProgress';
+import {MissionsCard} from '../../shared/components/MissionsCard';
 import UnitBanner from '../../components/UnitBanner';
 import Header from '../../components/Header';
 import LessonTrack from '../../components/LessonTrack';

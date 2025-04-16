@@ -1,5 +1,5 @@
-import { UserProgress } from '../../components/UserProgress'; 
-import MissionsCard from '../../components/MissionsCard'; 
+import { UserProgress } from '../../shared/components/UserProgress'; 
+import {MissionsCard} from '../../shared/components/MissionsCard'; 
 import { FaHeart } from 'react-icons/fa'; 
 
 const Tienda = () => {

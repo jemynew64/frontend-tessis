@@ -1,4 +1,4 @@
-const MissionsCard = () => {
+export const MissionsCard = () => {
   // Ejemplo de misiones
   const missions = [
     { description: 'Obtener 50 XP', progress: 0.8 },  // Progreso ficticio (30%)
@@ -30,4 +30,3 @@ const MissionsCard = () => {
   );
 };
 
-export default MissionsCard;

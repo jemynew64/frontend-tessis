@@ -1,4 +1,4 @@
-import axiosAuth from '../../../libs/AxiosHeader';
+import axiosAuth from '../../shared/utils/AxiosHeader';
 import { StudentForm } from "./EstudianteSchema";
 
 const BaseURL = import.meta.env.VITE_BASE_URL;

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import BarraProgreso from '../../components/BarraProgreso'; 
+import BarraProgreso from '../../shared/components/BarraProgreso'; 
 import MostrarCorazones from '../../components/MostrarCorazones'; 
 import { IoCloseCircleOutline } from 'react-icons/io5'; 
-import { ExitModal } from '../../components/modals/exit-modal'; 
-import { useExitModal } from '../../store/use-exit-modal'; 
+import { ExitModal } from '../../shared/components/modals/exit-modal'; 
+import { useExitModal } from '../../shared/store/use-exit-modal'; 
 import { obtenerLeccionConRetos } from '../../services/leccionesService'; 
 import { FaHeart } from 'react-icons/fa';
 import { Bolt } from 'lucide-react'; // Importar el icono de rayo de Lucide

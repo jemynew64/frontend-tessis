@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import Image from "../components/Image";
-import { loginPost } from "../services/login_service";
-import { useAuthStore } from "../store/auth";
-import toast from "react-hot-toast";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, LoginForm } from "../schemas/loginSchema"; // Importa el esquema de login
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+//components
+import Image from "../shared/components/Image";
+//shared
+import { useAuthStore } from "../shared/store/auth";
+//mis carpeta
+import { loginPost } from "./login.service";
+import { loginSchema, LoginForm } from "./loginSchema"; 
 
 export const Login = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { UserProgress } from '../../components/UserProgress'; // Componente de progreso del usuario
-import MissionsCard from '../../components/MissionsCard'; // Importar el nuevo componente de misiones
+import { UserProgress } from '../../shared/components/UserProgress'; // Componente de progreso del usuario
+import {MissionsCard} from '../../shared/components/MissionsCard'; // Importar el nuevo componente de misiones
 import { obtenerTodosusuarios } from "../../services/usuario.service"; // Función para obtener los usuarios
 
 // Definir la interfaz para el usuario

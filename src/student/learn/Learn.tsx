@@ -1,9 +1,9 @@
-import { UserProgress } from '../../components/UserProgress'; 
-import MissionsCard from '../../components/MissionsCard';
 import { Link } from 'react-router-dom'; // Importar Link desde react-router-dom
-import { useAuthStore } from '../../store/auth';  // Importar el hook para obtener el estado del usuario
+import { useAuthStore } from '../../shared/store/auth';  // Importar el hook para obtener el estado del usuario
+import { UserProgress } from '../../shared/components/UserProgress'; 
+import {MissionsCard} from '../../shared/components/MissionsCard';
 
-const Aprender = () => {
+export const Learn = () => {
 
   const user = useAuthStore((state) => state.user);  // Obtener el usuario desde el estado global
 
@@ -57,4 +57,3 @@ const Aprender = () => {
   );
 };
 
-export default Aprender;

@@ -1,6 +1,6 @@
-import { useAuthStore } from '../../store/auth';  // Asegúrate de importar el store
+import { useAuthStore } from '../../shared/store/auth';  // Asegúrate de importar el store
 
-export const Perfil = () => {
+export const Profile = () => {
   // Obtener el usuario desde la tienda zustand
   const { user } = useAuthStore((state) => state);
 

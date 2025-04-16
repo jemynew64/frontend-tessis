@@ -1,6 +1,6 @@
-import {LearningUnitProgress} from "../LearningUnitProgress"
-import { LessonModule } from "../LessonModule";
-import { ButtonDuo } from "../ButtonDuo";
+import {LearningUnitProgress} from "./LearningUnitProgress"
+import { LessonModule } from "./LessonModule";
+import { ButtonDuo } from "./ButtonDuo";
 import { useQuery } from "@tanstack/react-query";
 import { useUserQueryOptions } from "./CursotodoQueryOption";
 

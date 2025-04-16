@@ -1,4 +1,4 @@
-import axiosAuth from '../libs/AxiosHeader'; // Importamos la configuración de axios con autenticación
+import axiosAuth from '../shared/utils/AxiosHeader'; // Importamos la configuración de axios con autenticación
 
 // Definimos la estructura de los datos de los usuarios
 export interface User {

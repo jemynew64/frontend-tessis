@@ -3,8 +3,8 @@ import { useUserQueryOptions } from "./UserQueryOption";
 import { useQuery } from "@tanstack/react-query";
 import { StudentForm } from "./EstudianteSchema";
 import { UserModal } from "./UserModal";
-import { DeleteModal } from "../../../components/modals/delete-modal";
-import { useExitModal } from "../../../store/use-exit-modal";
+import { DeleteModal } from "../../shared/components/modals/delete-modal";
+import { useExitModal } from "../../shared/store/use-exit-modal";
 import {useEliminarUsuario} from "./usuario.mutations"
 
 export const PageUser = () => {
