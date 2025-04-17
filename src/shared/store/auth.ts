@@ -1,6 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import {User} from "../interfaces/index"
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  profile_image: string;
+  hearts: number;
+  points: number;
+  experience: number;
+  level: number;
+  user_type: "admin" | "student";
+}
 
 type State = {
   token: string;

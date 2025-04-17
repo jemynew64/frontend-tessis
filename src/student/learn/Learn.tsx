@@ -1,13 +1,14 @@
-import { Link } from 'react-router-dom'; // Importar Link desde react-router-dom
+import {CardLink} from "./CardLink"
 import { useAuthStore } from '../../shared/store/auth';  // Importar el hook para obtener el estado del usuario
 import { UserProgress } from '../../shared/components/UserProgress'; 
 import {MissionsCard} from '../../shared/components/MissionsCard';
+import { useQuery } from "@tanstack/react-query";
+import { useUserQueryOptions} from "./UserQueryOption"
 
 export const Learn = () => {
-
+  const { data } = useQuery(useUserQueryOptions());
+  console.log(data)
   const user = useAuthStore((state) => state.user);  // Obtener el usuario desde el estado global
-
-
   return (
     <div className="flex min-h-screen">
       {/* Mostrar barra de progreso en la parte superior solo en pantallas pequeñas */}
@@ -15,7 +16,7 @@ export const Learn = () => {
         <UserProgress  />
       </div>
       {/* Contenido principal */}
-      <div className="flex-1 p-8 lg:pl-[256px]">
+      <div className="flex-1 p-8 ">
         <div className="flex flex-col items-center h-screen p-4 space-y-6">
           <h1 className="text-center text-2xl font-bold">¿Listo para una nueva aventura?</h1>
           {/* Saludo con el nombre del usuario */}
@@ -24,30 +25,18 @@ export const Learn = () => {
           )}
 
           <div className="flex flex-col lg:flex-row gap-4 mt-4 w-full justify-center">
-           
-            {/* Mundo de los Números */}
-            <Link to="/matematicas" className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition w-full lg:w-auto">
-              <img 
-                src="/images/iconosuma.png" 
-                alt="Mundo de los Números" 
-                className="w-32 h-32 object-cover mb-4 rounded-md" 
+            {data?.map((mundo) => (
+              <CardLink
+                key={mundo.id}
+                to={`/listartodo/${mundo.id}`}
+                imgSrc={`/images/${mundo.image_src}`}
+                title={`Mundo de ${mundo.title}`}
               />
-              <p className="text-lg font-semibold text-center">Mundo de los Números</p>
-            </Link>
-
-            {/* Mundo de las Palabras */}
-            <Link to="/comunicacion" className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition w-full lg:w-auto">
-              <img 
-                src="/images/iconolibro.png" 
-                alt="Mundo de las Palabras" 
-                className="w-32 h-32 object-cover mb-4 rounded-md" 
-              />
-              <p className="text-lg font-semibold text-center">Mundo de las Palabras</p>
-            </Link>
+            ))}
           </div>
+
         </div>
       </div>
-
       {/* Barra de progreso en el lado derecho solo visible en pantallas grandes */}
       <div className="hidden lg:block w-[250px] bg-white p-4">
         <UserProgress  />
@@ -57,3 +46,15 @@ export const Learn = () => {
   );
 };
 
+{/* <div className="flex flex-col lg:flex-row gap-4 mt-4 w-full justify-center">
+<CardLink
+  to="/listartodo"
+  imgSrc="/images/iconosuma.png"
+  title="Mundo de los Números"
+/>
+<CardLink
+  to="/listartodo"
+  imgSrc="/images/iconolibro.png"
+  title="Mundo de las Palabras"
+/>
+</div> */}

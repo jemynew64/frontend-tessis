@@ -50,15 +50,6 @@ export const Rankings = () => {
         return "bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"; // Color por defecto con gradiente
     }
   };
-  
-  
-  
-  
-  
-  
-  
-  
-
   return (
     <div className="flex min-h-screen">
       {/* Contenido principal (en el centro) */}

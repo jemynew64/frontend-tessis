@@ -1,6 +1,25 @@
 import axios from "axios";
 
-import {Curso } from "../interfaces/index"
+export interface Leccion {
+  id: number;
+  titulo: string;
+  estaBloqueada: boolean;
+  estaCompletada: boolean;
+}
+
+export interface Unidad {
+  id: number;
+  titulo: string;
+  descripcion: string;
+  lecciones: Leccion[];
+}
+
+export interface Curso {
+  id: number;
+  titulo: string;
+  unidades: Unidad[];
+}
+
 const BaseURl=import.meta.env.VITE_BASE_URL
 
 // URLs de los cursos

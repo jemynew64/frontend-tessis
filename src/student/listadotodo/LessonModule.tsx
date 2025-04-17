@@ -6,9 +6,10 @@ import { BookText } from "lucide-react"; // Icono estilo guía
 interface LessonModuleProps extends HTMLAttributes<HTMLDivElement> {
   stage?: string;
   title: string;
+  description?: string; // ✅ nuevo prop opcional
 }
 
-export const LessonModule = ({className,stage = "ETAPA 1",title,...props}: LessonModuleProps) => {
+export const LessonModule = ({className,stage = "ETAPA 1",title,description,...props}: LessonModuleProps) => {
   const baseClasses = twMerge(
     clsx(
       "bg-lime-500 rounded-xl px-4 py-3 w-full flex justify-between items-center shadow-md",
@@ -22,6 +23,9 @@ export const LessonModule = ({className,stage = "ETAPA 1",title,...props}: Lesso
       <div>
         <p className="text-xs text-lime-100 uppercase font-semibold">{stage}</p>
         <p className="text-white text-lg font-bold">{title}</p>
+        {description && (
+          <p className="text-sm text-lime-100 font-medium">{description}</p>
+        )}
       </div>
 
       {/* Botón guía */}

@@ -1,6 +1,22 @@
 import axios from 'axios';
-import {LeccionConRetos} from "../interfaces/index"
-// Define las interfaces para los datos que esperas recibir
+export  interface LeccionConRetos {
+  id: number;
+  titulo: string;
+  retos: Reto[];
+}
+export interface Reto {
+  id: number;
+  tipo: string;
+  pregunta: string;
+  opciones: Opcion[];
+}
+export interface Opcion {
+  id: number;
+  texto: string;
+  esCorrecta: boolean;
+  imagen_src: string | null;
+  audio_src: string | null;
+}
 const BaseURl=import.meta.env.VITE_BASE_URL
 
 
