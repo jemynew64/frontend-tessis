@@ -19,6 +19,14 @@ module.exports = {
         15: "3.75rem", // Personalizado para w-15
         30: "7.5rem", // Personalizado para h-30
       },
+      keyframes: {
+        draw: {
+          to: { strokeDashoffset: "0" },
+        },
+      },
+      animation: {
+        draw: "draw 0.8s ease-in-out forwards",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],

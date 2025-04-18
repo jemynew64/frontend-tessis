@@ -9,6 +9,8 @@ import PrivateRoute from "./shared/layouts/PrivateRoute";
 import RoleRoute from "./shared/layouts/RoleRoute";
 import { PageUser } from "./admin/user/PageUser";
 import {CursoListadosTotal} from "./student/listadotodo/CursoListadosTotal"
+import { LessonApp } from "./admin/lesson/LessonApp";
+import { ChallengeApp } from "./admin/challenge/ChallengeApp";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -21,13 +23,9 @@ const AppRoutes = () => {
         {/* <Route path="/reto-leccion" element={<RetoLeccion />} />  aca ba el formulario quizz */}
         
         <Route element={<SidebarLayout />}>
-         <Route path="/listartodo/:id" element={<CursoListadosTotal />} />
 
+         <Route path="/listartodo/:id" element={<CursoListadosTotal />} />
           <Route path="/aprender" element={<Learn />} />
-                {/* listar todo lo reemplaza*/}
-          {/* <Route path="/matematicas" element={<Matematicas />} />
-          <Route path="/comunicacion" element={<Comunicacion />} /> */}
-                          {/* listar todo lo reemplaza*/}
           <Route path="/tienda" element={<Tienda />} />
           <Route path="/ranking" element={<Rankings />} />
           <Route path="/perfil" element={<Profile />} />
@@ -35,7 +33,9 @@ const AppRoutes = () => {
                      {/* Rutas Exclusivas de Administrador */}
           <Route element={<RoleRoute allowedRoles={["admin"]} />}>
            <Route path="/usuario" element={<PageUser />} />
-          </Route>
+           <Route path="/leccion" element={<LessonApp />} />
+           <Route path="/leccion-retos/:id_leccion/:titulo" element={<ChallengeApp />} />
+           </Route>
         </Route>
       </Route>
     </Routes>
