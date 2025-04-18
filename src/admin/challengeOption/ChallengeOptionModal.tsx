@@ -6,7 +6,7 @@ import { useCrearOption, useActualizarOption } from "./challengeOption.mutations
 import { useQuery } from "@tanstack/react-query";
 import { useOptionIdQueryOptions } from "./challengeOptionQueryOptions";
 //para manejar la imagen 
-//import { RemoteImage } from "../../shared/components/RemoteImage";
+import { RemoteImage } from "../../shared/components/RemoteImage";
 
 interface Props {
   isOpen: boolean;
@@ -19,9 +19,11 @@ export const ChallengeOptionModal = ({ isOpen, onClose, idOpcion, idChallenge }:
   const enabled = !!idOpcion;
   const { data } = useQuery({ ...useOptionIdQueryOptions(idOpcion!), enabled });
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<ChallengeOptionType>({
+  const { register, handleSubmit, reset, formState: { errors } , watch} = useForm<ChallengeOptionType>({
     resolver: zodResolver(ChallengeOptionSchema),
   });
+  //para que se vea la imagen
+  const image_src = watch("image_src");
 
   const { mutateAsync: crear, isPending: creando } = useCrearOption();
   const { mutateAsync: actualizar, isPending: actualizando } = useActualizarOption();
@@ -89,7 +91,10 @@ export const ChallengeOptionModal = ({ isOpen, onClose, idOpcion, idChallenge }:
             {...register("image_src")}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-        </div>
+          <div className="flex justify-center mt-4 mb-2">
+            <RemoteImage src={image_src} alt="Vista previa" className="w-40 h-40" />
+          </div>
+          </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">URL Audio</label>

@@ -29,7 +29,7 @@ const Sidebar = () => {
           {user?.user_type === "admin" && (
             <>
                   <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/admin.svg" />
-                  <SidebarItem label="Listado lecciones" to="/leccion" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo creacion de lecciones" to="/leccion" iconSrc="/admin.svg" />
                   </>
           )}
         </div>
@@ -44,7 +44,7 @@ const Sidebar = () => {
         {user?.user_type === "admin" && (
             <>
                   <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/admin.svg" />
-                  <SidebarItem label="Listado lecciones" to="/leccion" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo creacion de lecciones" to="/leccion" iconSrc="/admin.svg" />
 
             </>
           )}

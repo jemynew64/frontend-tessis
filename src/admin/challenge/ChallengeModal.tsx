@@ -5,7 +5,8 @@ import { ChallengeSchema, ChallengeType } from "./challenge.schema";
 import { useCrearChallenge, useActualizarChallenge } from "./challenge.mutations";
 import { useQuery } from "@tanstack/react-query";
 import { useChallengeIdQueryOptions } from "./challengeQueryOptions";
-
+//para manejar la imagen 
+import { RemoteImage } from "../../shared/components/RemoteImage";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -17,9 +18,12 @@ export const ChallengeModal = ({ isOpen, onClose, idChallenge, idLeccion }: Prop
   const enabled = !!idChallenge;
   const { data } = useQuery({ ...useChallengeIdQueryOptions(idChallenge!), enabled });
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<ChallengeType>({
+  const { register, handleSubmit, reset, formState: { errors },watch } = useForm<ChallengeType>({
     resolver: zodResolver(ChallengeSchema),
   });
+
+  //para que se vea la imagen
+  const image_src = watch("image_src");
 
   const { mutateAsync: crear, isPending: creando } = useCrearChallenge();
   const { mutateAsync: actualizar, isPending: actualizando } = useActualizarChallenge();
@@ -90,6 +94,9 @@ export const ChallengeModal = ({ isOpen, onClose, idChallenge, idLeccion }: Prop
         <div>
           <label className="block mb-1 text-sm font-medium text-gray-900">URL de Imagen (opcional)</label>
           <input {...register("image_src")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+                <div className="flex justify-center mt-4 mb-2">
+                    <RemoteImage src={image_src} alt="Vista previa" className="w-40 h-40" />
+                </div>
         </div>
 
         <div>
