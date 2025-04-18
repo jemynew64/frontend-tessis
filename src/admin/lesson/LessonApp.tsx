@@ -58,7 +58,7 @@ export const LessonApp = () => {
       {isLoading && <p>Cargando...</p>}
       {error && <p>Error al cargar lecciones</p>}
 
-      <table className="w-full border bg-white shadow-sm rounded-md">
+      <table className="w-full border bg-white shadow-sm rounded-md table-fixed">
         <thead>
           <tr className="bg-gray-100 text-left">
             <th className="p-3">Título</th>

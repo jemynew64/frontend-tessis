@@ -8,6 +8,7 @@ import { useEliminarChallenge } from "./challenge.mutations";
 import { ChallengeModal } from "./ChallengeModal";
 import { DeleteModal } from "../../shared/components/modals/delete-modal";
 import { useExitModal } from "../../shared/store/use-exit-modal";
+import { RemoteImage } from "../../shared/components/RemoteImage";
 
 export const ChallengeApp = () => {
   const { id_leccion, titulo } = useParams();
@@ -62,7 +63,8 @@ export const ChallengeApp = () => {
       {isLoading && <p>Cargando retos...</p>}
       {error && <p>Ocurrió un error al cargar los retos</p>}
 
-      <table className="w-full border bg-white shadow-md rounded-md">
+      <table className="w-full border bg-white shadow-md rounded-md table-fixed
+">
         <thead className="bg-gray-100 text-left">
           <tr>
             <th className="p-3">Pregunta</th>
@@ -78,11 +80,14 @@ export const ChallengeApp = () => {
             <tr key={reto.id} className="border-t hover:bg-gray-50">
               <td className="p-3 font-medium">{reto.question}</td>
               <td className="p-3 capitalize">{reto.type}</td>
-              <td className="p-3">{reto.image_src || "Sin imagen"}</td>
+              <td className="px-5 py-3">
+                <RemoteImage src={reto.image_src} alt="no visualizable" />
+              </td>
               <td className="p-3">{reto.order_num}</td>
               <td className="p-3">{titulo}</td>
               <td className="p-3 flex flex-wrap gap-2">
-                <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                <button onClick={() => (navigate(`/opciones-del-reto/${reto.id}/${encodeURIComponent(reto.question)}`))} 
+                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
                   Agregar
                 </button>
                 <button onClick={() => handleEditar(reto.id!)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">

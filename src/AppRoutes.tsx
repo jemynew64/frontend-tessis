@@ -11,6 +11,7 @@ import { PageUser } from "./admin/user/PageUser";
 import {CursoListadosTotal} from "./student/listadotodo/CursoListadosTotal"
 import { LessonApp } from "./admin/lesson/LessonApp";
 import { ChallengeApp } from "./admin/challenge/ChallengeApp";
+import { ChallengeOptionApp } from "./admin/challengeOption/ChallengeOptionApp";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -35,6 +36,7 @@ const AppRoutes = () => {
            <Route path="/usuario" element={<PageUser />} />
            <Route path="/leccion" element={<LessonApp />} />
            <Route path="/leccion-retos/:id_leccion/:titulo" element={<ChallengeApp />} />
+           <Route path="/opciones-del-reto/:challenge_id/:titulo" element={<ChallengeOptionApp />} />
            </Route>
         </Route>
       </Route>
