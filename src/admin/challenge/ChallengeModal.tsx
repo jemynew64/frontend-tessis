@@ -7,6 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useChallengeIdQueryOptions } from "./challengeQueryOptions";
 //para manejar la imagen 
 import { RemoteImage } from "../../shared/components/RemoteImage";
+import { uploadImageToBackend } from "../../shared/utils/uploadImageToBackend";
+
+
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -18,7 +22,7 @@ export const ChallengeModal = ({ isOpen, onClose, idChallenge, idLeccion }: Prop
   const enabled = !!idChallenge;
   const { data } = useQuery({ ...useChallengeIdQueryOptions(idChallenge!), enabled });
 
-  const { register, handleSubmit, reset, formState: { errors },watch } = useForm<ChallengeType>({
+  const { register, handleSubmit, reset, formState: { errors },watch,setValue } = useForm<ChallengeType>({
     resolver: zodResolver(ChallengeSchema),
   });
 
@@ -92,11 +96,28 @@ export const ChallengeModal = ({ isOpen, onClose, idChallenge, idLeccion }: Prop
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-900">URL de Imagen (opcional)</label>
-          <input {...register("image_src")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
-                <div className="flex justify-center mt-4 mb-2">
-                    <RemoteImage src={image_src} alt="Vista previa" className="w-40 h-40" />
-                </div>
+          <label className="block mb-1 text-sm font-medium text-gray-900">Imagen</label>
+
+          <input
+            type="file"
+            accept="image/*"
+            className="block mt-2"
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+
+              try {
+                const url = await uploadImageToBackend(file);
+                setValue("image_src", url); // se asigna la URL devuelta por el backend
+              } catch (err) {
+                console.error("Error al subir imagen al backend:", err);
+              }
+            }}
+          />
+
+          <div className="flex justify-center mt-4 mb-2">
+            <RemoteImage src={image_src} alt="Vista previa" className="w-40 h-40" />
+          </div>
         </div>
 
         <div>

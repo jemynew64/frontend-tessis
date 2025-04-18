@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useOptionIdQueryOptions } from "./challengeOptionQueryOptions";
 //para manejar la imagen 
 import { RemoteImage } from "../../shared/components/RemoteImage";
+import { uploadImageToBackend } from "../../shared/utils/uploadImageToBackend";
 
 interface Props {
   isOpen: boolean;
@@ -19,7 +20,7 @@ export const ChallengeOptionModal = ({ isOpen, onClose, idOpcion, idChallenge }:
   const enabled = !!idOpcion;
   const { data } = useQuery({ ...useOptionIdQueryOptions(idOpcion!), enabled });
 
-  const { register, handleSubmit, reset, formState: { errors } , watch} = useForm<ChallengeOptionType>({
+  const { register, handleSubmit, reset, formState: { errors } , watch,setValue} = useForm<ChallengeOptionType>({
     resolver: zodResolver(ChallengeOptionSchema),
   });
   //para que se vea la imagen
@@ -86,15 +87,29 @@ export const ChallengeOptionModal = ({ isOpen, onClose, idOpcion, idChallenge }:
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">URL Imagen</label>
+          <label className="block mb-1 text-sm font-medium text-gray-900">Imagen</label>
+
           <input
-            {...register("image_src")}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="file"
+            accept="image/*"
+            className="block mt-2"
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+
+              try {
+                const url = await uploadImageToBackend(file);
+                setValue("image_src", url); // se asigna la URL devuelta por el backend
+              } catch (err) {
+                console.error("Error al subir imagen al backend:", err);
+              }
+            }}
           />
+
           <div className="flex justify-center mt-4 mb-2">
             <RemoteImage src={image_src} alt="Vista previa" className="w-40 h-40" />
           </div>
-          </div>
+        </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">URL Audio</label>
