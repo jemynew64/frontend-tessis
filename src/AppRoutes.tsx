@@ -13,6 +13,10 @@ import { LessonApp } from "./admin/lesson/LessonApp";
 import { ChallengeApp } from "./admin/challenge/ChallengeApp";
 import { ChallengeOptionApp } from "./admin/challengeOption/ChallengeOptionApp";
 import { Quizz } from "./student/quizz/Quizz";
+import { UnitApp } from "./admin/unit/UnitApp";
+import { AchievementApp } from "./admin/achievement/AchievementApp";
+import { MissionApp } from "./admin/mission/MissionApp";
+import { CourseApp } from "./admin/course/CourseApp";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -35,6 +39,10 @@ const AppRoutes = () => {
                      {/* Rutas Exclusivas de Administrador */}
           <Route element={<RoleRoute allowedRoles={["admin"]} />}>
            <Route path="/usuario" element={<PageUser />} />
+           <Route path="/unit" element={<UnitApp />} />
+           <Route path="/achievement" element={<AchievementApp />} />
+           <Route path="/misiones" element={<MissionApp />} />
+           <Route path="/course" element={<CourseApp />} />
            <Route path="/leccion" element={<LessonApp />} />
            <Route path="/leccion-retos/:id_leccion/:titulo" element={<ChallengeApp />} />
            <Route path="/opciones-del-reto/:challenge_id/:titulo" element={<ChallengeOptionApp />} />

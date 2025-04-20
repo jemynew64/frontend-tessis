@@ -30,6 +30,11 @@ const Sidebar = () => {
             <>
                   <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/admin.svg" />
                   <SidebarItem label="Modulo creacion de lecciones" to="/leccion" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/admin.svg" />
+
                   </>
           )}
         </div>
@@ -46,6 +51,10 @@ const Sidebar = () => {
             <>
                   <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/admin.svg" />
                   <SidebarItem label="Modulo creacion de lecciones" to="/leccion" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/admin.svg" />
+                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/admin.svg" />
 
             </>
           )}

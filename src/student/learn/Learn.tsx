@@ -29,7 +29,7 @@ export const Learn = () => {
               <CardLink
                 key={mundo.id}
                 to={`/listartodo/${mundo.id}`}
-                imgSrc={`/images/${mundo.image_src}`}
+                imgSrc={`${mundo.image_src}`}
                 title={`Mundo de ${mundo.title}`}
               />
             ))}
