@@ -21,43 +21,45 @@ const Sidebar = () => {
 
         {/* Ítems desktop */}
         <div className="flex flex-col gap-y-4 flex-1 overflow-y-auto pr-2 scrollbar-hide">
-          
+
+        {user?.user_type === "admin" && (
+            <>
+                  <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/panel-usuario.svg" />
+                  <SidebarItem label="Cuestionarios" to="/leccion" iconSrc="/leccion.svg" />
+                  <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/unidad.svg" />
+                  <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/mision.svg" />
+                  <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/logro.svg" />
+                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/curso.svg" />
+
+                  </>
+          )}          
           <SidebarItem label="Aprender" to="/aprender" iconSrc="/learn.svg" />
           <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
           <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
           <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
-          {user?.user_type === "admin" && (
-            <>
-                  <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo creacion de lecciones" to="/leccion" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/admin.svg" />
 
-                  </>
-          )}
         </div>
       </div>
 
       {/* Barra inferior fija en móviles */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 w-full bg-gradient-to-b from-[#4727BD] to-[#211257] flex justify-around items-center py-2 z-30">
+       
+      {user?.user_type === "admin" && (
+            <>
+                  <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/panel-usuario.svg" />
+                  <SidebarItem label="Cuestionarios" to="/leccion" iconSrc="/leccion.svg" />
+                  <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/unidad.svg" />
+                  <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/mision.svg" />
+                  <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/logro.svg" />
+                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/curso.svg" />
+
+            </>
+          )}
         <SidebarItem label="Aprender" to="/aprender" iconSrc="/learn.svg" />
         <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
         <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
         <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
 
-        {user?.user_type === "admin" && (
-            <>
-                  <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo creacion de lecciones" to="/leccion" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/admin.svg" />
-                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/admin.svg" />
-
-            </>
-          )}
       </div>
     </>
   );
