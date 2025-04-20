@@ -7,6 +7,10 @@ import { useEliminarLesson } from "./lesson.mutations";
 import { DeleteModal } from "../../shared/components/modals/delete-modal";
 import { useExitModal } from "../../shared/store/use-exit-modal";
 import { LessonModal } from "./LessonModal"; // Lo haremos ahora
+import {  LessonFormType} from "./lesson.schema"
+//compomentes que usan tankstack table
+import { Table } from "../../shared/components/Table";
+import { ColumnDef } from "@tanstack/react-table";
 
 export const LessonApp = () => {
   const navigate = useNavigate();
@@ -34,7 +38,44 @@ export const LessonApp = () => {
       setLeccionIdToDelete(null);
     }
   };
-
+  //columns es nesecita el tipo de pregunta y por si viene nulo osea nada por eso esta el unknown
+  const columns: ColumnDef<LessonFormType, unknown>[] = [
+    {
+      header: "Título", 
+      accessorKey: "title", 
+    },
+    {
+      header: "Unidad",
+      accessorKey: "unit.title", // row.unit?.title
+    },
+    {
+      header: "Orden",
+      accessorKey: "order_num", // row.order_num
+      // sin cell, se muestra por defecto el valor
+    },
+    {
+      header: "Acciones",
+      // 🔥 Aquí NO usamos accessorKey ni accessorFn
+      // Porque no es una propiedad real ni calculada: es solo para mostrar botones
+      cell: ({ row }) => {
+        const lesson = row.original; // accedemos al objeto completo
+        return (
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => navigate(`/leccion-retos/${lesson.id}/${encodeURIComponent(lesson.title)}`)} className="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">
+              Agregar
+            </button>
+            <button onClick={() => handleUpdate(lesson.id!)} className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 transition">
+              Editar
+            </button>
+            <button onClick={() => handleDelete(lesson.id!)} className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition">
+              Eliminar
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+  
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">Lista de Lecciones</h1>
@@ -55,49 +96,13 @@ export const LessonApp = () => {
         idleccion={leccionIdToEdit ?? undefined}
       />
 
+<div className="overflow-x-auto">
       {isLoading && <p>Cargando...</p>}
       {error && <p>Error al cargar lecciones</p>}
+      {data && <Table data={data} columns={columns} />}
 
-      <table className="w-full border bg-white shadow-sm rounded-md table-fixed">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-3">Título</th>
-            <th className="p-3">Orden</th>
-            <th className="p-3">Unidad</th>
-            <th className="p-3">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map((lesson) => (
-            <tr key={lesson.id} className="hover:bg-gray-50 border-t">
-              <td className="p-3">{lesson.title}</td>
-              <td className="p-3">{lesson.order_num}</td>
-              <td className="p-3">{lesson.unit?.title}</td>
-              <td className="p-3 flex gap-2">
-              <button
-                  onClick={() => (navigate(`/leccion-retos/${lesson.id}/${encodeURIComponent(lesson.title)}`))}
-                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700"
-                >
-                  agregar
-                </button>
-                <button
-                  onClick={() => handleUpdate(lesson.id)}
-                  className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleDelete(lesson.id)}
-                  className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                >
-                  Eliminar
-                </button>
+</div>
 
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
 
       <DeleteModal onConfirm={confirmDelete} />
     </div>

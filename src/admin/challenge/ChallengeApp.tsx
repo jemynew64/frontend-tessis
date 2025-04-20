@@ -1,4 +1,3 @@
-// src/admin/challenge/ChallengeApp.tsx
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -9,6 +8,9 @@ import { ChallengeModal } from "./ChallengeModal";
 import { DeleteModal } from "../../shared/components/modals/delete-modal";
 import { useExitModal } from "../../shared/store/use-exit-modal";
 import { RemoteImage } from "../../shared/components/RemoteImage";
+//compomentes que usan tankstack table
+import { Table } from "../../shared/components/Table";
+import { ColumnDef } from "@tanstack/react-table";
 
 export const ChallengeApp = () => {
   const { id_leccion, titulo } = useParams();
@@ -23,16 +25,19 @@ export const ChallengeApp = () => {
   const [idChallenge, setIdChallenge] = useState<number | null>(null);
   const [idToDelete, setIdToDelete] = useState<number | null>(null);
 
+    //este pata almacena el id a update y abre el modal update
   const handleEditar = (id: number) => {
     setIdChallenge(id);
     setOpenModal(true);
   };
 
+  //este pata almacena el id a eliminar y abre el modal eliminar
   const handleEliminar = (id: number) => {
     setIdToDelete(id);
     open();
   };
 
+  //aca simplemente en el modal me sale un boton eliminar y ahi si eliminar y lo cierra
   const confirmDelete = () => {
     if (idToDelete !== null) {
       eliminar.mutate(idToDelete);
@@ -40,8 +45,78 @@ export const ChallengeApp = () => {
     }
   };
 
+  //columns es nesecita el tipo de pregunta y por si viene nulo osea nada por eso esta el unknown
+  const columns: ColumnDef<ChallengeType, unknown>[] = [
+    {
+      header: "Pregunta", // Título que se muestra en la tabla
+      accessorKey: "question", // La columna usará row.question
+      cell: ({ getValue }) => ( // Personalizamos cómo se muestra ese valor
+        <div className="font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
+          {getValue() as string} {/* lo forzamos a string por seguridad */}
+        </div>
+      ),
+    },
+    {
+      header: "Tipo",
+      accessorKey: "type", // usa automáticamente row.type
+      cell: ({ getValue }) => (
+        <span className="capitalize">{getValue() as string}</span> // estilizado
+      ),
+    },
+    {
+      header: "Imagen",
+      accessorKey: "image_src", // row.image_src
+      cell: ({ getValue }) => (
+        <RemoteImage src={getValue() as string} alt="no visualizable" />
+      ),
+    },
+    {
+      header: "Orden",
+      accessorKey: "order_num", // row.order_num
+      // sin cell, se muestra por defecto el valor
+    },
+    {
+      header: "Lección",
+      accessorFn: () => titulo || "", // No hay en el objeto, viene por useParams
+      // no hay accessorKey porque no hay una clave real en ChallengeType
+    },
+    {
+      header: "Acciones",
+      // 🔥 Aquí NO usamos accessorKey ni accessorFn
+      // Porque no es una propiedad real ni calculada: es solo para mostrar botones
+      cell: ({ row }) => {
+        const reto = row.original; // accedemos al objeto completo
+        return (
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() =>
+                navigate(`/opciones-del-reto/${reto.id}/${encodeURIComponent(reto.question)}`)}
+              className="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition"
+            >
+              Agregar
+            </button>
+            <button
+              onClick={() => handleEditar(reto.id!)}
+              className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 transition"
+            >
+              Editar
+            </button>
+            <button
+              onClick={() => handleEliminar(reto.id!)}
+              className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition"
+            >
+              Eliminar
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+  
+
   return (
     <div className="p-6">
+      {/* cosas que esta arriba de la tabla */}
       <button
         onClick={() => navigate(-1)}
         className="mb-4 bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300"
@@ -60,48 +135,12 @@ export const ChallengeApp = () => {
         Crear Nuevo Reto
       </button>
 
+      {/* aca literal esta toda mi tabla en ese componente Table xd */}
       {isLoading && <p>Cargando retos...</p>}
       {error && <p>Ocurrió un error al cargar los retos</p>}
+      {data && <Table data={data} columns={columns} />}
 
-      <table className="w-full border bg-white shadow-md rounded-md table-fixed
-">
-        <thead className="bg-gray-100 text-left">
-          <tr>
-            <th className="p-3">Pregunta</th>
-            <th className="p-3">Tipo</th>
-            <th className="p-3">Imagen</th>
-            <th className="p-3">Orden</th>
-            <th className="p-3">Lección</th>
-            <th className="p-3">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map((reto: ChallengeType) => (
-            <tr key={reto.id} className="border-t hover:bg-gray-50">
-              <td className="p-3 font-medium">{reto.question}</td>
-              <td className="p-3 capitalize">{reto.type}</td>
-              <td className="px-5 py-3">
-                <RemoteImage src={reto.image_src} alt="no visualizable" />
-              </td>
-              <td className="p-3">{reto.order_num}</td>
-              <td className="p-3">{titulo}</td>
-              <td className="p-3 flex flex-wrap gap-2">
-                <button onClick={() => (navigate(`/opciones-del-reto/${reto.id}/${encodeURIComponent(reto.question)}`))} 
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-                  Agregar
-                </button>
-                <button onClick={() => handleEditar(reto.id!)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
-                  Editar
-                </button>
-                <button onClick={() => handleEliminar(reto.id!)} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
+      {/* modales que son del update y create y el del delete */}
       <ChallengeModal
         isOpen={openModal}
         onClose={() => setOpenModal(false)}
