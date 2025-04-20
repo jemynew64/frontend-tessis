@@ -12,6 +12,7 @@ import {CursoListadosTotal} from "./student/listadotodo/CursoListadosTotal"
 import { LessonApp } from "./admin/lesson/LessonApp";
 import { ChallengeApp } from "./admin/challenge/ChallengeApp";
 import { ChallengeOptionApp } from "./admin/challengeOption/ChallengeOptionApp";
+import { Quizz } from "./student/quizz/Quizz";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -21,7 +22,7 @@ const AppRoutes = () => {
       {/* Rutas Privadas (Cualquier usuario autenticado) */}
       <Route element={<PrivateRoute />}>
         
-        {/* <Route path="/reto-leccion" element={<RetoLeccion />} />  aca ba el formulario quizz */}
+         <Route path="/quizz/:id_lesson" element={<Quizz />} />
         
         <Route element={<SidebarLayout />}>
 

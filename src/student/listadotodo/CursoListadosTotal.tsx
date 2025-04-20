@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
 //cosas echas por mi
 import { useUserQueryOptions } from "./CursotodoQueryOption";
@@ -11,6 +11,8 @@ import { ButtonDuo } from "./ButtonDuo";
 
 
 export const CursoListadosTotal = () => {
+  const navigate = useNavigate();
+
   const { id: course_id } = useParams();
   const user = useAuthStore((state) => state.user);
   const { data } = useQuery(
@@ -48,8 +50,8 @@ export const CursoListadosTotal = () => {
                       estaCompletada={estaCompletada}
                       estaBloqueada={estaBloqueada}
                       tooltip={leccion.title}
-                      onClick={() => console.log("Abrir lección", leccion.id)}
-                    />
+                      onClick={() => navigate(`/quizz/${leccion.id}`)}
+                      />
                   </div>
 
                   {/* Conector hacia la siguiente lección */}

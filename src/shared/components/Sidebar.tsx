@@ -41,6 +41,7 @@ const Sidebar = () => {
         <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
         <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
         <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
+
         {user?.user_type === "admin" && (
             <>
                   <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/admin.svg" />
