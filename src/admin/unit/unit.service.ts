@@ -27,3 +27,11 @@ export const deleteUnit = async (id: number): Promise<{ message: string }> => {
   const res = await axiosAuth.delete(`${BaseURL}unidades/${id}/`);
   return res.data;
 };
+
+//para el select
+import { CourseType } from "../course/course.schema";
+
+export const getAllCourses = async (): Promise<CourseType[]> => {
+  const res = await axiosAuth.get(`${BaseURL}cursos/`);
+  return res.data;
+};

@@ -5,6 +5,7 @@ import {
   eliminarOpcion,
 } from "./challengeOption.service";
 import { ChallengeOptionType } from "./challengeOption.schema";
+import { showSuccessToast, showErrorToast } from "../../shared/utils/mutationToastHandler";
 
 export const useCrearOption = () => {
   const queryClient = useQueryClient();
@@ -12,6 +13,10 @@ export const useCrearOption = () => {
     mutationFn: crearOpcion,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["opciones_por_reto"] });
+      showSuccessToast("Opción creada correctamente", "🧩");
+    },
+    onError: (error: unknown) => {
+      showErrorToast("Error al crear opción", error, "❌");
     },
   });
 };
@@ -23,6 +28,10 @@ export const useActualizarOption = () => {
       actualizarOpcion(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["opciones_por_reto"] });
+      showSuccessToast("Opción actualizada correctamente", "✏️");
+    },
+    onError: (error: unknown) => {
+      showErrorToast("Error al actualizar opción", error, "❌");
     },
   });
 };
@@ -33,6 +42,10 @@ export const useEliminarOption = () => {
     mutationFn: eliminarOpcion,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["opciones_por_reto"] });
+      showSuccessToast("Opción eliminada correctamente", "🗑️");
+    },
+    onError: (error: unknown) => {
+      showErrorToast("Error al eliminar opción", error, "⚠️");
     },
   });
 };

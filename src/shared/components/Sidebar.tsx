@@ -25,11 +25,11 @@ const Sidebar = () => {
         {user?.user_type === "admin" && (
             <>
                   <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/panel-usuario.svg" />
-                  <SidebarItem label="Cuestionarios" to="/leccion" iconSrc="/leccion.svg" />
+                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/curso.svg" />
                   <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/unidad.svg" />
+                  <SidebarItem label="Cuestionarios" to="/leccion" iconSrc="/leccion.svg" />
                   <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/mision.svg" />
                   <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/logro.svg" />
-                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/curso.svg" />
 
                   </>
           )}          
@@ -47,11 +47,11 @@ const Sidebar = () => {
       {user?.user_type === "admin" && (
             <>
                   <SidebarItem label="Panel Usuario" to="/usuario" iconSrc="/panel-usuario.svg" />
-                  <SidebarItem label="Cuestionarios" to="/leccion" iconSrc="/leccion.svg" />
+                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/curso.svg" />
                   <SidebarItem label="Modulo Unidades" to="/unit" iconSrc="/unidad.svg" />
+                  <SidebarItem label="Cuestionarios" to="/leccion" iconSrc="/leccion.svg" />
                   <SidebarItem label="Modulo Misiones" to="/misiones" iconSrc="/mision.svg" />
                   <SidebarItem label="Modulo Logros" to="/achievement" iconSrc="/logro.svg" />
-                  <SidebarItem label="Modulo Cursos" to="/course" iconSrc="/curso.svg" />
 
             </>
           )}

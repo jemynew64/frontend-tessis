@@ -5,37 +5,47 @@ import {
   eliminarUsuario,
 } from "./usuario.service";
 import { StudentForm } from "./EstudianteSchema";
+import { showSuccessToast, showErrorToast } from "../../shared/utils/mutationToastHandler";
 
-// Crear usuario
 export const useCrearUsuario = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: crearUsuario,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] }); // Refresca lista
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      showSuccessToast("Usuario creado correctamente", "👤");
+    },
+    onError: (error: unknown) => {
+      showErrorToast("Error al crear usuario", error, "❌");
     },
   });
 };
 
-// Actualizar usuario
 export const useActualizarUsuario = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<StudentForm> }) =>
       actualizarUsuario(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] }); // Refresca lista
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      showSuccessToast("Usuario actualizado correctamente", "✏️");
+    },
+    onError: (error: unknown) => {
+      showErrorToast("Error al actualizar usuario", error, "❌");
     },
   });
 };
 
-// Eliminar usuario
 export const useEliminarUsuario = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: eliminarUsuario,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] }); // Refresca lista
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      showSuccessToast("Usuario eliminado correctamente", "🗑️");
+    },
+    onError: (error: unknown) => {
+      showErrorToast("Error al eliminar usuario", error, "⚠️");
     },
   });
 };

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UnitFormType, UnitSchema } from "./unit.schema";
 import { useCreateUnit, useUpdateUnit } from "./unit.mutations";
-import { useUnitByIdQueryOptions } from "./unit.queryOptions";
+import { useUnitByIdQueryOptions,useCourseQueryOptions } from "./unit.queryOptions";
 import { useQuery } from "@tanstack/react-query";
 
 interface Props {
@@ -13,6 +13,9 @@ interface Props {
 }
 
 export const UnitModal = ({ isOpen, onClose, idUnit }: Props) => {
+
+  const { data:listacurso } = useQuery(useCourseQueryOptions());
+  
   const enabled = !!idUnit;
   const { data } = useQuery({ ...useUnitByIdQueryOptions(idUnit!), enabled });
 
@@ -91,10 +94,23 @@ export const UnitModal = ({ isOpen, onClose, idUnit }: Props) => {
             </div>
 
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-900">ID del Curso</label>
-              <input type="number" {...register("course_id", { valueAsNumber: true })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
-              {errors.course_id && <p className="text-red-500 text-sm">{errors.course_id.message}</p>}
+              <label className="block mb-1 text-sm font-medium text-gray-900">Curso</label>
+              <select
+                {...register("course_id", { valueAsNumber: true })}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+              >
+                <option value="">Selecciona un curso</option>
+                {listacurso?.map((curso) => (
+                  <option key={curso.id} value={curso.id}>
+                    {curso.title}
+                  </option>
+                ))}
+              </select>
+              {errors.course_id && (
+                <p className="text-red-500 text-sm">{errors.course_id.message}</p>
+              )}
             </div>
+
 
             <div className="flex justify-end gap-2 pt-4">
               <button type="button" onClick={onClose} className="px-4 py-2 border rounded text-gray-600">Cancelar</button>
