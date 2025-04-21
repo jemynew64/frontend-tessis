@@ -74,7 +74,7 @@ export const AchievementApp = () => {
 
       {isLoading && <p>Cargando...</p>}
       {error && <p>Error al cargar logros</p>}
-      {data && <Table data={data} columns={columns} />}
+      {data && <Table data={data} columns={columns} enableGlobalFilter />}
 
       <AchievementModal
         isOpen={isModalOpen}

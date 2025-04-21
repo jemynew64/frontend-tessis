@@ -1,13 +1,18 @@
 import { z } from "zod";
 
-// reto.ts
+//reto
+
 export const ChallengeSchema = z.object({
   id: z.number().optional(),
-  type: z.string().max(20, "El tipo de reto no debe superar los 20 caracteres"),
-  question: z.string(),
+  type: z.enum(["seleccionar", "escribir"], {
+    errorMap: () => ({ message: "Debes seleccionar un tipo válido" }),
+  }),
+  question: z.string().min(1, "La pregunta es obligatoria"),
   order_num: z.number().min(1, "El orden debe ser un número positivo"),
   lesson_id: z.number().min(1, "Debe referenciar una lección válida"),
   image_src: z.string().optional(),
 });
+
+
 
 export type ChallengeType = z.infer<typeof ChallengeSchema>;

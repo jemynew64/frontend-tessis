@@ -71,7 +71,7 @@ export const CourseApp = () => {
 
       {isLoading && <p>Cargando...</p>}
       {error && <p>Error al cargar cursos</p>}
-      {data && <Table data={data} columns={columns} />}
+      {data && <Table data={data} columns={columns} enableGlobalFilter  />}
 
       <CourseModal
         isOpen={isModalOpen}

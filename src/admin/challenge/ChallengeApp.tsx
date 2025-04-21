@@ -136,7 +136,7 @@ export const ChallengeApp = () => {
       </button>
 
       {/* aca literal esta toda mi tabla en ese componente Table xd */}
-      {isLoading && <p>Cargando retos...</p>}
+      {isLoading && <p className="text-gray-500">Cargando retos...</p>}
       {error && <p>Ocurrió un error al cargar los retos</p>}
       {data && <Table data={data} columns={columns} />}
 
