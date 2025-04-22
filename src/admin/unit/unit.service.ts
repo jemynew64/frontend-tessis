@@ -35,3 +35,12 @@ export const getAllCourses = async (): Promise<CourseType[]> => {
   const res = await axiosAuth.get(`${BaseURL}cursos/`);
   return res.data;
 };
+
+export const uploadUnitsExcel = async (formData: FormData): Promise<{ message: string }> => {
+  const res = await axiosAuth.post(`${BaseURL}excel/unidad-completa`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+};

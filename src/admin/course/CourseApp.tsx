@@ -8,6 +8,8 @@ import { CourseModal } from "./CourseModal";
 import { Table } from "../../shared/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { CourseType } from "./course.schema";
+import { Pencil, Trash2 } from "lucide-react";
+import { RemoteImage } from "../../shared/components/RemoteImage";
 
 export const CourseApp = () => {
   const { data, isLoading, error } = useQuery(useCourseQueryOptions());
@@ -36,12 +38,20 @@ export const CourseApp = () => {
   };
 
   const columns: ColumnDef<CourseType, unknown>[] = [
-    { header: "Título", accessorKey: "title" },
+    {
+      header: "Título",
+      accessorKey: "title",
+      enableColumnFilter: true,
+    },
     {
       header: "Imagen",
       accessorKey: "image_src",
       cell: ({ getValue }) => (
-        <img src={getValue() as string} alt="curso" className="h-12 w-12 object-cover rounded" />
+        <RemoteImage
+          src={getValue() as string}
+          alt="imagen curso"
+          className="h-12 w-12 rounded object-cover"
+        />
       ),
     },
     {
@@ -49,9 +59,21 @@ export const CourseApp = () => {
       cell: ({ row }) => {
         const course = row.original;
         return (
-          <div className="flex gap-2">
-            <button onClick={() => handleEdit(course.id)} className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 transition">Editar</button>
-            <button onClick={() => handleDelete(course.id)} className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition">Eliminar</button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => handleEdit(course.id)}
+              className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              title="Editar curso"
+            >
+              <Pencil size={16} />
+            </button>
+            <button
+              onClick={() => handleDelete(course.id)}
+              className="p-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+              title="Eliminar curso"
+            >
+              <Trash2 size={16} />
+            </button>
           </div>
         );
       },
@@ -64,14 +86,22 @@ export const CourseApp = () => {
 
       <button
         onClick={() => setIsModalOpen(true)}
-        className="mb-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+        className="mb-6 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
       >
         Crear Curso
       </button>
 
-      {isLoading && <p>Cargando...</p>}
-      {error && <p>Error al cargar cursos</p>}
-      {data && <Table data={data} columns={columns} enableGlobalFilter  />}
+      {isLoading && <p className="text-gray-500">Cargando cursos...</p>}
+      {error && <p className="text-red-500">Error al cargar cursos</p>}
+      {data && (
+        <Table
+          data={data}
+          columns={columns}
+          enableGlobalFilter
+          enablePagination
+          enableColumnVisibility
+        />
+      )}
 
       <CourseModal
         isOpen={isModalOpen}
