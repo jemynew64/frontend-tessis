@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import {obtenerTodosleccions,obtenerleccionPorId} from "./lessonapp.service"
+import {obtenerTodosleccions,obtenerleccionPorId ,getAllUnits} from "./lessonapp.service"
 
 export  function useLessonQueryOptions() {
     return queryOptions({
@@ -15,3 +15,9 @@ export function useLessonIdQueryOptions(id: number) {
     });
   }
   
+export function useUnitQueryOptions() {
+  return queryOptions({
+    queryKey: ["unit"],
+    queryFn: () => getAllUnits(),
+  });
+}

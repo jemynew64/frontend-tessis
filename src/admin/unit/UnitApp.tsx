@@ -13,7 +13,6 @@ export const UnitApp = () => {
   const { data, isLoading, error } = useQuery(useUnitQueryOptions());
   const eliminar = useDeleteUnit();
   const { open } = useExitModal();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [unitIdToEdit, setUnitIdToEdit] = useState<number | null>(null);
   const [unitIdToDelete, setUnitIdToDelete] = useState<number | null>(null);
@@ -38,6 +37,7 @@ export const UnitApp = () => {
   const columns: ColumnDef<UnitType, unknown>[] = [
     { header: "Título", accessorKey: "title" },
     { header: "Descripción", accessorKey: "description" },
+    { header: "Curso", accessorKey: "course.title" },
     { header: "Orden", accessorKey: "order_num" },
     {
       header: "Acciones",

@@ -4,9 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LessonSchema,LessonFormType } from "./lesson.schema";
 import { useCrearLesson, useActualizarLesson } from "./lesson.mutations";
-import { useLessonIdQueryOptions } from "./lessonQueryOption";
+import { useLessonIdQueryOptions ,useUnitQueryOptions} from "./lessonQueryOption";
 import { useQuery } from "@tanstack/react-query";
-
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -14,8 +13,11 @@ interface Props {
 }
 
 export const LessonModal = ({ isOpen, onClose, idleccion }: Props) => {
+
   const enabled = !!idleccion;
   const { data } = useQuery({ ...useLessonIdQueryOptions(idleccion!), enabled });
+  //solo para el select
+  const { data:todoslasunidades } = useQuery(useUnitQueryOptions());
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<LessonFormType>({
     resolver: zodResolver(LessonSchema),
@@ -85,9 +87,20 @@ export const LessonModal = ({ isOpen, onClose, idleccion }: Props) => {
 
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-900">Unidad</label>
-              <input type="number" {...register("unit_id", { valueAsNumber: true })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+              <select
+                {...register("unit_id", { valueAsNumber: true })}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+              >
+                <option value="">Selecciona una unidad</option>
+                {todoslasunidades?.map((unidad) => (
+                  <option key={unidad.id} value={unidad.id}>
+                    {unidad.title}
+                  </option>
+                ))}
+              </select>
               {errors.unit_id && <p className="text-red-500 text-sm">{errors.unit_id.message}</p>}
             </div>
+
 
             <div className="flex justify-end gap-2 pt-4">
               <button type="button" onClick={onClose} className="px-4 py-2 border rounded text-gray-600">

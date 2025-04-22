@@ -38,3 +38,11 @@ export const eliminarleccion = async (id: number): Promise<{ message: string }> 
   const response = await axiosAuth.delete(`${BaseURL}lecciones/${id}/`);
   return response.data;
 };
+
+//solo para el select 
+import { UnitType } from "../unit/unit.schema";
+
+export const getAllUnits = async (): Promise<UnitType[]> => {
+  const res = await axiosAuth.get(`${BaseURL}unidades/`);
+  return res.data;
+};
