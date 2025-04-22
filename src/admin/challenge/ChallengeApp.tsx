@@ -50,6 +50,11 @@ export const ChallengeApp = () => {
     {
       header: "Pregunta", // Título que se muestra en la tabla
       accessorKey: "question", // La columna usará row.question
+      cell: ({ getValue }) => ( // Personalizamos cómo se muestra ese valor
+        <div className="font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
+          {getValue() as string} {/* lo forzamos a string por seguridad */}
+        </div>
+      ),
     },
     {
       header: "Tipo",

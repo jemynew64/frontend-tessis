@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,Navigate } from "react-router-dom";
 import { Login } from "./auth/Login";
 import {Learn} from "./student/learn/Learn";
 import Tienda from "./student/shop/Tienda";
@@ -17,7 +17,11 @@ import { UnitApp } from "./admin/unit/UnitApp";
 import { AchievementApp } from "./admin/achievement/AchievementApp";
 import { MissionApp } from "./admin/mission/MissionApp";
 import { CourseApp } from "./admin/course/CourseApp";
+//solo para manejar lar redireccion
+import { useAuthStore } from "./shared/store/auth";
+
 const AppRoutes = () => {
+  const { isAuth } = useAuthStore(); // aquí evaluamos el auth globalmente
   return (
     <Routes>
       {/* Rutas Públicas */}
@@ -49,6 +53,11 @@ const AppRoutes = () => {
            </Route>
         </Route>
       </Route>
+            {/* Fallback Route para rutas no existentes */}
+            <Route
+        path="*"
+        element={<Navigate to={isAuth ? "/aprender" : "/"} replace />}
+      />
     </Routes>
   );
 };
