@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { QuizzType } from "./quizz.service";
 import { create } from "zustand";
 import { QuizzCard } from "./QuizzCard";
+
+import { useAuthStore } from "../../shared/store/auth"; 
+import { completarLeccion } from "./quizz.service";
+
 // 🔐 Estado global como en ExitModal (persistente durante la sesión)
 type SafeRedirectState = {
   shouldRedirect: boolean;
@@ -19,6 +23,10 @@ const useSafeRedirect = create<SafeRedirectState>((set) => ({
 }));
 
 export const Quizz = () => {
+  // en el user.id esta el id que nesecito para el completar leccion
+  const user = useAuthStore((state) => state.user);
+
+
   const navigate = useNavigate();
   const location = useLocation(); // 👈 Detecta cambio de navegación
 
@@ -57,6 +65,12 @@ export const Quizz = () => {
       setPreguntaActual(null);
       setFinalizado(true);
       markForRedirect();
+      
+      if (user?.id) {
+        completarLeccion(id, user.id).catch((err) =>
+          console.error("Error al completar lección:", err)
+        );
+      }
     } else {
       setPreguntaActual(siguienteCola[0]);
     }

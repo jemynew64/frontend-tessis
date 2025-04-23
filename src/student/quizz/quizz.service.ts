@@ -30,3 +30,6 @@ export const obtenerQuizzforlesson = async (lessonId: number): Promise<QuizzType
   return response.data;
 };
 
+export const completarLeccion = async (lessonId: number, userId: number) => {
+  return await axiosAuth.post(`${BaseURL}lecciones/completar/${lessonId}/${userId}`);
+};

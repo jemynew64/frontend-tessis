@@ -8,9 +8,22 @@ import {MissionsCard} from '../../shared/components/MissionsCard';
 import {LearningUnitProgress} from "./LearningUnitProgress"
 import { LessonModule } from "./LessonModule";
 import { ButtonDuo } from "./ButtonDuo";
-
+//la el inicio del quiz
+import { iniciarLeccion } from "./cursotodo.service";
 
 export const CursoListadosTotal = () => {
+
+  const handleIniciarLeccion = async (lessonId: number) => {
+    if (!user?.id) return;
+  
+    try {
+      await iniciarLeccion(lessonId, user.id);
+      navigate(`/quizz/${lessonId}`);
+    } catch (error) {
+      console.error("Error al iniciar la lección:", error);
+    }
+  };
+
   const navigate = useNavigate();
 
   const { id: course_id } = useParams();
@@ -36,10 +49,10 @@ export const CursoListadosTotal = () => {
               className="bg-lime-700 mb-4"
             />
 
-            {unidad.lesson.map((leccion, idx) => {
-              const progreso = leccion.lesson_progress?.[0];
-              const estaCompletada = progreso?.completed === true;
-              const estaBloqueada = false;
+          {unidad.lesson.map((leccion, idx) => {
+            const estaCompletada = leccion.completed === true;
+            const estaBloqueada = !leccion.unlocked;
+
               const esPar = idx % 2 === 0;
 
               return (
@@ -50,7 +63,7 @@ export const CursoListadosTotal = () => {
                       estaCompletada={estaCompletada}
                       estaBloqueada={estaBloqueada}
                       tooltip={leccion.title}
-                      onClick={() => navigate(`/quizz/${leccion.id}`)}
+                      onClick={() => handleIniciarLeccion(leccion.id)}
                       />
                   </div>
 

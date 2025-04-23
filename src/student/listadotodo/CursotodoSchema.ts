@@ -10,11 +10,8 @@ export interface Unit {
 }
 
 export interface Lesson {
-  id:              number;
-  title:           string;
-  lesson_progress: LessonProgress[];
-}
-
-export interface LessonProgress {
+  id: number;
+  title: string;
   completed: boolean;
+  unlocked: boolean;
 }
