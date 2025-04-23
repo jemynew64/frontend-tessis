@@ -1,12 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    port: 5173, // ✅ Solo para desarrollo local en Docker
+    port: 5173, // Para desarrollo local (Docker o tu máquina)
     watch: {
       usePolling: true
     },
@@ -15,7 +14,7 @@ export default defineConfig({
     }
   },
   preview: {
-    host: true,         // ✅ Esto permite que se sirva en 0.0.0.0
-    port: 80             // ✅ Render requiere que el contenedor escuche en el 80
+    host: true,  // Esto permite recibir conexiones externas
+    port: 80     // Render requiere el puerto 80 en producción
   }
 })
