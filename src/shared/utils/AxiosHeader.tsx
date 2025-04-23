@@ -7,13 +7,16 @@ const axiosAuth = axios.create({
 });
 
 // Obtener el token directamente del estado de la tienda
-const token = useAuthStore.getState().token;
 
 // Interceptor para incluir el token de autorización en las solicitudes
 axiosAuth.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${token}`;
+    const token = useAuthStore.getState().token; // lee siempre en tiempo real
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
 });
+
 
 // Interceptor para manejar errores de respuesta
 axiosAuth.interceptors.response.use(

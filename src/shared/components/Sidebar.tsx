@@ -4,6 +4,8 @@ import { useAuthStore } from "../store/auth"
 
 const Sidebar = () => {
   const { user } = useAuthStore();
+  const { logout } = useAuthStore();
+
   return (
     <>
       {/* Sidebar desktop */}
@@ -37,7 +39,12 @@ const Sidebar = () => {
           <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
           <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
           <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
-
+          <SidebarItem label="Cerrar sesión" iconSrc="/logout.svg"
+            onClick={() => {
+              logout();
+              window.location.href = "/"; // o /login si prefieres
+            }}
+          />
         </div>
       </div>
 
@@ -59,7 +66,12 @@ const Sidebar = () => {
         <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
         <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
         <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
-
+        <SidebarItem label="Cerrar sesión" iconSrc="/logout.svg"
+            onClick={() => {
+              logout();
+              window.location.href = "/"; // o /login si prefieres
+            }}
+          />
       </div>
     </>
   );

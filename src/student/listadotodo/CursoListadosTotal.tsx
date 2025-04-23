@@ -1,22 +1,35 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
-//cosas echas por mi
+import { useRef } from "react";
+
+// cosas hechas por ti
 import { useUserQueryOptions } from "./CursotodoQueryOption";
 import { useAuthStore } from "../../shared/store/auth"; 
 import { UserProgress } from '../../shared/components/UserProgress'; 
-import {MissionsCard} from '../../shared/components/MissionsCard';
-import {LearningUnitProgress} from "./LearningUnitProgress"
+import { MissionsCard } from '../../shared/components/MissionsCard';
+import { LearningUnitProgress } from "./LearningUnitProgress";
 import { LessonModule } from "./LessonModule";
 import { ButtonDuo } from "./ButtonDuo";
-//la el inicio del quiz
 import { iniciarLeccion } from "./cursotodo.service";
+import { useRestoreScrollById } from "../../shared/hooks/useRestoreScroll";
 
 export const CursoListadosTotal = () => {
+  const navigate = useNavigate();
+  const { id: course_id } = useParams();
+  const user = useAuthStore((state) => state.user);
+  const { data } = useQuery(
+    useUserQueryOptions(Number(course_id), user?.id ?? 0)
+  );
+
+  // Referencias por lección
+  const refs = useRef<Record<number, HTMLDivElement | null>>({});
+  useRestoreScrollById(refs); // Hook que hace el scroll automático al regresar
 
   const handleIniciarLeccion = async (lessonId: number) => {
     if (!user?.id) return;
-  
     try {
+      sessionStorage.setItem("scrollY", window.scrollY.toString());
+      sessionStorage.setItem("lessonId", lessonId.toString());
       await iniciarLeccion(lessonId, user.id);
       navigate(`/quizz/${lessonId}`);
     } catch (error) {
@@ -24,17 +37,8 @@ export const CursoListadosTotal = () => {
     }
   };
 
-  const navigate = useNavigate();
-
-  const { id: course_id } = useParams();
-  const user = useAuthStore((state) => state.user);
-  const { data } = useQuery(
-    useUserQueryOptions(Number(course_id), user?.id ?? 0)
-  );
-
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
-      {/* Contenido principal */}
       <div className="flex-1 p-4">
         <LearningUnitProgress>
           {data?.title ?? "Cargando..."}
@@ -49,35 +53,33 @@ export const CursoListadosTotal = () => {
               className="bg-lime-700 mb-4"
             />
 
-          {unidad.lesson.map((leccion, idx) => {
-            const estaCompletada = leccion.completed === true;
-            const estaBloqueada = !leccion.unlocked;
-
+            {unidad.lesson.map((leccion, idx) => {
+              const estaCompletada = leccion.completed === true;
+              const estaBloqueada = !leccion.unlocked;
               const esPar = idx % 2 === 0;
 
               return (
-                <div key={leccion.id} className="flex flex-col items-center mb-6">
-                  {/* Botón con leve desplazamiento tipo zigzag sutil */}
-                  <div className={`relative ${esPar ? 'translate-x-[-20px]' : 'translate-x-[20px]'}`}>
+                <div
+                  key={leccion.id}
+                  ref={(el) => { refs.current[leccion.id] = el }}
+                  className="flex flex-col items-center mb-6"
+                >
+                  <div className={`relative ${esPar ? 'translate-x-[-25x]' : 'translate-x-[40px]'}`}>
                     <ButtonDuo
                       estaCompletada={estaCompletada}
                       estaBloqueada={estaBloqueada}
                       tooltip={leccion.title}
                       onClick={() => handleIniciarLeccion(leccion.id)}
-                      />
+                    />
                   </div>
-
-                  {/* Conector hacia la siguiente lección */}
                 </div>
               );
             })}
-
           </div>
         ))}
       </div>
 
-      {/* Sidebar derecha */}
-      <div className="hidden lg:flex flex-col w-[250px]  p-4 shadow-md">
+      <div className="hidden lg:flex flex-col w-[250px] p-4 shadow-md">
         <UserProgress />
         <MissionsCard />
       </div>
