@@ -1,5 +1,5 @@
 # ------------------------------
-# Etapa 1: Desarrollo y Build
+# Etapa 1: Build
 # ------------------------------
     FROM node:20-alpine AS build
     RUN apk add --no-cache curl
@@ -23,14 +23,16 @@
     
     WORKDIR /usr/src/app
     
+    # Solo las dependencias de producción
     COPY package*.json ./
     RUN npm ci --omit=dev
     
+    # Copia la app ya build-eada
     COPY --from=build /usr/src/app/dist ./dist
     
-    # 👉 Servimos la app en el puerto 80 (Render escucha ahí)
-    EXPOSE 80
+    # Servidor estático confiable (más estable que vite preview)
+    RUN npm install -g http-server
     
-    # 👉 Preview sirve la app build-eada
-    CMD ["npx", "vite", "preview", "--host", "0.0.0.0", "--port", "80"]
+    EXPOSE 80
+    CMD ["http-server", "dist", "-p", "80"]
     
