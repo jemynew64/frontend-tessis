@@ -5,16 +5,17 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // Necesario para exponer el servidor fuera del contenedor
-    port: 5173, // Puerto que estás usando
+    host: true,
+    port: 5173, // ✅ Solo para desarrollo local en Docker
     watch: {
-      usePolling: true // Obligatorio para Docker en Windows
+      usePolling: true
     },
     hmr: {
-      clientPort: 5173 // Importante para que HMR funcione correctamente
+      clientPort: 5173
     }
   },
   preview: {
-    port: 5173
+    host: true,         // ✅ Esto permite que se sirva en 0.0.0.0
+    port: 80             // ✅ Render requiere que el contenedor escuche en el 80
   }
 })
