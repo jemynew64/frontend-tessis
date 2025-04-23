@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    port: 5173, // Para desarrollo local (Docker o tu máquina)
+    port: 5173,
     watch: {
       usePolling: true
     },
@@ -14,7 +14,9 @@ export default defineConfig({
     }
   },
   preview: {
-    host: true,  // Esto permite recibir conexiones externas
-    port: 80     // Render requiere el puerto 80 en producción
+    host: true,
+    port: 80,
+    strictPort: true,
+    allowedHosts: ['frontend-tessis.onrender.com']  // ✅ Esto desbloquea tu host de Render
   }
 })
