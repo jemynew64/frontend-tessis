@@ -1,30 +1,35 @@
-# Etapa 1: Build
-FROM node:20-alpine AS build
-WORKDIR /usr/src/app
-
-# Copiar dependencias y hacer npm install
-COPY package*.json ./
-RUN npm install
-
-# Copiar el resto del proyecto (incluye vite.config, src, etc.)
-COPY . .
-
-# ⚠️ Asegúrate que Render tenga seteada la variable VITE_BASE_URL
-# Hacemos el build y las variables VITE_* se inyectan aquí
-RUN npm run build
-
-# Etapa 2: Producción
-FROM node:20-alpine AS production
-WORKDIR /usr/src/app
-
-# Instalar solo http-server para servir la app
-RUN npm install -g http-server
-
-# Copiar solo los archivos de la app ya construida
-COPY --from=build /usr/src/app/dist ./dist
-
-# Puerto donde Render sirve (obligatorio)
-EXPOSE 80
-
-# Usamos http-server para servir dist (no vite preview)
-CMD ["http-server", "dist", "-p", "80"]
+# --------------------------
+# Etapa 1: Build de producción
+# --------------------------
+    FROM node:20-alpine AS build
+    WORKDIR /app
+    
+    # Copiar package.json e instalar dependencias
+    COPY package*.json ./
+    RUN npm install
+    
+    # Copiar todo el proyecto
+    COPY . .
+    
+    # 👉 Aquí Render inyecta las variables de entorno automáticamente
+    # como VITE_BASE_URL al hacer este build
+    RUN npm run build
+    
+    # --------------------------
+    # Etapa 2: Servidor estático
+    # --------------------------
+    FROM node:20-alpine
+    WORKDIR /app
+    
+    # Instalar servidor de archivos estáticos
+    RUN npm install -g http-server
+    
+    # Copiar solo el build final
+    COPY --from=build /app/dist ./dist
+    
+    # Exponer el puerto 80 (Render lo usa por defecto)
+    EXPOSE 80
+    
+    # Servir el contenido de la carpeta dist
+    CMD ["http-server", "dist", "-p", "80"]
+    

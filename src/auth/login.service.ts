@@ -2,6 +2,7 @@ import axios from 'axios';
 // const BaseURl=import.meta.env.VITE_BASE_URL
 // const BaseURl="http://localhost:3000/api/"
 const BaseURL = import.meta.env.VITE_BASE_URL;
+console.log("VITE_BASE_URL:", import.meta.env.VITE_BASE_URL);
 
 console.log("URL del backend:", BaseURL); // debería mostrar http://localhost:3000/api/
 interface UserLogin {
