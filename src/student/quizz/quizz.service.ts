@@ -1,4 +1,5 @@
 import axiosAuth from '../../shared/utils/AxiosHeader';
+import { UserMissionType } from "../../shared/interfaces/UserMissionSchema"
 
 export interface QuizzType {
     id:               number;
@@ -33,3 +34,12 @@ export const obtenerQuizzforlesson = async (lessonId: number): Promise<QuizzType
 export const completarLeccion = async (lessonId: number, userId: number) => {
   return await axiosAuth.post(`${BaseURL}lecciones/completar/${lessonId}/${userId}`);
 };
+
+export const CompletarMision = async (misionusuario:UserMissionType) => {
+  return await axiosAuth.post(`${BaseURL}misionUsuarios/`,misionusuario);
+};
+
+export const Aumentarpuntos = async (user_id: number, lesson_id: number) => {
+  return await axiosAuth.post(`${BaseURL}quizzpoints/`,{user_id,lesson_id});
+};
+

@@ -17,7 +17,6 @@ export const UserProgress = () => {
           const response = await getUserByIdService(user.id); // Asegúrate de que esta función esté correctamente definida en tu servicio
           // Desestructura los datos obtenidos de la respuesta
           const { hearts, points, experience } = response;
-          
           // Asigna los valores a los estados locales
           setCorazones(hearts);
           setPuntos(points);
@@ -32,33 +31,31 @@ export const UserProgress = () => {
   }, [user?.id]);  // Solo se ejecuta cuando el ID del usuario cambie
 
   return (
-    <div className="bg-white p-2 rounded-lg shadow-md fixed top-0 left-0 right-0 w-full lg:static lg:w-auto lg:p-4 lg:rounded-lg lg:shadow-md z-50 flex justify-center lg:flex-col items-center lg:items-start">
-      <div className="flex items-center space-x-2 mx-4">
-        <span className="text-gray-600 flex items-center">
-          <Bolt className="h-5 w-5 text-yellow-500 mr-1" />
-          Puntos:
-        </span>
-        <span className="text-lg font-bold text-blue-600">{points !== null ? points : 'Cargando...'}</span>
+    <div className="bg-white p-2 rounded-lg shadow-md fixed top-0 left-0 right-0 w-full lg:static lg:w-auto lg:p-4 lg:rounded-lg lg:shadow-md z-50 flex justify-center lg:flex-col items-center lg:items-start space-x-4 lg:space-x-0">
+      
+      {/* Puntos */}
+      <div className="flex items-center space-x-1">
+        <Bolt className="h-5 w-5 text-yellow-500" />
+        <span className="hidden lg:inline text-gray-600">Puntos:</span>
+        <span className="text-lg font-bold text-blue-600">{points !== null ? points : '...'}</span>
       </div>
-
-      <div className="flex items-center space-x-2 mx-4">
-        <span className="text-gray-600 flex items-center">
-          <Heart className="h-5 w-5 text-red-500 mr-1" />
-          Vidas:
-        </span>
-        <span className="text-lg font-bold text-red-600">{hearts !== null ? `${hearts}/5` : 'Cargando...'}</span>
+  
+      {/* Vidas */}
+      <div className="flex items-center space-x-1">
+        <Heart className="h-5 w-5 text-red-500" />
+        <span className="hidden lg:inline text-gray-600">Vidas:</span>
+        <span className="text-lg font-bold text-red-600">{hearts !== null ? `${hearts}/5` : '...'}</span>
       </div>
-
-      {/* Muestra los datos de experience solo si existen */}
+  
+      {/* Experiencia */}
       {experience !== null && (
-        <div className="flex items-center space-x-2 mx-4">
-          <span className="text-gray-600 flex items-center">
-          <img src="/points.svg" alt="Points icon" className="h-6 w-6 text-yellow-500" /> {/* Usando el SVG del public */}
-          Experiencia:
-          </span>
+        <div className="flex items-center space-x-1">
+          <img src="/points.svg" alt="Points icon" className="h-6 w-6" />
+          <span className="hidden lg:inline text-gray-600">Experiencia:</span>
           <span className="text-lg font-bold text-blue-600">{experience}</span>
         </div>
       )}
     </div>
   );
-};
+  
+  };

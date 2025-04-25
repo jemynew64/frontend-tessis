@@ -2,12 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useQuizzQueryOptions } from "./quizzQueryOption";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { QuizzType } from "./quizz.service";
+import { QuizzType,Aumentarpuntos } from "./quizz.service";
+// import { UserMissionType } from "../../shared/interfaces/UserMissionSchema";
+
 import { create } from "zustand";
 import { QuizzCard } from "./QuizzCard";
 
 import { useAuthStore } from "../../shared/store/auth"; 
 import { completarLeccion } from "./quizz.service";
+// import { CompletarMision } from "./quizz.service"
 
 // 🔐 Estado global como en ExitModal (persistente durante la sesión)
 type SafeRedirectState = {
@@ -31,9 +34,9 @@ export const Quizz = () => {
   const location = useLocation(); // 👈 Detecta cambio de navegación
 
   const { id_lesson } = useParams();
-  const id = Number(id_lesson);
+  const leccionid = Number(id_lesson);
 
-  const { data, isLoading, error } = useQuery(useQuizzQueryOptions(id));
+  const { data, isLoading, error } = useQuery(useQuizzQueryOptions(leccionid));
 
   const [cola, setCola] = useState<QuizzType[]>([]);
   const [preguntaActual, setPreguntaActual] = useState<QuizzType | null>(null);
@@ -67,9 +70,18 @@ export const Quizz = () => {
       markForRedirect();
       
       if (user?.id) {
-        completarLeccion(id, user.id).catch((err) =>
+        completarLeccion(leccionid, user.id).catch((err) =>
           console.error("Error al completar lección:", err)
         );
+        Aumentarpuntos(user.id, leccionid).catch((err) =>
+          console.error("Error al aumentar puntos:", err)
+        );
+        // const misionusuario: UserMissionType = {
+        //   user_id: user.id,
+        //   depsueslo completo 
+        // }
+        // CompletarMision()
+
       }
     } else {
       setPreguntaActual(siguienteCola[0]);
