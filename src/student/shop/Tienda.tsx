@@ -1,15 +1,8 @@
-import { UserProgress } from '../../shared/components/UserProgress'; 
-import {MissionsCard} from '../../shared/components/MissionsCard'; 
 import { FaHeart } from 'react-icons/fa'; 
 
 const Tienda = () => {
   return (
     <div className="flex min-h-screen">
-      {/* Contenido principal (en el centro) */}
-      <div className="block lg:hidden">
-        <UserProgress  />
-      </div>
-
       <div className="flex-1 p-8 lg:pl-[256px]">
         {/* Icono de la tienda */}
         <div className="text-center">
@@ -39,12 +32,6 @@ const Tienda = () => {
             Recargar Vida
           </button>
         </div>
-      </div>
-
-      {/* Barra de progreso (a la derecha) */}
-      <div className="hidden lg:block w-[250px] bg-white p-4">
-        <UserProgress  />
-        <MissionsCard />
       </div>
     </div>
   );

@@ -1,21 +1,16 @@
 import { useMemo } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { UserProgress } from '../../shared/components/UserProgress';
-import { MissionsCard } from '../../shared/components/MissionsCard';
 import { useRankingQueryOptions } from "./userankingQueryOptions";
 import { StudentForm } from "../../admin/user/EstudianteSchema";
 
 export const Rankings = () => {
-  // Obtener los datos con React Query
   const { data, isLoading, error } = useQuery(useRankingQueryOptions());
 
-  // Ordenar por experiencia con useMemo
   const usuariosOrdenados = useMemo(() => {
     if (!data) return [];
     return [...data].sort((a: StudentForm, b: StudentForm) => b.experience - a.experience);
   }, [data]);
 
-  // Función para los estilos según ranking
   const getMedalColor = (index: number) => {
     switch (index) {
       case 0:
@@ -30,28 +25,20 @@ export const Rankings = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Para pantallas pequeñas */}
-      <div className="block lg:hidden">
-        <UserProgress />
-      </div>
-
-      {/* Contenido principal */}
-      <div className="flex-1 p-20 ">
+    <div className="flex-1 p-8 lg:pl-[256px]">
+      <div className="max-w-3xl mx-auto">
         <div className="text-center">
           <img src="/leaderboard.svg" alt="Icono Tienda" className="mx-auto w-32 h-32 mb-4" />
           <h1 className="text-2xl font-semibold mb-6">Ranking de campeones</h1>
         </div>
 
-        {/* Cargando o error */}
         {isLoading && <p className="text-center">Cargando ranking...</p>}
         {error && <p className="text-center text-red-500">Error al cargar el ranking.</p>}
 
-        {/* Mostrar usuarios */}
         {usuariosOrdenados.map((usuario, index) => (
           <div
             key={usuario.id}
-            className={`p-6 rounded-lg shadow-md mb-8 flex items-center justify-between ${getMedalColor(index)}`}
+            className={`p-6 rounded-lg mb-8 flex items-center justify-between ${getMedalColor(index)} transition-all duration-300 ease-in-out transform`}
           >
             <div className="flex items-center space-x-4">
               <span className="text-lg font-semibold">{index + 1}</span>
@@ -65,12 +52,6 @@ export const Rankings = () => {
             <span className="text-sm text-black">{usuario.experience} XP</span>
           </div>
         ))}
-      </div>
-
-      {/* Sidebar en pantallas grandes */}
-      <div className="hidden lg:block bg-white p-4">
-        <UserProgress />
-        <MissionsCard />
       </div>
     </div>
   );

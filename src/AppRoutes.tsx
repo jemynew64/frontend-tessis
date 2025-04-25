@@ -8,6 +8,7 @@ import SidebarLayout from "./shared/layouts/MainLayout";
 import PrivateRoute from "./shared/layouts/PrivateRoute";
 import RoleRoute from "./shared/layouts/RoleRoute";
 import { PageUser } from "./admin/user/PageUser";
+import StudentLayout from "./shared/layouts/StudentLayout";
 import {CursoListadosTotal} from "./student/listadotodo/CursoListadosTotal"
 import { LessonApp } from "./admin/lesson/LessonApp";
 import { ChallengeApp } from "./admin/challenge/ChallengeApp";
@@ -29,30 +30,34 @@ const AppRoutes = () => {
 
       {/* Rutas Privadas (Cualquier usuario autenticado) */}
       <Route element={<PrivateRoute />}>
-        
-         <Route path="/quizz/:id_lesson" element={<Quizz />} />
-        
-        <Route element={<SidebarLayout />}>
+      <Route path="/quizz/:id_lesson" element={<Quizz />} />
 
-         <Route path="/listartodo/:id" element={<CursoListadosTotal />} />
-          <Route path="/aprender" element={<Learn />} />
-          <Route path="/tienda" element={<Tienda />} />
-          <Route path="/ranking" element={<Rankings />} />
-          <Route path="/perfil" element={<Profile />} />
+  {/* 🎯 StudentLayout para rutas del estudiante con progreso + misiones */}
+  <Route element={<StudentLayout />}>
+    <Route path="/aprender" element={<Learn />} />
+    <Route path="/listartodo/:id" element={<CursoListadosTotal />} />
+    <Route path="/tienda" element={<Tienda />} />
+    <Route path="/ranking" element={<Rankings />} />
+  </Route>
 
-                     {/* Rutas Exclusivas de Administrador */}
-          <Route element={<RoleRoute allowedRoles={["admin"]} />}>
-           <Route path="/usuario" element={<PageUser />} />
-           <Route path="/unit" element={<UnitApp />} />
-           <Route path="/achievement" element={<AchievementApp />} />
-           <Route path="/misiones" element={<MissionApp />} />
-           <Route path="/course" element={<CourseApp />} />
-           <Route path="/leccion" element={<LessonApp />} />
-           <Route path="/leccion-retos/:id_leccion/:titulo" element={<ChallengeApp />} />
-           <Route path="/opciones-del-reto/:challenge_id/:titulo" element={<ChallengeOptionApp />} />
-           </Route>
-        </Route>
-      </Route>
+  {/* 🛠️ SidebarLayout para todo lo demás (tienda, perfil, admin) */}
+  <Route element={<SidebarLayout />}>
+  <Route path="/perfil" element={<Profile />} />
+
+    {/* Admin */}
+    <Route element={<RoleRoute allowedRoles={["admin"]} />}>
+      <Route path="/usuario" element={<PageUser />} />
+      <Route path="/unit" element={<UnitApp />} />
+      <Route path="/achievement" element={<AchievementApp />} />
+      <Route path="/misiones" element={<MissionApp />} />
+      <Route path="/course" element={<CourseApp />} />
+      <Route path="/leccion" element={<LessonApp />} />
+      <Route path="/leccion-retos/:id_leccion/:titulo" element={<ChallengeApp />} />
+      <Route path="/opciones-del-reto/:challenge_id/:titulo" element={<ChallengeOptionApp />} />
+    </Route>
+  </Route>
+</Route>
+
             {/* Fallback Route para rutas no existentes */}
             <Route
         path="*"

@@ -5,8 +5,6 @@ import { useRef } from "react";
 // cosas hechas por ti
 import { useUserQueryOptions } from "./CursotodoQueryOption";
 import { useAuthStore } from "../../shared/store/auth"; 
-import { UserProgress } from '../../shared/components/UserProgress'; 
-import { MissionsCard } from '../../shared/components/MissionsCard';
 import { LearningUnitProgress } from "./LearningUnitProgress";
 import { LessonModule } from "./LessonModule";
 import { ButtonDuo } from "./ButtonDuo";
@@ -38,8 +36,8 @@ export const CursoListadosTotal = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen">
-      <div className="flex-1 p-4">
+    <div className="flex-1 p-8 lg:pl-[256px]">
+      <div className="max-w-5xl mx-auto">
         <LearningUnitProgress>
           {data?.title ?? "Cargando..."}
         </LearningUnitProgress>
@@ -64,7 +62,7 @@ export const CursoListadosTotal = () => {
                   ref={(el) => { refs.current[leccion.id] = el }}
                   className="flex flex-col items-center mb-6"
                 >
-                  <div className={`relative ${esPar ? 'translate-x-[-25x]' : 'translate-x-[40px]'}`}>
+                  <div className={`relative ${esPar ? 'translate-x-[-25px]' : 'translate-x-[40px]'}`}>
                     <ButtonDuo
                       estaCompletada={estaCompletada}
                       estaBloqueada={estaBloqueada}
@@ -77,11 +75,6 @@ export const CursoListadosTotal = () => {
             })}
           </div>
         ))}
-      </div>
-
-      <div className="hidden lg:flex flex-col w-[250px] p-4 shadow-md">
-        <UserProgress />
-        <MissionsCard />
       </div>
     </div>
   );
