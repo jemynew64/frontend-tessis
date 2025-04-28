@@ -5,8 +5,8 @@ const SidebarLayout = () => {
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1 p-8 lg:pl-[256px]">
-        <Outlet /> {/* Aquí se renderizarán las páginas */}
+      <div className="flex-1 lg:pl-[256px]">
+      <Outlet /> {/* Aquí se renderizarán las páginas */}
       </div>
     </div>
   );

@@ -23,23 +23,22 @@ export interface ChallengeOption {
 // LessonFormType para todo lo que sea mandar en mi formulario
 // LessonType para todo lo que sea que me llege de mi api get get id
 
-const BaseURL = import.meta.env.VITE_BASE_URL;
 
 // Obtener un leccion por ID
 export const obtenerQuizzforlesson = async (lessonId: number): Promise<QuizzType[]> => {
-  const response = await axiosAuth.get(`${BaseURL}reto/quizz/${lessonId}`);
+  const response = await axiosAuth.get(`reto/quizz/${lessonId}`);
   return response.data;
 };
 
 export const completarLeccion = async (lessonId: number, userId: number) => {
-  return await axiosAuth.post(`${BaseURL}lecciones/completar/${lessonId}/${userId}`);
+  return await axiosAuth.post(`lecciones/completar/${lessonId}/${userId}`);
 };
 
 export const CompletarMision = async (misionusuario:UserMissionType) => {
-  return await axiosAuth.post(`${BaseURL}misionUsuarios/`,misionusuario);
+  return await axiosAuth.post(`misionUsuarios/`,misionusuario);
 };
 
 export const Aumentarpuntos = async (user_id: number, lesson_id: number) => {
-  return await axiosAuth.post(`${BaseURL}quizzpoints/`,{user_id,lesson_id});
+  return await axiosAuth.post(`quizzpoints/`,{user_id,lesson_id});
 };
 

@@ -1,47 +1,78 @@
-import { useAuthStore } from '../../shared/store/auth';  // Asegúrate de importar el store
+import { useAuthStore } from '../../shared/store/auth';
+import {useUserIdQueryOptions} from "../../admin/user/UserQueryOption"
+import { useQuery } from '@tanstack/react-query';
+import { Achievements } from '../achievements/Achievements';
 
 export const Profile = () => {
-  // Obtener el usuario desde la tienda zustand
+  
   const { user } = useAuthStore((state) => state);
 
-  // Verificar si el usuario está autenticado
-  if (!user) {
-    return <div className="text-center text-lg font-semibold text-gray-500">No estás autenticado.</div>;  // Si no hay usuario, mostrar mensaje
+  // Si el user no existe, ni siquiera intentes hacer la query
+  const { data: usuario } = useQuery({
+    ...useUserIdQueryOptions(user?.id ?? 0),
+    enabled: !!user,
+  });
+  
+  
+  if (!usuario) {
+    return (
+      <div className="text-center text-lg font-semibold text-gray-500">
+        Cargando perfil...
+      </div>
+    );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <div className="flex-1 p-8 lg:px-16">
-        {/* Título y foto de perfil */}
-        <div className="text-center mb-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-3">
+        {/* Lado izquierdo - avatar y nombre */}
+        <div className="bg-purple-600 p-8 flex flex-col items-center justify-center text-white">
           <img
-            src={ '/images/iconomorado.jpg'}  // Usar la imagen del perfil o la predeterminada
+            src="/images/iconomorado.jpg"
             alt="Perfil"
-            className="w-36 h-36 rounded-full mx-auto mb-4 object-cover shadow-lg border-4 border-white"
+            className="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover mb-4"
           />
-          <h1 className="text-3xl font-semibold text-gray-800">{user.name}</h1>
+          <h2 className="text-xl font-bold">{usuario.name}</h2>
+          <p className="text-sm text-purple-200">Miembro desde octubre de 2018</p>
         </div>
 
-        {/* Información del perfil */}
-        <div className="bg-white p-8 rounded-2xl shadow-xl space-y-6">
-          <div className="flex justify-between items-center border-b pb-4">
-            <span className="text-xl font-medium text-gray-700">Email:</span>
-            <span className="text-lg text-gray-500">{user.email}</span>
+        {/* Lado derecho - datos y stats */}
+        <div className="col-span-2 p-8 space-y-6">
+          {/* Info rápida */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm">
+              <p className="text-xl font-bold text-purple-700">{usuario.experience}</p>
+              <p className="text-sm text-gray-500 uppercase">Experiencia</p>
+            </div>
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm">
+              <p className="text-xl font-bold text-blue-700">{usuario.points}</p>
+              <p className="text-sm text-gray-500 uppercase">Puntos</p>
+            </div>
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm">
+              <p className="text-xl font-bold text-red-600">{usuario.hearts}</p>
+              <p className="text-sm text-gray-500 uppercase">Corazones</p>
+            </div>
           </div>
-          <div className="flex justify-between items-center border-b pb-4">
-            <span className="text-xl font-medium text-gray-700">Corazones:</span>
-            <span className="text-lg text-gray-500">{user.hearts}</span>
-          </div>
-          <div className="flex justify-between items-center border-b pb-4">
-            <span className="text-xl font-medium text-gray-700">Puntos:</span>
-            <span className="text-lg text-gray-500">{user.points}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-xl font-medium text-gray-700">Experiencia:</span>
-            <span className="text-lg text-gray-500">{user.experience} XP</span>
+
+          {/* Información adicional */}
+          <div className="space-y-2">
+            <div className="flex justify-between border-b pb-1">
+              <span className="font-medium text-gray-600">Correo electrónico:</span>
+              <span className="text-gray-800">{usuario.email}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium text-gray-600">Estado:</span>
+              <span className="text-gray-800">Activo</span>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Logros */}
+      <div className=' mt-4'>
+      <Achievements userExperience={usuario.experience} userId={usuario.id!} />
+      </div>
+
     </div>
   );
 };
