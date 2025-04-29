@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChallengeSchema, ChallengeType } from "./challenge.schema";
@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useChallengeIdQueryOptions } from "./challengeQueryOptions";
 import { RemoteImage } from "../../shared/components/RemoteImage";
 import { uploadImageToBackend } from "../../shared/utils/uploadImageToBackend";
+import { Upload, Link as LinkIcon } from "lucide-react";
 
 interface Props {
   isOpen: boolean;
@@ -70,6 +71,7 @@ export const ChallengeModal = ({ isOpen, onClose, idChallenge, idLeccion }: Prop
       });
     }
   }, [isEditMode, isOpen, idLeccion, reset]);
+  const [useUpload, setUseUpload] = useState(true); // al inicio del componente
 
   const onSubmit = async (formData: ChallengeType) => {
     try {
@@ -133,26 +135,58 @@ export const ChallengeModal = ({ isOpen, onClose, idChallenge, idLeccion }: Prop
             </div>
 
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-900">Imagen</label>
-              <input
-                type="file"
-                accept="image/*"
-                className="block mt-2"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-                  try {
-                    const url = await uploadImageToBackend(file);
-                    setValue("image_src", url);
-                  } catch (err) {
-                    console.error("Error al subir imagen:", err);
-                  }
-                }}
-              />
-              <div className="flex justify-center mt-4 mb-2">
-                <RemoteImage src={image_src} alt="Vista previa" className="w-40 h-40" />
-              </div>
-            </div>
+  <div className="flex items-center justify-between mb-1">
+    <label className="text-sm font-medium text-gray-900">Imagen</label>
+    <button
+      type="button"
+      className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
+      onClick={() => setUseUpload((prev) => !prev)}
+    >
+      {useUpload ? (
+        <>
+          <LinkIcon className="w-4 h-4" />
+          Usar URL
+        </>
+      ) : (
+        <>
+          <Upload className="w-4 h-4" />
+          Subir imagen
+        </>
+      )}
+    </button>
+  </div>
+
+  {useUpload ? (
+    <input
+      type="file"
+      accept="image/*"
+      className="block mt-2"
+      onChange={async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+          const url = await uploadImageToBackend(file);
+          setValue("image_src", url);
+        } catch (err) {
+          console.error("Error al subir imagen:", err);
+        }
+      }}
+    />
+  ) : (
+    <input
+      {...register("image_src")}
+      placeholder="https://ejemplo.com/imagen.jpg"
+      className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 mt-2"
+    />
+  )}
+
+  {image_src && (
+    <div className="flex justify-center mt-4 mb-2">
+      <RemoteImage src={image_src} alt="Vista previa" className="w-40 h-40 rounded object-cover" />
+    </div>
+  )}
+</div>
+
 
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-900">Orden</label>
