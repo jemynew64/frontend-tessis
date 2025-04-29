@@ -11,6 +11,7 @@ import { QuizzCard } from "./QuizzCard";
 import { useAuthStore } from "../../shared/store/auth"; 
 import { completarLeccion } from "./quizz.service";
 // import { CompletarMision } from "./quizz.service"
+const completeSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948220/sonido_completar_quizz_he8ahr.wav");
 
 // 🔐 Estado global como en ExitModal (persistente durante la sesión)
 type SafeRedirectState = {
@@ -68,6 +69,7 @@ export const Quizz = () => {
       setPreguntaActual(null);
       setFinalizado(true);
       markForRedirect();
+      completeSound.play().catch(() => {});
       
       if (user?.id) {
         completarLeccion(leccionid, user.id).catch((err) =>

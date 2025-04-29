@@ -5,6 +5,10 @@ import { ExitModal } from "../../shared/components/modals/exit-modal";
 import { useExitModal } from "../../shared/store/use-exit-modal";
 import { useNavigate } from "react-router-dom";
 
+// 🎵 Sonidos Cloudinary
+const correctSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948236/opcion_correcta_vzfox9.wav");
+const incorrectSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948242/opcion_incorrecta_qgpuct.wav");
+
 interface Option {
   id: number;
   text: string;
@@ -18,28 +22,32 @@ interface QuizzCardProps {
   onAnswer?: (isCorrect: boolean) => void;
 }
 
-export const QuizzCard = ({ question, options, onAnswer ,image_src }: QuizzCardProps) => {
+export const QuizzCard = ({ question, options, onAnswer, image_src }: QuizzCardProps) => {
+  const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
   const [disabled, setDisabled] = useState(false);
-  const [respuestaCorrecta, setRespuestaCorrecta] = useState<boolean | null>(null);
   const { open } = useExitModal();
   const navigate = useNavigate();
 
-  const manejarRespuesta = (isCorrect: boolean) => {
+  const manejarRespuesta = (opcion: Option) => {
     if (disabled) return;
 
     setDisabled(true);
-    setRespuestaCorrecta(isCorrect);
+    setSelectedOptionId(opcion.id);
 
-    if (isCorrect) {
+    if (opcion.is_correct) {
       toast.success("¡Respuesta correcta!");
+      correctSound.play().catch(() => {}); // 🎵 sonido correcto
+      // navigator.vibrate?.(100); // (opcional vibración corta)
     } else {
       toast.error("¡Respuesta incorrecta!");
+      incorrectSound.play().catch(() => {}); // 🎵 sonido incorrecto
+      navigator.vibrate?.(200); // vibración larga si falla
     }
 
-    onAnswer?.(isCorrect);
+    onAnswer?.(opcion.is_correct);
 
     setTimeout(() => {
-      setRespuestaCorrecta(null);
+      setSelectedOptionId(null);
       setDisabled(false);
     }, 800);
   };
@@ -54,32 +62,47 @@ export const QuizzCard = ({ question, options, onAnswer ,image_src }: QuizzCardP
         <IoCloseCircleOutline size={28} />
       </button>
 
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">{question}</h2>
-{image_src && (
-  <div className="mb-6 max-h-[70vh] overflow-auto rounded-lg border">
-    <img
-      src={image_src}
-      alt="Imagen del reto"
-      className="w-full object-contain"
-    />
-  </div>
-)}
+      <h2 className="text-xl font-semibold mb-4 text-gray-800 text-center">{question}</h2>
 
+      {image_src && (
+        <div className="mb-6 max-h-[70vh] overflow-auto rounded-lg border">
+          <img
+            src={image_src}
+            alt="Imagen del reto"
+            className="w-full object-contain"
+          />
+        </div>
+      )}
 
-      {options.map((opcion) => (
-        <button
-          key={opcion.id}
-          onClick={() => manejarRespuesta(opcion.is_correct)}
-          disabled={disabled}
-          className={`w-full mb-3 py-3 px-4 rounded-lg text-white font-medium transition-all duration-300 
-            ${respuestaCorrecta === true && opcion.is_correct ? 'bg-green-500'
-            : respuestaCorrecta === false && opcion.is_correct ? 'bg-green-500'
-            : respuestaCorrecta === false && !opcion.is_correct ? 'bg-red-500 animate-shake'
-            : 'bg-blue-600 hover:bg-blue-700'}`}
-        >
-          {opcion.text}
-        </button>
-      ))}
+      {options.map((opcion) => {
+        const isSelected = opcion.id === selectedOptionId;
+        const isCorrect = opcion.is_correct;
+
+        let buttonClasses = "w-full mb-3 py-3 px-4 rounded-lg text-white font-medium transition-all duration-300 ";
+
+        if (selectedOptionId === null) {
+          buttonClasses += "bg-blue-600 hover:bg-blue-700";
+        } else {
+          if (isSelected && isCorrect) {
+            buttonClasses += "bg-green-500 animate-pulse"; // Correcto
+          } else if (isSelected && !isCorrect) {
+            buttonClasses += "bg-red-500 animate-shake"; // Incorrecto
+          } else {
+            buttonClasses += "bg-blue-600 opacity-50"; // Otros apagados
+          }
+        }
+
+        return (
+          <button
+            key={opcion.id}
+            onClick={() => manejarRespuesta(opcion)}
+            disabled={disabled}
+            className={buttonClasses}
+          >
+            {opcion.text}
+          </button>
+        );
+      })}
 
       {/* Modal de salida */}
       <ExitModal onConfirm={() => navigate(-1)} />
