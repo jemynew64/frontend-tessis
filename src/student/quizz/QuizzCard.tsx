@@ -12,12 +12,13 @@ interface Option {
 }
 
 interface QuizzCardProps {
+  image_src?: string | null;
   question: string;
   options: Option[];
   onAnswer?: (isCorrect: boolean) => void;
 }
 
-export const QuizzCard = ({ question, options, onAnswer }: QuizzCardProps) => {
+export const QuizzCard = ({ question, options, onAnswer ,image_src }: QuizzCardProps) => {
   const [disabled, setDisabled] = useState(false);
   const [respuestaCorrecta, setRespuestaCorrecta] = useState<boolean | null>(null);
   const { open } = useExitModal();
@@ -54,6 +55,16 @@ export const QuizzCard = ({ question, options, onAnswer }: QuizzCardProps) => {
       </button>
 
       <h2 className="text-xl font-semibold mb-4 text-gray-800">{question}</h2>
+{image_src && (
+  <div className="mb-6 max-h-[70vh] overflow-auto rounded-lg border">
+    <img
+      src={image_src}
+      alt="Imagen del reto"
+      className="w-full object-contain"
+    />
+  </div>
+)}
+
 
       {options.map((opcion) => (
         <button

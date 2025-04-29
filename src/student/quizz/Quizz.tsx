@@ -135,6 +135,7 @@ export const Quizz = () => {
       {preguntaActual && (
         <QuizzCard
           question={preguntaActual.question}
+          image_src={preguntaActual.image_src}
           options={preguntaActual.challenge_option.map((op) => ({
             id: op.id,
             text: op.text,

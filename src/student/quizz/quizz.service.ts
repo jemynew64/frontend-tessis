@@ -5,7 +5,7 @@ export interface QuizzType {
     id:               number;
     type:             string;
     question:         string;
-    image_src:        null;
+    image_src?: string | null;
     order_num:        number;
     lesson_id:        number;
     challenge_option: ChallengeOption[];
