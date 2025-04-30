@@ -3,6 +3,11 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "login-pattern": "url('/images/background-login.png')",
+
+        "background-pattern": "url('/images/background-login.png')",
+      },
       colors: {
         "custom-purple": "#533CA6", // Agrega tu color personalizado aquí
         "custom-negro": "#3C3C3C", // Agrega tu color personalizado aquí

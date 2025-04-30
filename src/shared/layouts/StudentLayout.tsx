@@ -5,19 +5,19 @@ import { MissionsCard } from "../../shared/components/MissionsCard";
 
 const StudentLayout = () => {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen ">
       {/* Sidebar izquierda */}
       <Sidebar />
 
       {/* Contenido principal */}
       <div className="flex-1 flex flex-col bg-gray-50">
         {/* TopBar en móviles */}
-        <div className="block lg:hidden w-full">
+        <div className="block lg:hidden w-full ">
           <UserProgress />
         </div>
 
         {/* Página */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 ">
           <Outlet />
         </main>
       </div>

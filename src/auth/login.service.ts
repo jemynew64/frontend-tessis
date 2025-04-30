@@ -1,4 +1,6 @@
 import axios from 'axios';
+import type { AxiosError } from "axios";
+
 // const BaseURl=import.meta.env.VITE_BASE_URL
 // const BaseURl="http://localhost:3000/api/"
 const BaseURL = import.meta.env.VITE_BASE_URL;
@@ -15,10 +17,13 @@ const axiosAuth = axios.create({
 });
 
 export const loginPost = async (userData: UserLogin) => {
-  console.log('Enviando datos:', userData);  // Verifica qué datos estás enviando
-  const response = await axiosAuth.post('auth/login/', {
-    email: userData.email,  
-    password: userData.password, 
-  });
-  return response.data;
+  try {
+    const response = await axiosAuth.post('auth/login/', userData);
+    return { success: true, data: response.data };
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ error: string }>;
+    const mensaje = axiosError.response?.data?.error || "Error desconocido";
+    const status = axiosError.response?.status;
+    return { success: false, status, mensaje };
+  }
 };
