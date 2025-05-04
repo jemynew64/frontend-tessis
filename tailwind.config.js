@@ -28,9 +28,15 @@ module.exports = {
         draw: {
           to: { strokeDashoffset: "0" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "20%, 60%": { transform: "translateX(-8px)" },
+          "40%, 80%": { transform: "translateX(8px)" },
+        },
       },
       animation: {
         draw: "draw 0.8s ease-in-out forwards",
+        shake: "shake 0.6s ease-in-out",
       },
     },
   },

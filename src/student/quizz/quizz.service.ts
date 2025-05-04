@@ -39,6 +39,7 @@ export const CompletarMision = async (misionusuario:UserMissionType) => {
 };
 
 export const Aumentarpuntos = async (user_id: number, lesson_id: number) => {
-  return await axiosAuth.post(`quizzpoints/`,{user_id,lesson_id});
+  const response = await axiosAuth.post(`quizzpoints/`,{user_id,lesson_id});
+  return response.data.datos;
 };
 

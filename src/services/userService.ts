@@ -5,7 +5,7 @@ export interface User {
   id: number;
   nombre: string;
   email: string;
-  tipo_usuario: string;
+  user_type: string;
   // agrega los demás campos que puedas tener
 }
 

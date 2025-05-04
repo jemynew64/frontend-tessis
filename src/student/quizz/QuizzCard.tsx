@@ -4,6 +4,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import { ExitModal } from "../../shared/components/modals/exit-modal";
 import { useExitModal } from "../../shared/store/use-exit-modal";
 import { useNavigate } from "react-router-dom";
+import { QuizOptionButton } from "./QuizOptionButton"; // Ajusta el path si es necesario
 
 // 🎵 Sonidos Cloudinary
 const correctSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948236/opcion_correcta_vzfox9.wav");
@@ -36,12 +37,11 @@ export const QuizzCard = ({ question, options, onAnswer, image_src }: QuizzCardP
 
     if (opcion.is_correct) {
       toast.success("¡Respuesta correcta!");
-      correctSound.play().catch(() => {}); // 🎵 sonido correcto
-      // navigator.vibrate?.(100); // (opcional vibración corta)
+      correctSound.play().catch(() => {});
     } else {
       toast.error("¡Respuesta incorrecta!");
-      incorrectSound.play().catch(() => {}); // 🎵 sonido incorrecto
-      navigator.vibrate?.(200); // vibración larga si falla
+      incorrectSound.play().catch(() => {});
+      navigator.vibrate?.(200);
     }
 
     onAnswer?.(opcion.is_correct);
@@ -49,11 +49,11 @@ export const QuizzCard = ({ question, options, onAnswer, image_src }: QuizzCardP
     setTimeout(() => {
       setSelectedOptionId(null);
       setDisabled(false);
-    }, 800);
+    }, 1000);
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto bg-white p-6 rounded-xl shadow-lg border-2 border-blue-200 relative">
+    <div className="w-full max-w-xl mx-auto bg-white p-6 rounded-2xl shadow-2xl border-2 border-blue-200 relative animate-fade-in">
       {/* Botón de cerrar para salir */}
       <button
         onClick={() => open()}
@@ -62,47 +62,40 @@ export const QuizzCard = ({ question, options, onAnswer, image_src }: QuizzCardP
         <IoCloseCircleOutline size={28} />
       </button>
 
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 text-center">{question}</h2>
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center text-custom-purple">{question}</h2>
 
       {image_src && (
-        <div className="mb-6 max-h-[70vh] overflow-auto rounded-lg border">
+        <div className="mb-6 max-h-[60vh] overflow-auto rounded-xl border-2 border-gray-200">
           <img
             src={image_src}
             alt="Imagen del reto"
-            className="w-full object-contain"
+            className="w-full object-contain rounded-xl"
           />
         </div>
       )}
 
-      {options.map((opcion) => {
-        const isSelected = opcion.id === selectedOptionId;
-        const isCorrect = opcion.is_correct;
+      <div className="space-y-3">
+        {options.map((opcion) => {
+          return (
+        <QuizOptionButton
+          key={opcion.id}
+          text={opcion.text}
+          isSelected={selectedOptionId === opcion.id}
+          isCorrect={opcion.is_correct}
+          disabled={disabled}
+          onClick={() => manejarRespuesta(opcion)}
+        />
+          );
+        })}
+      </div>
 
-        let buttonClasses = "w-full mb-3 py-3 px-4 rounded-lg text-white font-medium transition-all duration-300 ";
-
-        if (selectedOptionId === null) {
-          buttonClasses += "bg-blue-600 hover:bg-blue-700";
-        } else {
-          if (isSelected && isCorrect) {
-            buttonClasses += "bg-green-500 animate-pulse"; // Correcto
-          } else if (isSelected && !isCorrect) {
-            buttonClasses += "bg-red-500 animate-shake"; // Incorrecto
-          } else {
-            buttonClasses += "bg-blue-600 opacity-50"; // Otros apagados
-          }
-        }
-
-        return (
-          <button
-            key={opcion.id}
-            onClick={() => manejarRespuesta(opcion)}
-            disabled={disabled}
-            className={buttonClasses}
-          >
-            {opcion.text}
-          </button>
-        );
-      })}
+      {selectedOptionId !== null && (
+        <p className="mt-4 text-center text-sm font-semibold text-gray-600">
+          {options.find((o) => o.id === selectedOptionId)?.is_correct
+            ? "¡Bien hecho!"
+            : "Sigue intentándolo"}
+        </p>
+      )}
 
       {/* Modal de salida */}
       <ExitModal onConfirm={() => navigate(-1)} />
