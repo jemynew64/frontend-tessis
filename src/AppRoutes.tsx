@@ -20,6 +20,7 @@ import { MissionApp } from "./admin/mission/MissionApp";
 import { CourseApp } from "./admin/course/CourseApp";
 //solo para manejar lar redireccion
 import { useAuthStore } from "./shared/store/auth";
+import { Prueba } from "./pruebas-ui/Prueba";
 
 const AppRoutes = () => {
   const { isAuth } = useAuthStore(); // aquí evaluamos el auth globalmente
@@ -27,6 +28,7 @@ const AppRoutes = () => {
     <Routes>
       {/* Rutas Públicas */}
       <Route path="/" element={<Login />} />
+      <Route path="/probando" element={<Prueba />} />
 
       {/* Rutas Privadas (Cualquier usuario autenticado) */}
       <Route element={<PrivateRoute />}>
