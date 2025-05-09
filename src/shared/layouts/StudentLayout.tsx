@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../shared/components/Sidebar";
 import { UserProgress } from "../../shared/components/UserProgress";
-import { MissionsCard } from "../../shared/components/MissionsCard";
+import { MissionsCard } from "../components/Missionscard/MissionsCard";
 
 const StudentLayout = () => {
   return (

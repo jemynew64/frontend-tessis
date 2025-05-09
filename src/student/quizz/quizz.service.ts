@@ -34,6 +34,7 @@ export const completarLeccion = async (lessonId: number, userId: number) => {
   return await axiosAuth.post(`lecciones/completar/${lessonId}/${userId}`);
 };
 
+//aca acabo de modificar el type deuser misions
 export const CompletarMision = async (misionusuario:UserMissionType) => {
   return await axiosAuth.post(`misionUsuarios/`,misionusuario);
 };
