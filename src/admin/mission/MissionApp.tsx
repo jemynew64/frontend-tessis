@@ -8,6 +8,9 @@ import { MissionModal } from "./MissionModal";
 import { Table } from "../../shared/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { MissionType } from "./mission.schema";
+//importando componentes pa mejorar la UI
+import { StatKeyLabel } from "./component/StatKeyLabel";
+import { StatConditionBadge } from "./component/StatConditionBadge";
 
 export const MissionApp = () => {
   const { data, isLoading, error } = useQuery(useMissionQueryOptions());
@@ -35,23 +38,47 @@ export const MissionApp = () => {
     }
   };
 
-  const columns: ColumnDef<MissionType, unknown>[] = [
-    { header: "Título", accessorKey: "title" },
-    { header: "Descripción", accessorKey: "description" },
-    { header: "Exp. Otorgada", accessorKey: "granted_experience" },
-    {
-      header: "Acciones",
-      cell: ({ row }) => {
-        const mission = row.original;
-        return (
-          <div className="flex gap-2">
-            <button onClick={() => handleEdit(mission.id)} className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 transition">Editar</button>
-            <button onClick={() => handleDelete(mission.id)} className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition">Eliminar</button>
-          </div>
-        );
-      },
+ const columns: ColumnDef<MissionType, unknown>[] = [
+  { header: "Título", accessorKey: "title" },
+  { header: "Descripción", accessorKey: "description" },
+  { header: "Exp. Otorgada", accessorKey: "granted_experience" },
+
+  // 🆕 Nuevos campos para evaluación
+{
+  header: "Campo Evaluado",
+  cell: ({ row }) => <StatKeyLabel value={row.original.stat_key} />,
+},
+{
+  header: "Condición",
+  cell: ({ row }) => <StatConditionBadge value={row.original.stat_condition} />,
+},
+
+  { header: "Valor a Cumplir", accessorKey: "stat_value" },
+
+  {
+    header: "Acciones",
+    cell: ({ row }) => {
+      const mission = row.original;
+      return (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleEdit(mission.id)}
+            className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 transition"
+          >
+            Editar
+          </button>
+          <button
+            onClick={() => handleDelete(mission.id)}
+            className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition"
+          >
+            Eliminar
+          </button>
+        </div>
+      );
     },
-  ];
+  },
+];
+
 
   return (
     <div className="p-6">

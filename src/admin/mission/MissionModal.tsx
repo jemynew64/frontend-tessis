@@ -12,6 +12,25 @@ interface Props {
   idMission?: number;
 }
 
+const statKeyOptions = [
+  { value: "lessons_completed", label: "Lecciones completadas" },
+  { value: "lessons_perfect", label: "Lecciones perfectas" },
+  { value: "challenges_completed", label: "Retos completados" },
+  { value: "correct_answers", label: "Respuestas correctas" },
+  { value: "wrong_answers", label: "Respuestas incorrectas" },
+  { value: "experience_gained", label: "Experiencia ganada" },
+  { value: "points_gained", label: "Puntos ganados" },
+  { value: "time_spent_minutes", label: "Minutos activos" },
+];
+
+const statConditionOptions = [
+  { value: "gte", label: "≥ Mayor o igual" },
+  { value: "lte", label: "≤ Menor o igual" },
+  { value: "eq",  label: "= Igual a" },
+  { value: "gt",  label: "> Mayor que" },
+  { value: "lt",  label: "< Menor que" },
+];
+
 export const MissionModal = ({ isOpen, onClose, idMission }: Props) => {
   const enabled = !!idMission;
   const { data } = useQuery({ ...useMissionByIdQueryOptions(idMission!), enabled });
@@ -24,9 +43,7 @@ export const MissionModal = ({ isOpen, onClose, idMission }: Props) => {
   const { mutateAsync: update, isPending: updating } = useUpdateMission();
 
   useEffect(() => {
-    if (data) {
-      reset(data);
-    }
+    if (data) reset(data);
   }, [data, reset]);
 
   useEffect(() => {
@@ -35,6 +52,9 @@ export const MissionModal = ({ isOpen, onClose, idMission }: Props) => {
         title: "",
         description: "",
         granted_experience: 0,
+        stat_key: "lessons_completed",
+        stat_condition: "gte",
+        stat_value: 1,
       });
     }
   }, [idMission, isOpen, reset]);
@@ -68,20 +88,47 @@ export const MissionModal = ({ isOpen, onClose, idMission }: Props) => {
           <form onSubmit={handleSubmit(onSubmit)} className="p-4 md:p-5 space-y-4">
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-900">Título</label>
-              <input {...register("title")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+              <input {...register("title")} className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
               {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
             </div>
 
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-900">Descripción</label>
-              <textarea {...register("description")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+              <textarea {...register("description")} className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
               {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
             </div>
 
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-900">Exp. Otorgada</label>
-              <input type="number" {...register("granted_experience", { valueAsNumber: true })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+              <input type="number" {...register("granted_experience", { valueAsNumber: true })} className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
               {errors.granted_experience && <p className="text-red-500 text-sm">{errors.granted_experience.message}</p>}
+            </div>
+
+            {/* NUEVOS CAMPOS */}
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-900">Campo Evaluado</label>
+              <select {...register("stat_key")} className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
+                {statKeyOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+              {errors.stat_key && <p className="text-red-500 text-sm">{errors.stat_key.message}</p>}
+            </div>
+
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-900">Condición</label>
+              <select {...register("stat_condition")} className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
+                {statConditionOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+              {errors.stat_condition && <p className="text-red-500 text-sm">{errors.stat_condition.message}</p>}
+            </div>
+
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-900">Valor a cumplir</label>
+              <input type="number" {...register("stat_value", { valueAsNumber: true })} className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+              {errors.stat_value && <p className="text-red-500 text-sm">{errors.stat_value.message}</p>}
             </div>
 
             <div className="flex justify-end gap-2 pt-4">
