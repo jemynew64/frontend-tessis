@@ -8,6 +8,8 @@ import { AchievementModal } from "./AchievementModal";
 import { Table } from "../../shared/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { AchievementType } from "./achievement.schema";
+import {StatKeyLabel } from "./components/StatKeyLabel"
+import { StatConditionBadge} from "./components/StatConditionBadge"
 
 export const AchievementApp = () => {
   const { data, isLoading, error } = useQuery(useAchievementQueryOptions());
@@ -35,31 +37,58 @@ export const AchievementApp = () => {
     }
   };
 
-  const columns: ColumnDef<AchievementType, unknown>[] = [
-    { header: "Título", accessorKey: "title" },
-    { header: "Descripción", accessorKey: "description" },
-    {
-      header: "Imagen",
-      accessorKey: "image_src",
-      cell: ({ getValue }) => (
-        <img src={getValue() as string} alt="logro" className="h-12 w-12 object-cover rounded" />
-      ),
+const columns: ColumnDef<AchievementType, unknown>[] = [
+  { header: "Título", accessorKey: "title" },
+  { header: "Descripción", accessorKey: "description" },
+  {
+    header: "Imagen",
+    accessorKey: "image_src",
+    cell: ({ getValue }) => (
+      <img
+        src={getValue() as string}
+        alt="logro"
+        className="h-12 w-12 object-cover rounded"
+      />
+    ),
+  },
+  {
+    header: "Campo Evaluado",
+    cell: ({ row }) => <StatKeyLabel value={row.original.stat_key} />,
+  },
+  {
+    header: "Condición",
+    cell: ({ row }) => (
+      <StatConditionBadge value={row.original.stat_condition} />
+    ),
+  },
+  {
+    header: "Valor a cumplir",
+    accessorKey: "stat_value",
+  },
+  {
+    header: "Acciones",
+    cell: ({ row }) => {
+      const achievement = row.original;
+      return (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleEdit(achievement.id)}
+            className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 transition"
+          >
+            Editar
+          </button>
+          <button
+            onClick={() => handleDelete(achievement.id)}
+            className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition"
+          >
+            Eliminar
+          </button>
+        </div>
+      );
     },
-    { header: "Exp. Requerida", accessorKey: "required_experience" },
-    { header: "Nivel Requerido", accessorKey: "required_level" },
-    {
-      header: "Acciones",
-      cell: ({ row }) => {
-        const achievement = row.original;
-        return (
-          <div className="flex gap-2">
-            <button onClick={() => handleEdit(achievement.id)} className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 transition">Editar</button>
-            <button onClick={() => handleDelete(achievement.id)} className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition">Eliminar</button>
-          </div>
-        );
-      },
-    },
-  ];
+  },
+];
+
 
   return (
     <div className="p-6">
