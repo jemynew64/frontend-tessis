@@ -44,3 +44,12 @@ export const Aumentarpuntos = async (user_id: number, lesson_id: number) => {
   return response.data.datos;
 };
 
+export const enviarEstadisticas = async (stats: Record<string, number>) => {
+  console.log("Enviando stats:", stats); // 👈 asegúrate de ver esto
+  return await axiosAuth.patch("stats", stats);
+};
+
+export const VerificarMisiones = async () => {
+  console.log("Enviando Comprobando si se completo alguna mision"); // 👈 asegúrate de ver esto
+  return await axiosAuth.post("misionUsuarios/check");
+};
