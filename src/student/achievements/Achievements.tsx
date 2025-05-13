@@ -13,6 +13,9 @@ export const Achievements = () => {
     queryFn: () => obtenerEstadisticasUsuario(),
   });
 
+  // Verificamos si las estadísticas existen
+  const isStatsEmpty = !stats || Object.keys(stats).length === 0;
+
   if (isLoading || !stats) return <p className="text-center text-gray-500">Cargando logros...</p>;
   if (error) return <p className="text-center text-red-500">Error al cargar logros.</p>;
 
@@ -22,7 +25,7 @@ export const Achievements = () => {
 
       <div className="flex flex-col gap-4 items-center sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
         {logros?.map((logro: AchievementType) => {
-          const currentStat = stats[logro.stat_key] ?? 0;
+          const currentStat = isStatsEmpty ? 0 : stats[logro.stat_key] ?? 0; // Si no hay estadísticas, asignamos 0
           const progress = Math.min((currentStat / logro.stat_value) * 100, 100);
           const isCompleted = progress >= 100;
 

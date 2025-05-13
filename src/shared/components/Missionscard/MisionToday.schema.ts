@@ -9,4 +9,7 @@ export interface Mission {
     title:              string;
     description:        string;
     granted_experience: number;
+    stat_key:           string;
+    stat_condition:     string;
+    stat_value:         number;
 }
