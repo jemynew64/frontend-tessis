@@ -70,7 +70,7 @@ export const Profile = () => {
 
       {/* Logros */}
       <div className=' mt-4'>
-      <Achievements userExperience={usuario.experience} userId={usuario.id!} />
+      <Achievements/>
       </div>
 
     </div>

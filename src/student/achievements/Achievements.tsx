@@ -1,46 +1,19 @@
-import { useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { obtenerTodosLogros, CrearRelacionlogrousuario } from "./achievements.service";
+import { useQuery } from "@tanstack/react-query";
+import { obtenerTodosLogros, obtenerEstadisticasUsuario } from "./achievements.service";
 import { AchievementType } from "./AchievementSchema";
 
-interface AchievementsProps {
-  userExperience: number; // Solo pasamos la experiencia del usuario
-  userId: number;         // 🔥 también pasamos el userId necesario para la relación
-}
-
-export const Achievements = ({ userExperience, userId }: AchievementsProps) => {
-  const { data, isLoading, error } = useQuery({
+export const Achievements = () => {
+  const { data: logros, isLoading, error } = useQuery({
     queryKey: ["achievement"],
     queryFn: () => obtenerTodosLogros(),
   });
 
-  const mutationCrearRelacion = useMutation({
-    mutationFn: CrearRelacionlogrousuario,
-    onSuccess: () => {
-      console.log("¡Relación logro-usuario creada con éxito!");
-    },
-    onError: (error) => {
-      console.error("Error al crear relación logro-usuario:", error);
-    },
+  const { data: stats } = useQuery({
+    queryKey: ["userStats"],
+    queryFn: () => obtenerEstadisticasUsuario(),
   });
 
-  useEffect(() => {
-    if (data) {
-      data.forEach((logro: AchievementType) => {
-        const isCompleted = userExperience >= logro.required_experience;
-
-        if (isCompleted) {
-          // Cada vez que se detecta que se completó, creamos la relación
-          mutationCrearRelacion.mutate({
-            achievement_id: logro.id,
-            user_id: userId,
-          });
-        }
-      });
-    }
-  }, [data, userExperience, userId]);
-
-  if (isLoading) return <p className="text-center text-gray-500">Cargando logros...</p>;
+  if (isLoading || !stats) return <p className="text-center text-gray-500">Cargando logros...</p>;
   if (error) return <p className="text-center text-red-500">Error al cargar logros.</p>;
 
   return (
@@ -48,9 +21,10 @@ export const Achievements = ({ userExperience, userId }: AchievementsProps) => {
       <h2 className="text-xl font-bold text-gray-800 mb-6 text-center">Logros</h2>
 
       <div className="flex flex-col gap-4 items-center sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
-        {data?.map((logro: AchievementType) => {
-          const isCompleted = userExperience >= logro.required_experience;
-          const progress = Math.min((userExperience / logro.required_experience) * 100, 100);
+        {logros?.map((logro: AchievementType) => {
+          const currentStat = stats[logro.stat_key] ?? 0;
+          const progress = Math.min((currentStat / logro.stat_value) * 100, 100);
+          const isCompleted = progress >= 100;
 
           return (
             <div
@@ -72,7 +46,7 @@ export const Achievements = ({ userExperience, userId }: AchievementsProps) => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-gray-800">{logro.title}</h3>
                   <span className="text-sm text-gray-400">
-                    {userExperience}/{logro.required_experience}
+                    {currentStat}/{logro.stat_value}
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 h-2 rounded-full my-2">
@@ -80,9 +54,7 @@ export const Achievements = ({ userExperience, userId }: AchievementsProps) => {
                     className={`h-2 rounded-full transition-all ${
                       isCompleted ? "bg-green-400" : "bg-yellow-400"
                     }`}
-                    style={{
-                      width: `${progress}%`,
-                    }}
+                    style={{ width: `${progress}%` }}
                   ></div>
                 </div>
                 <p className="text-xs text-gray-500">{logro.description}</p>

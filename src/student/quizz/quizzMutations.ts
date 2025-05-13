@@ -5,6 +5,7 @@ import {
   completarLeccion,
   enviarEstadisticas,
   VerificarMisiones,
+    VerificarLogros,
 } from "./quizz.service";
 
 export const useCompletarLeccionMutation = () =>
@@ -24,14 +25,12 @@ export const useEnviarEstadisticasMutation = () => {
 
   return useMutation({
     mutationFn: async (stats: Record<string, number>) => {
-      // Primero enviamos las estadísticas
-      await enviarEstadisticas(stats);
-
-      // Luego verificamos misiones
-      await VerificarMisiones();
-
+      await enviarEstadisticas(stats);        // 1. Envía stats
+      await VerificarMisiones();              // 2. Verifica misiones
+      await VerificarLogros();                // 3. Verifica logros (nuevo)
       // Invalidamos el caché de las misiones actualizadas
       queryClient.invalidateQueries({ queryKey: ["missionsToday"] });
+      queryClient.invalidateQueries({ queryKey: ["achievement"] }); // opcional: refrescar logros
     },
   });
 };

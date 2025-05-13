@@ -1,10 +1,6 @@
 import axiosAuth from '../../shared/utils/AxiosHeader';
 import {AchievementType} from  "./AchievementSchema"
 
-interface AchievementrelacionType {
-  achievement_id: number;
-  user_id: number;
-}
 
 // Obtener todos los usuarios (paginación opcional)
 export const obtenerTodosLogros = async (pagina: number = 1): Promise<AchievementType[]> => {
@@ -14,7 +10,8 @@ export const obtenerTodosLogros = async (pagina: number = 1): Promise<Achievemen
   return response.data;
 };
 
-export const CrearRelacionlogrousuario = async (relacion:AchievementrelacionType)=> {
-  const response = await axiosAuth.post(`logroObtenido/`,relacion )
+// achievements.service.ts
+export const obtenerEstadisticasUsuario = async (): Promise<Record<string, number>> => {
+  const response = await axiosAuth.get("stats"); // ajusta el endpoint según tu backend
   return response.data;
 };

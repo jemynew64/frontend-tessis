@@ -53,3 +53,8 @@ export const VerificarMisiones = async () => {
   console.log("Enviando Comprobando si se completo alguna mision"); // 👈 asegúrate de ver esto
   return await axiosAuth.post("misionUsuarios/check");
 };
+
+export const VerificarLogros = async () => {
+  console.log("📈 Comprobando si se completó algún logro...");
+  return await axiosAuth.post("logroObtenido/auto-check");
+};
