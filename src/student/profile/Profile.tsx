@@ -2,6 +2,8 @@ import { useAuthStore } from '../../shared/store/auth';
 import {useUserIdQueryOptions} from "../../admin/user/UserQueryOption"
 import { useQuery } from '@tanstack/react-query';
 import { Achievements } from '../achievements/Achievements';
+import {Dashboard } from "../../shared/components/dashboard/Dashboard"
+import {DashboardDiary } from "../../shared/components/dashboard/DashboardDiary"
 
 export const Profile = () => {
   
@@ -69,7 +71,13 @@ export const Profile = () => {
       </div>
 
       {/* Logros */}
-      <div className=' mt-4'>
+      <div className=''>
+      <Dashboard/>
+      </div>
+      <div className=' '>
+      <DashboardDiary/>
+      </div>
+      <div className=' '>
       <Achievements/>
       </div>
 
