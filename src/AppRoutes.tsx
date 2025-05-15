@@ -21,6 +21,7 @@ import { CourseApp } from "./admin/course/CourseApp";
 //solo para manejar lar redireccion
 import { useAuthStore } from "./shared/store/auth";
 import { Prueba } from "./pruebas-ui/Prueba";
+import { MissionsDiary } from "./student/DesafioDelDia/MissionsDiary";
 
 const AppRoutes = () => {
   const { isAuth } = useAuthStore(); // aquí evaluamos el auth globalmente
@@ -45,6 +46,7 @@ const AppRoutes = () => {
   {/* 🛠️ SidebarLayout para todo lo demás (tienda, perfil, admin) */}
   <Route element={<SidebarLayout />}>
   <Route path="/perfil" element={<Profile />} />
+  <Route path="/misiondiaria" element={<MissionsDiary />} />
 
     {/* Admin */}
     <Route element={<RoleRoute allowedRoles={["admin"]} />}>

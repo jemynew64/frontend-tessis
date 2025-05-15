@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMissionToday, obtenerEstadisticasUsuario } from "./MissionsCard.service";
-import { MissionToday } from "./MisionToday.schema";
-import { Mission } from "./MisionToday.schema";
-import { Contador } from "../../components/Contador"
-export const MissionsCard = () => {
+import { getMissionToday, obtenerEstadisticasUsuario } from "./MissionsDiary.service";
+import { MissionToday } from "./MissionsDiary.schema";
+import { Mission } from "./MissionsDiary.schema";
+import { Contador } from "../../shared/components/Contador";
+
+export const MissionsDiary = () => {
   const { data: missions, isLoading, isError } = useQuery<MissionToday[]>({
     queryKey: ["missionsToday"],
     queryFn: getMissionToday,
@@ -39,12 +40,12 @@ export const MissionsCard = () => {
   };
 
 return (
-  <div className="bg-white rounded-xl shadow-md w-full max-w-[280px] px-4 py-4 overflow-y-auto">
+  <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-4xl mx-auto mt-6">
     <div className="flex items-center justify-between mb-2">
-      <h2 className="text-lg font-bold text-gray-800">🎯 Misiones del Día</h2>
+      <h2 className="text-xl font-bold text-gray-800">🎯 Misiones del Día</h2>
       <Contador label="⏳" />
     </div>
-    <div className="space-y-4">
+    <div className="space-y-6">
       {missions.map((missionData) => {
         const progress = calculateMissionProgress(missionData.mission);
         const isCompleted = progress >= 100;
@@ -54,32 +55,34 @@ return (
         return (
           <div
             key={missionData.id}
-            className="flex items-start gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200"
+            className="flex items-center gap-5 bg-gray-50 p-4 rounded-xl border border-gray-200 hover:shadow-md transition"
           >
             {/* ÍCONO */}
-            <img
-              src="cofre-del-tesoro.svg"
-              alt="Misión"
-              className="w-7 h-7 mt-1"
-            />
+            <div className="flex-shrink-0">
+              <img
+                src="cofre-del-tesoro.svg" // puedes cambiar por íconos distintos según stat_key
+                alt="Misión"
+                className="w-10 h-10"
+              />
+            </div>
 
             {/* CONTENIDO */}
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold text-gray-800 break-words leading-snug">
+            <div className="flex-1">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-base font-semibold text-gray-800">
                   {missionData.mission.title}
-                </h3>
-                <span className="text-xs text-gray-500 whitespace-nowrap">
+                </span>
+                <span className="text-sm text-gray-500">
                   {currentValue} / {targetValue}
                 </span>
               </div>
 
-              <p className="text-xs text-gray-500 mt-1 leading-tight break-words">
+              <p className="text-sm text-gray-500 mb-2">
                 {missionData.mission.description}
               </p>
 
               {/* Barra de progreso */}
-              <div className="w-full bg-gray-200 h-2 mt-2 rounded-full">
+              <div className="w-full bg-gray-200 h-3 rounded-full">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
                     isCompleted ? "bg-green-500" : "bg-blue-500"

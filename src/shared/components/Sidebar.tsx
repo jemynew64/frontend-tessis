@@ -39,6 +39,7 @@ const Sidebar = () => {
           <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
           <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
           <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
+          <SidebarItem label="Mision Diaria" to="/misiondiaria" iconSrc="/mission2.svg" />
           <SidebarItem label="Cerrar sesión" iconSrc="/logout.svg"
             onClick={() => {
               logout();
@@ -66,6 +67,7 @@ const Sidebar = () => {
         <SidebarItem label="Canje de puntos" to="/tienda" iconSrc="/shop.svg" />
         <SidebarItem label="Ranking de Campeones" to="/ranking" iconSrc="/leaderboard.svg" />
         <SidebarItem label="Perfil" to="/perfil" iconSrc="/perfil.svg" />
+        <SidebarItem label="Mision Diaria" to="/misiondiaria" iconSrc="/mission2.svg" />
         <SidebarItem label="Cerrar sesión" iconSrc="/logout.svg"
             onClick={() => {
               logout();
