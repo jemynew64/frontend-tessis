@@ -12,10 +12,16 @@ import { Bar, Doughnut } from "react-chartjs-2";
 import { useUserGeneralStats } from "./QueryStats";
 import { Bolt } from "lucide-react";
 
+// voy a chapar de params a mi causa 
+import { useParams } from 'react-router-dom';
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 export const UserGeneralStatsChart = () => {
-  const { data: stats, isLoading } = useUserGeneralStats();
+  //este paramas lo llamo de mi url xd 
+  const { idusuario } = useParams();
+
+  const { data: stats, isLoading } = useUserGeneralStats(idusuario);
 
   if (isLoading || !stats) return <p>Cargando estadísticas...</p>;
 

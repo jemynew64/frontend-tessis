@@ -11,7 +11,9 @@ export const obtenerTodosLogros = async (pagina: number = 1): Promise<Achievemen
 };
 
 // achievements.service.ts
-export const obtenerEstadisticasUsuario = async (): Promise<Record<string, number>> => {
-  const response = await axiosAuth.get("stats"); // ajusta el endpoint según tu backend
+export const obtenerEstadisticasUsuario = async (idUsuarioIndicado?: string): Promise<Record<string, number>> => {
+  const response = await axiosAuth.get("stats", {
+    params: idUsuarioIndicado ? { usuarioindicadoid: idUsuarioIndicado } : {}
+  });
   return response.data;
 };

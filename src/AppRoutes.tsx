@@ -22,6 +22,7 @@ import { CourseApp } from "./admin/course/CourseApp";
 import { useAuthStore } from "./shared/store/auth";
 import { Prueba } from "./pruebas-ui/Prueba";
 import { MissionsDiary } from "./student/DesafioDelDia/MissionsDiary";
+import { Statsgeneral } from "./admin/stats/Statsgeneral";
 
 const AppRoutes = () => {
   const { isAuth } = useAuthStore(); // aquí evaluamos el auth globalmente
@@ -57,6 +58,7 @@ const AppRoutes = () => {
       <Route path="/course" element={<CourseApp />} />
       <Route path="/leccion" element={<LessonApp />} />
       <Route path="/leccion-retos/:id_leccion/:titulo" element={<ChallengeApp />} />
+      <Route path="/stats/:idusuario/:name" element={<Statsgeneral />} />
       <Route path="/opciones-del-reto/:challenge_id/:titulo" element={<ChallengeOptionApp />} />
     </Route>
   </Route>

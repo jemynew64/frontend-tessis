@@ -9,6 +9,7 @@ import { useEliminarUsuario } from "./usuario.mutations";
 import { Table } from "../../shared/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const PageUser = () => {
   const { open } = useExitModal();
@@ -18,6 +19,7 @@ export const PageUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState<number | null>(null);
   const [editingUserId, setEditingUserId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleUpdate = (id: number) => {
     setEditingUserId(id);
@@ -73,6 +75,13 @@ export const PageUser = () => {
         const user = row.original;
         return (
           <div className="flex gap-2">
+            <button
+              onClick={() => navigate(`/stats/${user.id!}/${encodeURIComponent(user.name!)}`)}
+              className="p-2 bg-lime-600 text-white rounded hover:bg-green-800 transition"
+              title="Ver estadisticas"
+            >
+              <img src="statsusuario.svg" alt="" className="h-4 w-4 filter invert " />
+            </button>
             <button
               onClick={() => handleUpdate(user.id!)}
               className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"

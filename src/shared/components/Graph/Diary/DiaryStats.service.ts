@@ -1,6 +1,6 @@
-import axiosAuth from '../../../utils/AxiosHeader';
+// UserGraph.service.ts
+import axiosAuth from "../../../utils/AxiosHeader";
 
-// achievements.service.ts
 export interface DailyUserStat {
   date: string;
   lessons_completed: number;
@@ -13,7 +13,9 @@ export interface DailyUserStat {
   time_spent_minutes: number;
 }
 
-export const obtenerStatsDiarios = async (): Promise<DailyUserStat[]> => {
-  const response = await axiosAuth.get("/stats/totaldays"); // Tu endpoint real
+export const obtenerStatsDiarios = async (idUsuarioIndicado?: string): Promise<DailyUserStat[]> => {
+  const response = await axiosAuth.get("/stats/totaldays", {
+    params: idUsuarioIndicado ? { usuarioindicadoid: idUsuarioIndicado } : {}
+  });
   return response.data;
 };

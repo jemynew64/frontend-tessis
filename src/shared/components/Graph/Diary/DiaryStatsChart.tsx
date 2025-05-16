@@ -13,7 +13,8 @@ import type { ChartOptions } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useQuery } from "@tanstack/react-query";
 import { obtenerStatsDiarios } from "./DiaryStats.service";
-
+// voy a chapar de params a mi causa 
+import { useParams } from 'react-router-dom';
 
 ChartJS.register(
   CategoryScale,
@@ -27,9 +28,12 @@ ChartJS.register(
 );
 
 export const DiaryStatsChart = () => {
+  //este paramas lo llamo de mi url xd 
+  const { idusuario } = useParams();
+
   const { data: stats, isLoading } = useQuery({
-    queryKey: ["dailyUserStats"],
-    queryFn: obtenerStatsDiarios
+    queryKey: ["dailyUserStats", idusuario],
+    queryFn: () => obtenerStatsDiarios(idusuario),
   });
 
   if (isLoading || !stats) return <p>Cargando datos diarios...</p>;

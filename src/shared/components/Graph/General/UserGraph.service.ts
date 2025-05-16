@@ -1,7 +1,7 @@
 import axiosAuth from '../../../utils/AxiosHeader';
 
 // achievements.service.ts
-export const obtenerEstadisticasUsuario = async (): Promise<{
+export const obtenerEstadisticasUsuario = async (idUsuarioIndicado?: string): Promise<{
   total_lessons: number;
   total_lessons_perfect: number;
   total_challenges: number;
@@ -13,6 +13,8 @@ export const obtenerEstadisticasUsuario = async (): Promise<{
   total_experience: number;
   quizzes_completed: number;
 }> => {
-  const response = await axiosAuth.get("/stats"); // Ajusta según tu endpoint
+  const response = await axiosAuth.get("/stats", {
+    params: idUsuarioIndicado ? { usuarioindicadoid: idUsuarioIndicado } : {}
+  });
   return response.data;
 };

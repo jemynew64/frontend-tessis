@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { obtenerTodosLogros, obtenerEstadisticasUsuario } from "./achievements.service";
 import { AchievementType } from "./AchievementSchema";
+import { useParams } from 'react-router-dom';
 
 export const Achievements = () => {
+    const { idusuario } = useParams();
+
   const { data: logros, isLoading, error } = useQuery({
     queryKey: ["achievement"],
     queryFn: () => obtenerTodosLogros(),
@@ -10,7 +13,7 @@ export const Achievements = () => {
 
   const { data: stats } = useQuery({
     queryKey: ["userStats"],
-    queryFn: () => obtenerEstadisticasUsuario(),
+    queryFn: () => obtenerEstadisticasUsuario(idusuario),    
   });
 
   // Verificamos si las estadísticas existen
@@ -20,7 +23,7 @@ export const Achievements = () => {
   if (error) return <p className="text-center text-red-500">Error al cargar logros.</p>;
 
   return (
-    <section className="w-full px-6 py-10 bg-white">
+    <section className="w-full px-6 py-10 ">
       <h2 className="text-xl font-bold text-gray-800 mb-6 text-center">Logros</h2>
 
       <div className="flex flex-col gap-4 items-center sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
