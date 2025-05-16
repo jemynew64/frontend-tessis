@@ -75,7 +75,7 @@ const actividadData = {
           <h2 className="text-lg font-semibold mb-1">Total de EXP ganada</h2>
           <p className="text-2xl font-bold text-blue-600">{stats.total_experience}</p>
         </div>
-                <img src="/points.svg" alt="Points icon" className="h-8 w-8" />
+            <img src="/points.svg" alt="Points icon" className="h-8 w-8" />
       </div>
 
       {/* Puntos */}

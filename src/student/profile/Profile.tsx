@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Achievements } from '../achievements/Achievements';
 import {Dashboard } from "../../shared/components/dashboard/Dashboard"
 import {DashboardDiary } from "../../shared/components/dashboard/DashboardDiary"
+import { Bolt,Heart } from "lucide-react";
 
 export const Profile = () => {
   
@@ -42,16 +43,25 @@ export const Profile = () => {
         <div className="col-span-2 p-8 space-y-6">
           {/* Info rápida */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm">
-              <p className="text-xl font-bold text-purple-700">{usuario.experience}</p>
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col">
+              <div className="flex justify-center items-center gap-2">
+              <p className="text-xl font-bold text-purple-700 ">{usuario.experience}</p>
+              <img src="/points.svg" alt="Points icon" className="h-8 w-8" />
+            </div>
               <p className="text-sm text-gray-500 uppercase">Experiencia</p>
             </div>
-            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm">
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col">
+              <div className="flex justify-center items-center gap-2">
               <p className="text-xl font-bold text-blue-700">{usuario.points}</p>
+              <Bolt className="h-6 w-6 text-yellow-500" />
+              </div>
               <p className="text-sm text-gray-500 uppercase">Puntos</p>
             </div>
-            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm">
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col">
+              <div className="flex justify-center items-center gap-2">
               <p className="text-xl font-bold text-red-600">{usuario.hearts}</p>
+              <Heart className="h-5 w-5 text-red-500" />
+              </div>
               <p className="text-sm text-gray-500 uppercase">Corazones</p>
             </div>
           </div>
