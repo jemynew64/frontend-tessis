@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-// import { useQuizzQueryOptions,useQuizzStatusQueryOptions } from "./quizzQueryOption";
-import { useQuizzQueryOptions } from "./quizzQueryOption";
+import { useQuizzQueryOptions,useQuizzStatusQueryOptions } from "./quizzQueryOption";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { QuizzType } from "./quizz.service";
@@ -17,7 +16,8 @@ import {
   useEnviarEstadisticasMutation,
 } from "./quizzMutations";
 
-const completeSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948220/sonido_completar_quizz_he8ahr.wav");
+// const completeSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948220/sonido_completar_quizz_he8ahr.wav");
+const completeSound = new Audio("/audio/sonido_completar_quizz.wav");
 
 type SafeRedirectState = {
   shouldRedirect: boolean;
@@ -39,7 +39,7 @@ export const Quizz = () => {
   const leccionid = Number(id_lesson);
 
   const { data, isLoading, error } = useQuery(useQuizzQueryOptions(leccionid));
-  // const { data: quizzStatus } = useQuery(useQuizzStatusQueryOptions(leccionid)); // 👈 nuevo
+  const { data: quizzStatus } = useQuery(useQuizzStatusQueryOptions(leccionid)); // 👈 nuevo
 
   const completarLeccion = useCompletarLeccionMutation();
   const aumentarPuntos = useAumentarPuntosMutation();
@@ -120,8 +120,7 @@ export const Quizz = () => {
       const fuePerfecta = incorrectas === 0 && correctas === data.length;
 
       const statsPayload = {
-      // lessons_completed: quizzStatus ? 0 : 1, // ✅ Si ya estaba completado → 0
-        lessons_completed: 1, // ✅ Si ya estaba completado → 0
+        lessons_completed: quizzStatus ? 0 : 1, // ✅ Si ya estaba completado → 0
         lessons_perfect: fuePerfecta ? 1 : 0,
         challenges_completed: data.length,
         correct_answers: correctas,

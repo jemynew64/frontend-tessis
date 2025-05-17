@@ -21,6 +21,7 @@ const statKeyOptions = [
   { value: "experience_gained", label: "Experiencia ganada" },
   { value: "points_gained", label: "Puntos ganados" },
   { value: "time_spent_minutes", label: "Minutos activos" },
+  { value: "quizzes_completed", label: "Quizzes completados" },
 ];
 
 const statConditionOptions = [

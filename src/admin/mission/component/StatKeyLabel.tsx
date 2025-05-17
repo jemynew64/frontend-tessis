@@ -12,6 +12,7 @@ export const StatKeyLabel = ({ value }: StatKeyLabelProps) => {
     experience_gained: "Experiencia ganada",
     points_gained: "Puntos ganados",
     time_spent_minutes: "Minutos activos",
+    quizzes_completed: "Quizzes completados",
   };
 
   return <span>{map[value] || value}</span>;

@@ -71,6 +71,22 @@ export const DiaryStatsChart = () => {
         borderColor: "#ff9800",
         backgroundColor: "rgba(255, 152, 0, 0.2)",
         tension: 0.4
+      },
+      {
+        label: "Quizz echos",
+        data: stats.map((s) => s.quizzes_completed),
+        fill: true,
+        borderColor: "#33ff68",
+        backgroundColor: "rgba(255, 152, 0, 0.2)",
+        tension: 0.4
+      },
+      {
+        label: "Lecciones completadas",
+        data: stats.map((s) => s.lessons_completed),
+        fill: true,
+        borderColor: "#fff633",
+        backgroundColor: "rgba(255, 152, 0, 0.2)",
+        tension: 0.4
       }
     ]
   };

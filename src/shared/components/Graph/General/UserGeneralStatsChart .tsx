@@ -35,7 +35,7 @@ const actividadData = {
       backgroundColor: "#4dc9f6"
     },
     {
-      label: "Retos",
+      label: "Preguntas respondidas",
       data: [stats.total_challenges],
       backgroundColor: "#f67019"
     },
@@ -50,7 +50,7 @@ const actividadData = {
       backgroundColor: "#537bc4"
     },
     {
-      label: "Quizzes",
+      label: "Quizzes echos en total",
       data: [stats.quizzes_completed],
       backgroundColor: "#acc236"
     }

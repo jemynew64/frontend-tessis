@@ -11,6 +11,7 @@ export interface DailyUserStat {
   experience_gained: number;
   points_gained: number;
   time_spent_minutes: number;
+  quizzes_completed: number;
 }
 
 export const obtenerStatsDiarios = async (idUsuarioIndicado?: string): Promise<DailyUserStat[]> => {

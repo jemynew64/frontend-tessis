@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { QuizOptionButton } from "./QuizOptionButton"; // Ajusta el path si es necesario
 
 // 🎵 Sonidos Cloudinary
-const correctSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948236/opcion_correcta_vzfox9.wav");
-const incorrectSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948242/opcion_incorrecta_qgpuct.wav");
+// const correctSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948236/opcion_correcta_vzfox9.wav");
+// const incorrectSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948242/opcion_incorrecta_qgpuct.wav");
+const correctSound = new Audio("/audio/opcion_correcta.wav");
+const incorrectSound = new Audio("/audio/opcion_incorrecta.wav");
 
 interface Option {
   id: number;
