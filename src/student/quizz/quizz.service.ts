@@ -58,3 +58,14 @@ export const VerificarLogros = async () => {
   console.log("📈 Comprobando si se completó algún logro...");
   return await axiosAuth.post("logroObtenido/auto-check");
 };
+// Verifica si el quizz ya fue completado por el usuario autenticado
+export const VerificarQuizzstatus = async (lesson_id: number) => {
+  console.log("📈 Comprobando si se completó el quizz previamente...");
+
+  const response = await axiosAuth.get("/quizzpoints/status", {
+    params: { lesson_id }, // ✅ Se pasa como query param
+  });
+
+  // Si está completado, devuelve 0 (no volver a contar); si no, 1
+  return response.data.completed;
+};
