@@ -62,10 +62,15 @@ export const VerificarLogros = async () => {
 export const VerificarQuizzstatus = async (lesson_id: number) => {
   console.log("📈 Comprobando si se completó el quizz previamente...");
 
-  const response = await axiosAuth.get("/quizzpoints/status", {
-    params: { lesson_id }, // ✅ Se pasa como query param
+  const response = await axiosAuth.get("quizzpoints/status", {
+    params: { lesson_id }, 
   });
 
   // Si está completado, devuelve 0 (no volver a contar); si no, 1
   return response.data.completed;
 };
+
+
+export const RelacionarUnidadTerminada = async (course_id: number) => {
+  return await axiosAuth.post(`unitprogress/progress/${course_id}`);
+}

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useQuizzQueryOptions,useQuizzStatusQueryOptions } from "./quizzQueryOption";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { QuizzType } from "./quizz.service";
+import { QuizzType,RelacionarUnidadTerminada } from "./quizz.service";
 import { Win } from "./Win";
 import { Gameover } from "./Gameover";
 import { create } from "zustand";
@@ -93,6 +93,9 @@ export const Quizz = () => {
           setFinalizado(true);
           markForRedirect();
           completeSound.play().catch(() => {});
+          //para verificar si se completo alguna unidad
+          const courseId = Number(sessionStorage.getItem("courseId"));
+          RelacionarUnidadTerminada(courseId); // ✅ actualiza unit_progress y stats
 
           completarLeccion.mutate({ lessonId: leccionid, userId: user.id });
 

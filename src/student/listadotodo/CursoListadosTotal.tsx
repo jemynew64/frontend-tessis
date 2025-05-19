@@ -55,6 +55,7 @@ export const CursoListadosTotal = () => {
     try {
       sessionStorage.setItem("scrollY", window.scrollY.toString());
       sessionStorage.setItem("lessonId", lessonId.toString());
+      sessionStorage.setItem("courseId", course_id!.toString()); 
       await iniciarLeccion(lessonId, user.id);
       navigate(`/quizz/${lessonId}`);
     } catch (error) {
