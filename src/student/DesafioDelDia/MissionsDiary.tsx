@@ -80,6 +80,9 @@ return (
               <p className="text-sm text-gray-500 mb-2">
                 {missionData.mission.description}
               </p>
+              <p className="text-sm text-purple-700 mt-1 font-medium">
+                🧠 Ganas <span className="font-bold">{missionData.mission.granted_experience}</span> EXP y <span className="text-yellow-500 font-bold">puntos 🪙</span>
+              </p>
 
               {/* Barra de progreso */}
               <div className="w-full bg-gray-200 h-3 rounded-full">

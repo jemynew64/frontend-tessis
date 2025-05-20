@@ -77,7 +77,9 @@ return (
               <p className="text-xs text-gray-500 mt-1 leading-tight break-words">
                 {missionData.mission.description}
               </p>
-
+              <p className="text-[11px] text-purple-700 mt-1 font-medium">
+                🧠 Ganas <span className="font-bold">{missionData.mission.granted_experience}</span> EXP y <p className="text-yellow-500">puntos 🪙</p>
+              </p>
               {/* Barra de progreso */}
               <div className="w-full bg-gray-200 h-2 mt-2 rounded-full">
                 <div
