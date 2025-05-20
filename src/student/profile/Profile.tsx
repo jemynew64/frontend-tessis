@@ -6,6 +6,7 @@ import {Dashboard } from "../../shared/components/dashboard/Dashboard"
 import {DashboardDiary } from "../../shared/components/dashboard/DashboardDiary"
 import { Bolt,Heart } from "lucide-react";
 import { LogoutButton } from "../../shared/components/LogoutButton";
+import { LevelProgress } from "../../shared/components/LevelProgress";
 
 export const Profile = () => {
   
@@ -39,7 +40,6 @@ export const Profile = () => {
           <h2 className="text-xl font-bold">{usuario.name}</h2>
           <p className="text-sm text-purple-200">Miembro desde octubre de 2018</p>
           <LogoutButton  />
-
         </div>
 
         {/* Lado derecho - datos y stats */}
@@ -48,24 +48,23 @@ export const Profile = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col">
               <div className="flex justify-center items-center gap-2">
-              <p className="text-xl font-bold text-purple-700 ">{usuario.experience}</p>
-              <img src="/points.svg" alt="Points icon" className="h-8 w-8" />
+            <LevelProgress experience={usuario.experience} size={100} />
             </div>
-              <p className="text-sm text-gray-500 uppercase">Experiencia</p>
             </div>
-            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col">
-              <div className="flex justify-center items-center gap-2">
-              <p className="text-xl font-bold text-blue-700">{usuario.points}</p>
-              <Bolt className="h-6 w-6 text-yellow-500" />
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col items-center justify-center">
+            <div className="flex items-center justify-center gap-1">
+                <p className="text-xl font-bold text-blue-700">{usuario.points}</p>
+                <Bolt className="h-6 w-6 text-yellow-500" />
               </div>
-              <p className="text-sm text-gray-500 uppercase">Puntos</p>
+              <p className="text-sm text-gray-500 uppercase mt-2">Puntos</p>
             </div>
-            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col">
-              <div className="flex justify-center items-center gap-2">
-              <p className="text-xl font-bold text-red-600">{usuario.hearts}</p>
-              <Heart className="h-5 w-5 text-red-500" />
+
+            <div className="bg-slate-100 rounded-lg p-4 text-center shadow-sm flex flex-col items-center justify-center">
+              <div className="flex items-center justify-center gap-1">
+                <p className="text-xl font-bold text-red-600">{usuario.hearts}</p>
+                <Heart className="h-5 w-5 text-red-500" />
               </div>
-              <p className="text-sm text-gray-500 uppercase">Corazones</p>
+              <p className="text-sm text-gray-500 uppercase mt-2">Corazones</p>
             </div>
           </div>
 
