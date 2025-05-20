@@ -5,6 +5,7 @@ import { Achievements } from '../achievements/Achievements';
 import {Dashboard } from "../../shared/components/dashboard/Dashboard"
 import {DashboardDiary } from "../../shared/components/dashboard/DashboardDiary"
 import { Bolt,Heart } from "lucide-react";
+import { LogoutButton } from "../../shared/components/LogoutButton";
 
 export const Profile = () => {
   
@@ -37,6 +38,8 @@ export const Profile = () => {
           />
           <h2 className="text-xl font-bold">{usuario.name}</h2>
           <p className="text-sm text-purple-200">Miembro desde octubre de 2018</p>
+          <LogoutButton  />
+
         </div>
 
         {/* Lado derecho - datos y stats */}
@@ -78,6 +81,8 @@ export const Profile = () => {
             </div>
           </div>
         </div>
+            
+
       </div>
 
       {/* Logros */}
