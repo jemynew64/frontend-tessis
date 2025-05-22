@@ -1,6 +1,12 @@
 import axiosAuth from '../../shared/utils/AxiosHeader';
 import { UserMissionType } from "../../shared/interfaces/UserMissionSchema"
 
+export interface QuizzResponse {
+  isLastLesson: boolean;
+  challenges: QuizzType[];
+}
+
+
 export interface QuizzType {
     id:               number;
     type:             string;
@@ -25,7 +31,7 @@ export interface ChallengeOption {
 
 
 // Obtener un leccion por ID
-export const obtenerQuizzforlesson = async (lessonId: number): Promise<QuizzType[]> => {
+export const obtenerQuizzforlesson = async (lessonId: number): Promise<QuizzResponse> => {
   const response = await axiosAuth.get(`reto/quizz/${lessonId}`);
   return response.data;
 };
@@ -50,17 +56,14 @@ export const enviarEstadisticas = async (stats: Record<string, number>) => {
 };
 
 export const VerificarMisiones = async () => {
-  console.log("Enviando Comprobando si se completo alguna mision"); // 👈 asegúrate de ver esto
   return await axiosAuth.post("misionUsuarios/check");
 };
 
 export const VerificarLogros = async () => {
-  console.log("📈 Comprobando si se completó algún logro...");
   return await axiosAuth.post("logroObtenido/auto-check");
 };
 // Verifica si el quizz ya fue completado por el usuario autenticado
 export const VerificarQuizzstatus = async (lesson_id: number) => {
-  console.log("📈 Comprobando si se completó el quizz previamente...");
 
   const response = await axiosAuth.get("quizzpoints/status", {
     params: { lesson_id }, 
@@ -74,3 +77,9 @@ export const VerificarQuizzstatus = async (lesson_id: number) => {
 export const RelacionarUnidadTerminada = async (course_id: number) => {
   return await axiosAuth.post(`unitprogress/progress/${course_id}`);
 }
+
+export const QuitarvidaService = async () => {
+  return await axiosAuth.post(`usuarios/restarlives`);
+}
+
+

@@ -8,13 +8,16 @@ import { Gameover } from "./Gameover";
 import { create } from "zustand";
 import { QuizzCard } from "./QuizzCard";
 import { useAuthStore } from "../../shared/store/auth";
+import { useMemo } from "react";
 
 // ✅ Mutaciones externas
 import {
   useAumentarPuntosMutation,
   useCompletarLeccionMutation,
   useEnviarEstadisticasMutation,
+  QuitarvidaMutation,
 } from "./quizzMutations";
+import MostrarCorazones from "../../shared/components/ui/MostrarCorazones";
 
 // const completeSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948220/sonido_completar_quizz_he8ahr.wav");
 const completeSound = new Audio("/audio/sonido_completar_quizz.wav");
@@ -38,7 +41,10 @@ export const Quizz = () => {
   const { id_lesson } = useParams();
   const leccionid = Number(id_lesson);
 
-  const { data, isLoading, error } = useQuery(useQuizzQueryOptions(leccionid));
+const { data, isLoading, error } = useQuery(useQuizzQueryOptions(leccionid));
+
+  const quizz = useMemo(() => data?.challenges ?? [], [data]);
+  const esUltimaLeccion = data?.isLastLesson ?? false;
   const { data: quizzStatus } = useQuery(useQuizzStatusQueryOptions(leccionid)); // 👈 nuevo
 
   const completarLeccion = useCompletarLeccionMutation();
@@ -58,74 +64,89 @@ export const Quizz = () => {
   const [gameOver, setGameOver] = useState(false);
 
   const { shouldRedirect, markForRedirect, reset } = useSafeRedirect();
+  //solo para el examen final
+  const [vidasRestantes, setVidasRestantes] = useState(3); // 👈 Solo para examen final
+  const quitarVidaMutation = QuitarvidaMutation();
 
   useEffect(() => {
-    if (data?.length) {
-      setCola([...data]);
-      setPreguntaActual(data[0]);
+    if (quizz?.length) {
+      setCola([...quizz]);
+      setPreguntaActual(quizz[0]);
       setFinalizado(false);
     }
     return () => reset();
-  }, [data, reset, location.key]);
+  }, [quizz, reset, location.key]);
 
-  const handleAnswer = (isCorrect: boolean) => {
-    if (!preguntaActual || gameOver) return;
+const handleAnswer = (isCorrect: boolean) => {
+  if (!preguntaActual || gameOver) return;
 
-    if (isCorrect) {
-      setCorrectas((prev) => prev + 1);
+  if (isCorrect) {
+    setCorrectas((prev) => prev + 1);
+  } else {
+    setIncorrectas((prev) => prev + 1);
+
+    if (esUltimaLeccion) {
+      // 👇 Reemplaza intentos por vidas
+      setVidasRestantes((prev) => {
+        const nuevasVidas = prev - 1;
+
+        // 👇 Aquí deberías poner el mutation para quitar una vida
+        quitarVidaMutation.mutate();
+
+        if (nuevasVidas <= 0) setGameOver(true);
+        return nuevasVidas;
+      });
     } else {
-      setIncorrectas((prev) => prev + 1);
       setIntentosRestantes((prev) => {
         const nuevo = prev - 1;
         if (nuevo <= 0) setGameOver(true);
         return nuevo;
       });
     }
+  }
 
-    const siguienteCola = [...cola];
-    siguienteCola.shift();
-    if (!isCorrect) siguienteCola.push(preguntaActual);
+  const siguienteCola = [...cola];
+  siguienteCola.shift();
+  if (!isCorrect) siguienteCola.push(preguntaActual);
 
-    setTimeout(() => {
-      if (siguienteCola.length === 0 || gameOver) {
-        if (!gameOver && user?.id) {
-          setPreguntaActual(null);
-          setFinalizado(true);
-          markForRedirect();
-          completeSound.play().catch(() => {});
-          //para verificar si se completo alguna unidad
-          const courseId = Number(sessionStorage.getItem("courseId"));
-          RelacionarUnidadTerminada(courseId); // ✅ actualiza unit_progress y stats
-
-          completarLeccion.mutate({ lessonId: leccionid, userId: user.id });
-
-          aumentarPuntos.mutate(
-            { lessonId: leccionid, userId: user.id },
-            {
-              onSuccess: setResultado,
-              onError: () => {
-                setResultado({ points: 0, experience: 0 });
-              },
-            }
-          );
-        }
-      } else {
-        setPreguntaActual(siguienteCola[0]);
+  setTimeout(() => {
+    if (siguienteCola.length === 0 || gameOver) {
+      if (!gameOver && user?.id) {
+        setPreguntaActual(null);
+        setFinalizado(true);
+        markForRedirect();
+        completeSound.play().catch(() => {});
+        const courseId = Number(sessionStorage.getItem("courseId"));
+        RelacionarUnidadTerminada(courseId);
+        completarLeccion.mutate({ lessonId: leccionid, userId: user.id });
+        aumentarPuntos.mutate(
+          { lessonId: leccionid, userId: user.id },
+          {
+            onSuccess: setResultado,
+            onError: () => {
+              setResultado({ points: 0, experience: 0 });
+            },
+          }
+        );
       }
-      setCola(siguienteCola);
-    }, 900);
-  };
+    } else {
+      setPreguntaActual(siguienteCola[0]);
+    }
+    setCola(siguienteCola);
+  }, 900);
+};
+
 
   useEffect(() => {
-    if (finalizado && resultado && data) {
+    if (finalizado && resultado && quizz) {
       const duracionMs = Date.now() - startTime;
       const minutos = Math.ceil(duracionMs / 60000);
-      const fuePerfecta = incorrectas === 0 && correctas === data.length;
+      const fuePerfecta = incorrectas === 0 && correctas === quizz.length;
 
       const statsPayload = {
         lessons_completed: quizzStatus ? 0 : 1, // ✅ Si ya estaba completado → 0
         lessons_perfect: fuePerfecta ? 1 : 0,
-        challenges_completed: data.length,
+        challenges_completed: quizz.length,
         correct_answers: correctas,
         wrong_answers: incorrectas,
         experience_gained: resultado.experience,
@@ -136,7 +157,7 @@ export const Quizz = () => {
 
       enviarEstadisticas.mutate(statsPayload);
     }
-  }, [finalizado, resultado, correctas, incorrectas, startTime, data]);
+  }, [finalizado, resultado, correctas, incorrectas, startTime, quizz]);
 
   useEffect(() => {
     if (shouldRedirect) {
@@ -183,17 +204,21 @@ export const Quizz = () => {
       {preguntaActual && (
         <div className="absolute top-0 left-0 w-full h-2 bg-gray-300">
           <div
-            className="h-2 bg-custom-purple transition-all duration-300"
-            style={{
-              width: `${((data.length - cola.length) / data.length) * 100}%`,
-            }}
+            className="h-2 bg-custom-purple transition-all duration-300"style={{width: `${((quizz.length - cola.length) / quizz.length) * 100}%`,}}
           ></div>
         </div>
       )}
 
-      <div className="text-center text-xl mb-4">
-        <p>Intentos restantes: {intentosRestantes}</p>
-      </div>
+        <div className="text-center text-xl mb-4">
+          {esUltimaLeccion ? (
+            <MostrarCorazones vidas={vidasRestantes} />
+          ) : (
+            <div className="text-center text-xl mb-4">
+              <p>Intentos restantes: {intentosRestantes}</p>
+            </div>
+          )}
+        </div>
+
 
       {preguntaActual && (
         <QuizzCard

@@ -6,6 +6,7 @@ import {
   enviarEstadisticas,
   VerificarMisiones,
     VerificarLogros,
+    QuitarvidaService,
 } from "./quizz.service";
 
 export const useCompletarLeccionMutation = () =>
@@ -34,3 +35,9 @@ export const useEnviarEstadisticasMutation = () => {
     },
   });
 };
+
+export const QuitarvidaMutation = () =>
+  useMutation({
+    mutationFn: () =>
+      QuitarvidaService(),
+  });
