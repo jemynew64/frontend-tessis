@@ -1,16 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { useQuizzQueryOptions,useQuizzStatusQueryOptions } from "./quizzQueryOption";
+import { useQuizzQueryOptions, useQuizzStatusQueryOptions, useUserQueryOptions } from "./quizzQueryOption";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { QuizzType,RelacionarUnidadTerminada } from "./quizz.service";
+import { useEffect, useState, useMemo } from "react";
+import { QuizzType, RelacionarUnidadTerminada } from "./quizz.service";
 import { Win } from "./Win";
 import { Gameover } from "./Gameover";
 import { create } from "zustand";
 import { QuizzCard } from "./QuizzCard";
 import { useAuthStore } from "../../shared/store/auth";
-import { useMemo } from "react";
-
-// ✅ Mutaciones externas
 import {
   useAumentarPuntosMutation,
   useCompletarLeccionMutation,
@@ -19,7 +16,6 @@ import {
 } from "./quizzMutations";
 import MostrarCorazones from "../../shared/components/ui/MostrarCorazones";
 
-// const completeSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948220/sonido_completar_quizz_he8ahr.wav");
 const completeSound = new Audio("/audio/sonido_completar_quizz.wav");
 
 type SafeRedirectState = {
@@ -35,38 +31,39 @@ const useSafeRedirect = create<SafeRedirectState>((set) => ({
 }));
 
 export const Quizz = () => {
-  const user = useAuthStore((state) => state.user);
+  const userId = useAuthStore((state) => state.user?.id);
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    refetch: refetchUser,
+  } = useQuery(useUserQueryOptions(userId ?? 0));
+
   const navigate = useNavigate();
   const location = useLocation();
   const { id_lesson } = useParams();
   const leccionid = Number(id_lesson);
 
-const { data, isLoading, error } = useQuery(useQuizzQueryOptions(leccionid));
-
+  const { data, isLoading, error } = useQuery(useQuizzQueryOptions(leccionid));
   const quizz = useMemo(() => data?.challenges ?? [], [data]);
   const esUltimaLeccion = data?.isLastLesson ?? false;
-  const { data: quizzStatus } = useQuery(useQuizzStatusQueryOptions(leccionid)); // 👈 nuevo
+  const { data: quizzStatus } = useQuery(useQuizzStatusQueryOptions(leccionid));
 
   const completarLeccion = useCompletarLeccionMutation();
   const aumentarPuntos = useAumentarPuntosMutation();
   const enviarEstadisticas = useEnviarEstadisticasMutation();
+  const quitarVidaMutation = QuitarvidaMutation();
 
   const [cola, setCola] = useState<QuizzType[]>([]);
   const [preguntaActual, setPreguntaActual] = useState<QuizzType | null>(null);
   const [finalizado, setFinalizado] = useState(false);
   const [resultado, setResultado] = useState<{ points: number; experience: number } | null>(null);
-
   const [correctas, setCorrectas] = useState(0);
   const [incorrectas, setIncorrectas] = useState(0);
   const [startTime] = useState(Date.now());
-
   const [intentosRestantes, setIntentosRestantes] = useState(10);
   const [gameOver, setGameOver] = useState(false);
 
   const { shouldRedirect, markForRedirect, reset } = useSafeRedirect();
-  //solo para el examen final
-  const [vidasRestantes, setVidasRestantes] = useState(3); // 👈 Solo para examen final
-  const quitarVidaMutation = QuitarvidaMutation();
 
   useEffect(() => {
     if (quizz?.length) {
@@ -77,41 +74,40 @@ const { data, isLoading, error } = useQuery(useQuizzQueryOptions(leccionid));
     return () => reset();
   }, [quizz, reset, location.key]);
 
-const handleAnswer = (isCorrect: boolean) => {
-  if (!preguntaActual || gameOver) return;
+  const handleAnswer = (isCorrect: boolean) => {
+    if (!preguntaActual || gameOver) return;
 
-  if (isCorrect) {
-    setCorrectas((prev) => prev + 1);
-  } else {
-    setIncorrectas((prev) => prev + 1);
-
-    if (esUltimaLeccion) {
-      // 👇 Reemplaza intentos por vidas
-      setVidasRestantes((prev) => {
-        const nuevasVidas = prev - 1;
-
-        // 👇 Aquí deberías poner el mutation para quitar una vida
-        quitarVidaMutation.mutate();
-
-        if (nuevasVidas <= 0) setGameOver(true);
-        return nuevasVidas;
-      });
+    if (isCorrect) {
+      setCorrectas((prev) => prev + 1);
     } else {
-      setIntentosRestantes((prev) => {
-        const nuevo = prev - 1;
-        if (nuevo <= 0) setGameOver(true);
-        return nuevo;
-      });
+      setIncorrectas((prev) => prev + 1);
+
+      if (esUltimaLeccion) {
+        if ((user?.hearts ?? 0) <= 1) {
+          setGameOver(true);
+        }
+
+        quitarVidaMutation.mutate(undefined, {
+          onSuccess: () => {
+            refetchUser(); // 🔁 Actualiza corazones inmediatamente
+          },
+        });
+
+      } else {
+        setIntentosRestantes((prev) => {
+          const nuevo = prev - 1;
+          if (nuevo <= 0) setGameOver(true);
+          return nuevo;
+        });
+      }
     }
-  }
 
-  const siguienteCola = [...cola];
-  siguienteCola.shift();
-  if (!isCorrect) siguienteCola.push(preguntaActual);
+    const siguienteCola = [...cola];
+    siguienteCola.shift();
+    if (!isCorrect) siguienteCola.push(preguntaActual);
 
-  setTimeout(() => {
-    if (siguienteCola.length === 0 || gameOver) {
-      if (!gameOver && user?.id) {
+    setTimeout(() => {
+      if (!gameOver && siguienteCola.length === 0 && user?.id) {
         setPreguntaActual(null);
         setFinalizado(true);
         markForRedirect();
@@ -123,19 +119,15 @@ const handleAnswer = (isCorrect: boolean) => {
           { lessonId: leccionid, userId: user.id },
           {
             onSuccess: setResultado,
-            onError: () => {
-              setResultado({ points: 0, experience: 0 });
-            },
+            onError: () => setResultado({ points: 0, experience: 0 }),
           }
         );
+      } else {
+        setPreguntaActual(siguienteCola[0]);
       }
-    } else {
-      setPreguntaActual(siguienteCola[0]);
-    }
-    setCola(siguienteCola);
-  }, 900);
-};
-
+      setCola(siguienteCola);
+    }, 900);
+  };
 
   useEffect(() => {
     if (finalizado && resultado && quizz) {
@@ -143,8 +135,8 @@ const handleAnswer = (isCorrect: boolean) => {
       const minutos = Math.ceil(duracionMs / 60000);
       const fuePerfecta = incorrectas === 0 && correctas === quizz.length;
 
-      const statsPayload = {
-        lessons_completed: quizzStatus ? 0 : 1, // ✅ Si ya estaba completado → 0
+      enviarEstadisticas.mutate({
+        lessons_completed: quizzStatus ? 0 : 1,
         lessons_perfect: fuePerfecta ? 1 : 0,
         challenges_completed: quizz.length,
         correct_answers: correctas,
@@ -153,9 +145,7 @@ const handleAnswer = (isCorrect: boolean) => {
         points_gained: resultado.points,
         time_spent_minutes: minutos,
         quizzes_completed: 1,
-      };
-
-      enviarEstadisticas.mutate(statsPayload);
+      });
     }
   }, [finalizado, resultado, correctas, incorrectas, startTime, quizz]);
 
@@ -171,28 +161,20 @@ const handleAnswer = (isCorrect: boolean) => {
 
   useEffect(() => {
     if (gameOver) {
-      const timeout = setTimeout(() => {
-        navigate(-1);
-      }, 2000);
+      const timeout = setTimeout(() => navigate(-1), 2000);
       return () => clearTimeout(timeout);
     }
   }, [gameOver, navigate]);
 
-  if (isLoading) return <p className="text-center">Cargando...</p>;
-  if (error || !data) return <p className="text-center text-red-500">Error al cargar el quizz</p>;
+  if (isUserLoading || isLoading) return <p className="text-center">Cargando...</p>;
+  if (error || !data || !user) return <p className="text-center text-red-500">Error al cargar el quizz</p>;
 
   const opcionesMezcladas = preguntaActual
     ? [...preguntaActual.challenge_option].sort(() => Math.random() - 0.5)
     : [];
 
   if (finalizado && resultado) {
-    return (
-      <Win
-        points={resultado.points}
-        experience={resultado.experience}
-        onReturn={() => navigate(-1)}
-      />
-    );
+    return <Win points={resultado.points} experience={resultado.experience} onReturn={() => navigate(-1)} />;
   }
 
   if (gameOver) {
@@ -204,21 +186,19 @@ const handleAnswer = (isCorrect: boolean) => {
       {preguntaActual && (
         <div className="absolute top-0 left-0 w-full h-2 bg-gray-300">
           <div
-            className="h-2 bg-custom-purple transition-all duration-300"style={{width: `${((quizz.length - cola.length) / quizz.length) * 100}%`,}}
+            className="h-2 bg-custom-purple transition-all duration-300"
+            style={{ width: `${((quizz.length - cola.length) / quizz.length) * 100}%` }}
           ></div>
         </div>
       )}
 
-        <div className="text-center text-xl mb-4">
-          {esUltimaLeccion ? (
-            <MostrarCorazones vidas={vidasRestantes} />
-          ) : (
-            <div className="text-center text-xl mb-4">
-              <p>Intentos restantes: {intentosRestantes}</p>
-            </div>
-          )}
-        </div>
-
+      <div className="text-center text-xl mb-4">
+        {esUltimaLeccion ? (
+          <MostrarCorazones vidas={user.hearts} />
+        ) : (
+          <p>Intentos restantes: {intentosRestantes}</p>
+        )}
+      </div>
 
       {preguntaActual && (
         <QuizzCard

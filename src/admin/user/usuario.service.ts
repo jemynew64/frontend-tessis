@@ -34,3 +34,8 @@ export const eliminarUsuario = async (id: number): Promise<{ message: string }> 
   const response = await axiosAuth.delete(`${BaseURL}usuarios/${id}/`);
   return response.data;
 };
+
+export const getHeartsRecoveryStatus = async (): Promise<{ heartsPending: number, recoveries: string[] }> => {
+  const response = await axiosAuth.get(`${BaseURL}usuarios/hearts-pending`);
+  return response.data;
+};
