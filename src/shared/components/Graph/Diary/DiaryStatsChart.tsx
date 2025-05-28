@@ -110,22 +110,24 @@ const options: ChartOptions<"line"> = {
   };
 
 return (
-<div className="p-4 bg-white rounded-xl shadow-xl w-full overflow-x-auto">
-  <h2 className="text-lg font-semibold mb-4">Progreso Diario</h2>
-  <div className="min-w-[350px]">
-    <Line data={chartData} options={options} />
-  </div>
+<div className="p-4 sm:p-6 bg-white rounded-xl shadow-xl w-full overflow-x-auto">
+    <h2 className="text-lg font-semibold mb-4">Progreso Diario</h2>
 
-  <div className="mt-4 text-center">
-    <p className="text-md font-medium text-gray-700">
-      Tiempo total dedicado:{" "}
-      <span className="font-bold text-blue-600">
-        {stats.reduce((acc, s) => acc + s.time_spent_minutes, 0)} minutos
-      </span>
-    </p>
-  </div>
-</div>
+    {/* Contenedor que crece en pantallas pequeñas */}
+    <div className="w-full min-w-[400px] sm:min-w-full">
+      <Line data={chartData} options={options} />
+    </div>
 
+    <div className="mt-4 text-center">
+      <p className="text-md font-medium text-gray-700">
+        Tiempo total dedicado:{" "}
+        <span className="font-bold text-blue-600">
+          {stats.reduce((acc, s) => acc + s.time_spent_minutes, 0)} minutos
+        </span>
+      </p>
+    </div>
+  </div>
 );
+
 
 };
