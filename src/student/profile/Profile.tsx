@@ -7,6 +7,7 @@ import {DashboardDiary } from "../../shared/components/dashboard/DashboardDiary"
 import { Bolt,Heart } from "lucide-react";
 import { LogoutButton } from "../../shared/components/LogoutButton";
 import { LevelProgress } from "../../shared/components/LevelProgress";
+import { ChangeProfileImageModal } from "./ChangeProfileImageModal";
 
 export const Profile = () => {
   
@@ -33,12 +34,17 @@ export const Profile = () => {
         {/* Lado izquierdo - avatar y nombre */}
         <div className="bg-purple-600 p-8 flex flex-col items-center justify-center text-white">
           <img
-            src="/images/iconomorado.jpg"
+            // src="/images/iconomorado.jpg"
+            src={usuario.profile_image}
             alt="Perfil"
             className="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover mb-4"
           />
           <h2 className="text-xl font-bold">{usuario.name}</h2>
-          <p className="text-sm text-purple-200">Miembro desde octubre de 2018</p>
+          <p className="text-sm text-purple-200">Miembro desde el 2025</p>  
+          {/* Botón para cambiar la imagen */}
+        <div className="mt-4 mb-2">
+          <ChangeProfileImageModal />
+        </div>
           <LogoutButton  />
         </div>
 
