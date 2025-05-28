@@ -92,29 +92,31 @@ export const DiaryStatsChart = () => {
   };
 
 const options: ChartOptions<"line"> = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top"
-      },
-      title: {
-        display: true,
-        text: "Progreso Diario del Usuario"
-      }
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: "top"
     },
-    scales: {
-      y: {
-        beginAtZero: true
-      }
+    title: {
+      display: true,
+      text: "Progreso Diario del Usuario"
     }
-  };
+  },
+  scales: {
+    y: {
+      beginAtZero: true
+    }
+  }
+};
+
 
 return (
 <div className="p-4 sm:p-6 bg-white rounded-xl shadow-xl w-full overflow-x-auto">
     <h2 className="text-lg font-semibold mb-4">Progreso Diario</h2>
 
     {/* Contenedor que crece en pantallas pequeñas */}
-    <div className="w-full min-w-[400px] sm:min-w-full">
+<div className="relative w-full h-[300px] sm:h-[400px]">
       <Line data={chartData} options={options} />
     </div>
 
