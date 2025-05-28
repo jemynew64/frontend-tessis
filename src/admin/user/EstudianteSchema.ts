@@ -28,7 +28,10 @@ export const studentSchema = z.object({
 
   user_type: z.enum(["student", "admin"], {
     message: "El tipo de usuario debe ser 'student' o 'admin'."
-  })
+  }),
+  // Campo opcional de imagen (URL)
+  profile_image: z.string()
+    .optional()
 });
 
 export type StudentForm = z.infer<typeof studentSchema>;

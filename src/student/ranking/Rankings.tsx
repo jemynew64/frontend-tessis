@@ -44,7 +44,7 @@ export const Rankings = () => {
               <span className="text-lg font-semibold">{index + 1}</span>
               <span className="text-lg font-semibold">{usuario.name}</span>
               <img
-                src="/images/iconomorado.jpg"
+                src={usuario.profile_image}
                 alt="Avatar"
                 className="w-12 h-12 rounded-full border-2 border-gray-300"
               />

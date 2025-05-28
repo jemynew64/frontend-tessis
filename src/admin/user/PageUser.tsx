@@ -38,69 +38,84 @@ export const PageUser = () => {
     }
   };
 
-  const columns: ColumnDef<StudentForm, unknown>[] = [
-    {
-      header: "Nombre",
-      accessorKey: "name",
-      enableColumnFilter: true,
+const columns: ColumnDef<StudentForm, unknown>[] = [
+  {
+    header: "Imagen de Perfil",
+    accessorKey: "profile_image",
+    cell: ({ getValue }) => {
+      const url = getValue() as string;
+      return (
+        <img
+          src={url ?? "/default_user.png"}
+          alt="Profile"
+          className="h-10 w-10 rounded-full object-cover border"
+        />
+      );
     },
-    {
-      header: "Correo",
-      accessorKey: "email",
-      enableColumnFilter: true,
+  },
+  {
+    header: "Nombre",
+    accessorKey: "name",
+    enableColumnFilter: true,
+  },
+  {
+    header: "Correo",
+    accessorKey: "email",
+    enableColumnFilter: true,
+  },
+  {
+    header: "❤️ Corazones",
+    accessorKey: "hearts",
+  },
+  {
+    header: "⭐ Puntos",
+    accessorKey: "points",
+  },
+  {
+    header: "🎯 Experiencia",
+    accessorKey: "experience",
+  },
+  {
+    header: "Tipo",
+    accessorKey: "user_type",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => (
+      <span className="capitalize">{getValue() as string}</span>
+    ),
+  },
+  {
+    header: "Acciones",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <div className="flex gap-2">
+          <button
+            onClick={() => navigate(`/stats/${user.id!}/${encodeURIComponent(user.name!)}`)}
+            className="p-2 bg-lime-600 text-white rounded hover:bg-green-800 transition"
+            title="Ver estadisticas"
+          >
+            <img src="statsusuario.svg" alt="" className="h-4 w-4 filter invert" />
+          </button>
+          <button
+            onClick={() => handleUpdate(user.id!)}
+            className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            title="Actualizar usuario"
+          >
+            <Pencil size={16} />
+          </button>
+          <button
+            onClick={() => handleDelete(user.id!)}
+            className="p-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            title="Eliminar usuario"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      );
     },
-    {
-      header: "❤️ Corazones",
-      accessorKey: "hearts",
-    },
-    {
-      header: "⭐ Puntos",
-      accessorKey: "points",
-    },
-    {
-      header: "🎯 Experiencia",
-      accessorKey: "experience",
-    },
-    {
-      header: "Tipo",
-      accessorKey: "user_type",
-      enableColumnFilter: true,
-      cell: ({ getValue }) => (
-        <span className="capitalize">{getValue() as string}</span>
-      ),
-    },
-    {
-      header: "Acciones",
-      cell: ({ row }) => {
-        const user = row.original;
-        return (
-          <div className="flex gap-2">
-            <button
-              onClick={() => navigate(`/stats/${user.id!}/${encodeURIComponent(user.name!)}`)}
-              className="p-2 bg-lime-600 text-white rounded hover:bg-green-800 transition"
-              title="Ver estadisticas"
-            >
-              <img src="statsusuario.svg" alt="" className="h-4 w-4 filter invert " />
-            </button>
-            <button
-              onClick={() => handleUpdate(user.id!)}
-              className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-              title="Actualizar usuario"
-            >
-              <Pencil size={16} />
-            </button>
-            <button
-              onClick={() => handleDelete(user.id!)}
-              className="p-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-              title="Eliminar usuario"
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
+  },
+];
+
 
   return (
     <div className="p-6">

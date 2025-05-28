@@ -1,0 +1,38 @@
+[
+  {
+    "value": "/images/iconomorado.jpg",
+    "label": "Imagen por defecto"
+  },
+  {
+    "value": "/images/niño1.jpeg",
+    "label": "Avatar 1"
+  },
+  {
+    "value": "/images/niño2.jpeg",
+    "label": "Avatar 2"
+  },
+  {
+    "value": "/images/niño3.jpeg",
+    "label": "Avatar 3"
+  },
+  {
+    "value": "/images/niño4.jpeg",
+    "label": "Avatar 4"
+  },
+  {
+    "value": "/images/niño5.jpeg",
+    "label": "Avatar 5"
+  },
+  {
+    "value": "/images/niño6.jpeg",
+    "label": "Avatar 6"
+  },
+  {
+    "value": "/images/niño7.jpeg",
+    "label": "Avatar 7"
+  },
+  {
+    "value": "/images/niño8.jpeg",
+    "label": "Avatar 8"
+  }
+]
