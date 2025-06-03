@@ -16,6 +16,12 @@ import {
 } from "./quizzMutations";
 import MostrarCorazones from "../../shared/components/ui/MostrarCorazones";
 
+interface Option {
+  id: number;
+  text: string;
+  is_correct: boolean;
+}
+
 const completeSound = new Audio("/audio/sonido_completar_quizz.wav");
 
 type SafeRedirectState = {
@@ -55,6 +61,7 @@ export const Quizz = () => {
 
   const [cola, setCola] = useState<QuizzType[]>([]);
   const [preguntaActual, setPreguntaActual] = useState<QuizzType | null>(null);
+  const [opcionesActuales, setOpcionesActuales] = useState<Option[]>([]);
   const [finalizado, setFinalizado] = useState(false);
   const [resultado, setResultado] = useState<{ points: number; experience: number } | null>(null);
   const [correctas, setCorrectas] = useState(0);
@@ -69,6 +76,11 @@ export const Quizz = () => {
     if (quizz?.length) {
       setCola([...quizz]);
       setPreguntaActual(quizz[0]);
+
+      // Mezcla las opciones SOLO UNA VEZ para la primera pregunta
+      const opcionesMezcladas = [...quizz[0].challenge_option].sort(() => Math.random() - 0.5);
+      setOpcionesActuales(opcionesMezcladas);
+
       setFinalizado(false);
     }
     return () => reset();
@@ -89,10 +101,9 @@ export const Quizz = () => {
 
         quitarVidaMutation.mutate(undefined, {
           onSuccess: () => {
-            refetchUser(); // 🔁 Actualiza corazones inmediatamente
+            refetchUser();
           },
         });
-
       } else {
         setIntentosRestantes((prev) => {
           const nuevo = prev - 1;
@@ -107,7 +118,9 @@ export const Quizz = () => {
     if (!isCorrect) siguienteCola.push(preguntaActual);
 
     setTimeout(() => {
-      if (!gameOver && siguienteCola.length === 0 && user?.id) {
+      const siguientePregunta = siguienteCola[0];
+
+      if (!gameOver && !siguientePregunta && user?.id) {
         setPreguntaActual(null);
         setFinalizado(true);
         markForRedirect();
@@ -123,8 +136,15 @@ export const Quizz = () => {
           }
         );
       } else {
-        setPreguntaActual(siguienteCola[0]);
+        setPreguntaActual(siguientePregunta);
+
+        // Mezcla las opciones SOLO UNA VEZ para la nueva pregunta
+        if (siguientePregunta) {
+          const opcionesMezcladas = [...siguientePregunta.challenge_option].sort(() => Math.random() - 0.5);
+          setOpcionesActuales(opcionesMezcladas);
+        }
       }
+
       setCola(siguienteCola);
     }, 900);
   };
@@ -169,10 +189,6 @@ export const Quizz = () => {
   if (isUserLoading || isLoading) return <p className="text-center">Cargando...</p>;
   if (error || !data || !user) return <p className="text-center text-red-500">Error al cargar el quizz</p>;
 
-  const opcionesMezcladas = preguntaActual
-    ? [...preguntaActual.challenge_option].sort(() => Math.random() - 0.5)
-    : [];
-
   if (finalizado && resultado) {
     return <Win points={resultado.points} experience={resultado.experience} onReturn={() => navigate(-1)} />;
   }
@@ -204,7 +220,7 @@ export const Quizz = () => {
         <QuizzCard
           question={preguntaActual.question}
           image_src={preguntaActual.image_src}
-          options={opcionesMezcladas}
+          options={opcionesActuales} // ✅ OPCIONES YA MEZCLADAS
           onAnswer={handleAnswer}
         />
       )}

@@ -58,11 +58,10 @@ return (
           >
             {/* ÍCONO */}
             <img
-              src="cofre-del-tesoro.svg"
+              src="/cofre-del-tesoro.svg"
               alt="Misión"
-              className="w-7 h-7 mt-1"
+              className="w-9 h-9 mt-1"
             />
-
             {/* CONTENIDO */}
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-center">
