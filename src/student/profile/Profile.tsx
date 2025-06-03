@@ -8,7 +8,8 @@ import { Bolt, Heart } from "lucide-react";
 import { LogoutButton } from "../../shared/components/LogoutButton";
 import { LevelProgress } from "../../shared/components/LevelProgress";
 import { ChangeProfileImageModal } from "./ChangeProfileImageModal";
-
+import { Generarpdf} from "./profile.service"
+import dayjs from "dayjs";
 export const Profile = () => {
   const { user } = useAuthStore((state) => state);
   const { data: usuario } = useQuery({
@@ -38,6 +39,16 @@ export const Profile = () => {
     <p className="text-xs sm:text-sm text-purple-200">Miembro desde el 2025</p>
     <div className="mt-3 sm:mt-4 mb-2">
       <ChangeProfileImageModal />
+            <button
+            onClick={() => {
+              const to = dayjs().format("YYYY-MM-DD");
+              const from = dayjs().subtract(7, "days").format("YYYY-MM-DD");
+              Generarpdf(from, to);
+            }}
+        className=" mt-2 px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition"
+      >
+        Generar un pdf detallado
+      </button>
     </div>
     <LogoutButton />
   </div>
