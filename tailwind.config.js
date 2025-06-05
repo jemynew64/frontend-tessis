@@ -6,7 +6,7 @@ module.exports = {
       backgroundImage: {
         "login-pattern": "url('/images/background-login.png')",
 
-        "background-pattern": "url('/images/background-login.png')",
+        "background-pattern": "url('/images/Backgroundcard.png')",
       },
       colors: {
         "custom-purple": "#533CA6", // Agrega tu color personalizado aquí

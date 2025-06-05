@@ -57,7 +57,7 @@ export const UserProgress = () => {
   }, [user?.id, data]);
 
   return (
-    <div className="bg-white p-2 rounded-lg shadow-md fixed top-0 left-0 right-0 w-full lg:static lg:w-auto lg:p-4 lg:rounded-lg lg:shadow-md z-50 flex justify-center lg:flex-col items-center lg:items-start space-x-4 lg:space-x-0">
+    <div className="bg-white p-2 rounded-lg shadow-md fixed top-0 left-0 right-0 w-full lg:static lg:w-auto lg:p-4 lg:rounded-lg lg:shadow-md z-40 flex justify-center lg:flex-col items-center lg:items-start space-x-4 lg:space-x-0">
 
       {/* Puntos */}
       <div className="flex items-center space-x-1">

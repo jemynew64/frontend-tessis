@@ -72,7 +72,7 @@ const Sidebar = () => {
 
       {/* Modal de confirmación para cerrar sesión */}
       {showLogoutModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
             <h2 className="text-lg font-bold text-gray-800 mb-4">¿Cerrar sesión?</h2>
             <p className="text-sm text-gray-600 mb-6">¿Estás seguro que deseas cerrar sesión? Se perderá cualquier progreso no guardado.</p>
