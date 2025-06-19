@@ -6,6 +6,7 @@ export interface CursotodoSchema {
 export interface Unit {
   title:       string;
   description: string;
+  color?:       string;
   lesson:      Lesson[];
 }
 

@@ -1,38 +1,50 @@
+// LessonModule.tsx
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { HTMLAttributes } from "react";
-// import { BookText } from "lucide-react"; // Icono estilo guía
+import { ColorName, colorMap } from "../../shared/utils/color";
 
 interface LessonModuleProps extends HTMLAttributes<HTMLDivElement> {
   stage?: string;
   title: string;
-  description?: string; // ✅ nuevo prop opcional
+  description?: string;
+  color?: ColorName;
 }
 
-export const LessonModule = ({className,stage = "ETAPA 1",title,description,...props}: LessonModuleProps) => {
-  const baseClasses = twMerge(
-    clsx(
-      "bg-lime-500 rounded-xl px-4 py-3 w-full flex justify-between items-center shadow-md",
-      className
-    )
-  );
+export const LessonModule = ({
+  className,
+  stage = "ETAPA 1",
+  title,
+  description,
+  color = "green",
+  ...props
+}: LessonModuleProps) => {
+  const c = colorMap[color];
 
   return (
-    <div className={baseClasses} {...props}>
-      {/* Texto a la izquierda */}
+    <div
+      className={twMerge(
+        clsx(
+          "rounded-xl px-4 py-3 w-full flex justify-between items-center shadow-md",
+          c.bg,
+          className
+        )
+      )}
+      {...props}
+    >
       <div>
-        <p className="text-xs text-lime-100 uppercase font-semibold">{stage}</p>
-        <p className="text-white text-lg font-bold">{title}</p>
+        <p className={clsx("text-xs uppercase font-semibold", c.contrastText)}>
+          {stage}
+        </p>
+        <p className={clsx("text-lg font-bold", c.contrastText)}>
+          {title}
+        </p>
         {description && (
-          <p className="text-sm text-lime-100 font-medium">{description}</p>
+          <p className={clsx("text-sm font-medium", c.contrastText)}>
+            {description}
+          </p>
         )}
       </div>
-
-      {/* Botón guía
-      <button className="bg-lime-600 hover:bg-lime-700 transition-colors text-white text-sm font-bold rounded-lg px-3 py-1 flex items-center gap-1 border border-lime-700">
-        <BookText size={16} />
-        GUÍA
-      </button> */}
     </div>
   );
 };

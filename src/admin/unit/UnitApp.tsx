@@ -62,6 +62,22 @@ const handleExcelUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     { header: "Descripción", accessorKey: "description" },
     { header: "Curso", accessorKey: "course.title" },
     { header: "Orden", accessorKey: "order_num" },
+ {
+      header: "Color",
+      cell: ({ row }) => {
+        const { color } = row.original;
+        return (
+          <span
+            className={`
+              inline-block px-2 py-0.5 text-xs font-semibold rounded-full
+              bg-${color}-500 text-white
+            `}
+          >
+            {color}
+          </span>
+        );
+      }
+    },
     {
       header: "Acciones",
       cell: ({ row }) => {

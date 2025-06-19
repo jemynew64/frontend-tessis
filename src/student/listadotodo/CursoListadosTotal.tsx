@@ -8,7 +8,7 @@ import { LearningUnitProgress } from "./LearningUnitProgress";
 import { LessonModule } from "./LessonModule";
 import { ButtonDuo } from "./ButtonDuo";
 import { iniciarLeccion } from "./cursotodo.service";
-
+import type { ColorName } from "../../shared/utils/color";
 const UNITS_PER_PAGE = 5;
 
 export const CursoListadosTotal = () => {
@@ -80,14 +80,15 @@ export const CursoListadosTotal = () => {
 
         {unidadesPaginadas.map((unidad, unidadIndex) => {
           const realIndex = inicio + unidadIndex;
-
+          const colorProp = (unidad.color ?? "green") as ColorName;
           return (
             <div key={realIndex}>
               <LessonModule
                 title={unidad.title}
                 description={unidad.description}
                 stage={`Unidad ${realIndex + 1}`}
-                className="bg-lime-700 mb-4"
+                className=" mb-4"
+                color={colorProp} 
               />
 
               {unidad.lesson.map((leccion, idx) => {
@@ -103,6 +104,7 @@ export const CursoListadosTotal = () => {
                   >
                     <div className={`relative ${esPar ? 'translate-x-[-25px]' : 'translate-x-[40px]'}`}>
                       <ButtonDuo
+                        color={colorProp} 
                         estaCompletada={estaCompletada}
                         estaBloqueada={estaBloqueada}
                         tooltip={leccion.title}
