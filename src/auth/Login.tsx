@@ -47,21 +47,24 @@ export const Login = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center w-full overflow-hidden px-4 ">
+    <div className="relative min-h-screen flex items-center justify-center w-full overflow-hidden px-4">
       {/* 🎬 Video de fondo */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
+        className="absolute top-0 left-0 w-full h-full object-cover z-[-2]"
       >
         <source src="/videos/videofondo.mp4" type="video/mp4" />
         Tu navegador no soporta videos HTML5.
       </video>
 
+      {/* Capa de desenfoque */}
+      <div className="absolute top-0 left-0 w-full h-full bg-black/30 backdrop-blur-md z-[-1]" />
+
       {/* Contenido del login */}
-      <div className="rounded-lg px-6 py-6 sm:px-12 sm:py-8 w-full max-w-sm sm:max-w-md bg-login-pattern  bg-no-repeat bg-cover transition-transform duration-300 ease-in-out hover:scale-[1.01] shadow-xl">
+      <div className="rounded-lg px-6 py-6 sm:px-12 sm:py-8 w-full max-w-sm sm:max-w-md bg-login-pattern backdrop-blur-lg transition-transform duration-300 ease-in-out hover:scale-[1.01] shadow-xl">
         <div className="flex justify-center mb-4">
           <Image
             src="/images/iconodemarca-sinfondo.png"
@@ -86,7 +89,7 @@ export const Login = () => {
               placeholder="Ingresa tu correo"
               className={`shadow-sm rounded-md w-full px-3 py-2 border ${
                 errors.email ? "border-red-500" : "border-gray-300"
-              } focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-custom-botones-input text-black text-left`}
+              } focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white bg-opacity-80 text-black`}
               {...register("email")}
             />
             {errors.email && (
@@ -104,7 +107,7 @@ export const Login = () => {
               placeholder="Ingresa tu contraseña"
               className={`shadow-sm rounded-md w-full px-3 py-2 pr-10 border ${
                 errors.password ? "border-red-500" : "border-gray-300"
-              } focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-custom-botones-input text-black text-left`}
+              } focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white bg-opacity-80 text-black`}
               {...register("password")}
             />
             <button

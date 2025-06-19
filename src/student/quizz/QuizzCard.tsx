@@ -9,8 +9,8 @@ import { QuizOptionButton } from "./QuizOptionButton"; // Ajusta el path si es n
 // 🎵 Sonidos Cloudinary
 // const correctSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948236/opcion_correcta_vzfox9.wav");
 // const incorrectSound = new Audio("https://res.cloudinary.com/dkbydlqen/video/upload/v1745948242/opcion_incorrecta_qgpuct.wav");
-const correctSound = new Audio("/audio/opcion_correcta.wav");
-const incorrectSound = new Audio("/audio/opcion_incorrecta.wav");
+const correctSound = new Audio("/audio/correcto.mp3");
+const incorrectSound = new Audio("/audio/incorrecto.mp3");
 
 interface Option {
   id: number;

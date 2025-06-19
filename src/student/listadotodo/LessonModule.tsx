@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { HTMLAttributes } from "react";
-import { BookText } from "lucide-react"; // Icono estilo guía
+// import { BookText } from "lucide-react"; // Icono estilo guía
 
 interface LessonModuleProps extends HTMLAttributes<HTMLDivElement> {
   stage?: string;
@@ -28,11 +28,11 @@ export const LessonModule = ({className,stage = "ETAPA 1",title,description,...p
         )}
       </div>
 
-      {/* Botón guía */}
+      {/* Botón guía
       <button className="bg-lime-600 hover:bg-lime-700 transition-colors text-white text-sm font-bold rounded-lg px-3 py-1 flex items-center gap-1 border border-lime-700">
         <BookText size={16} />
         GUÍA
-      </button>
+      </button> */}
     </div>
   );
 };
