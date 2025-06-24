@@ -45,20 +45,10 @@ export const Login = () => {
       toast.error(response.mensaje || "Hubo un error inesperado");
     }
   };
+  
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center w-full overflow-hidden px-4">
-      {/* 🎬 Video de fondo */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-[-2]"
-      >
-        <source src="/videos/videofondo.mp4" type="video/mp4" />
-        Tu navegador no soporta videos HTML5.
-      </video>
+<div className="relative w-screen h-screen flex items-center justify-center bg-login-pattern bg-cover bg-center backdrop-blur-lg">
 
       {/* Capa de desenfoque */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/30 backdrop-blur-md z-[-1]" />
@@ -67,7 +57,7 @@ export const Login = () => {
       <div className="rounded-lg px-6 py-6 sm:px-12 sm:py-8 w-full max-w-sm sm:max-w-md bg-login-pattern backdrop-blur-lg transition-transform duration-300 ease-in-out hover:scale-[1.01] shadow-xl">
         <div className="flex justify-center mb-4">
           <Image
-            src="/images/iconodemarca-sinfondo.png"
+            src="/images/iconodemarca-sinfondo.webp"
             alt="Logo de la marca"
             width="w-48 sm:w-64"
             height="h-48 sm:h-64"
