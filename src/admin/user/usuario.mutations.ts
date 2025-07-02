@@ -3,6 +3,7 @@ import {
   crearUsuario,
   actualizarUsuario,
   eliminarUsuario,
+  uploadUsersExcel,
 } from "./usuario.service";
 import { StudentForm } from "./EstudianteSchema";
 import { showSuccessToast, showErrorToast } from "../../shared/utils/mutationToastHandler";
@@ -46,6 +47,20 @@ export const useEliminarUsuario = () => {
     },
     onError: (error: unknown) => {
       showErrorToast("Error al eliminar usuario", error, "⚠️");
+    },
+  });
+};
+/////////accion para el excel
+export const useUploadUsersExcel = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: uploadUsersExcel,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      showSuccessToast("Archivo subido correctamente creando usuarios", "📥");
+    },
+    onError: (error: unknown) => {
+      showErrorToast("Error al subir archivo", error, "❌");
     },
   });
 };

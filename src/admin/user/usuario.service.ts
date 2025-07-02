@@ -39,3 +39,12 @@ export const getHeartsRecoveryStatus = async (): Promise<{ heartsPending: number
   const response = await axiosAuth.get(`${BaseURL}usuarios/hearts-pending`);
   return response.data;
 };
+
+export const uploadUsersExcel = async (formData: FormData): Promise<{ message: string }> => {
+  const res = await axiosAuth.post(`${BaseURL}excel/usuarios-masivos`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+};

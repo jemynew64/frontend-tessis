@@ -5,7 +5,7 @@ import { StudentForm } from "./EstudianteSchema";
 import { UserModal } from "./UserModal";
 import { DeleteModal } from "../../shared/components/modals/delete-modal";
 import { useExitModal } from "../../shared/store/use-exit-modal";
-import { useEliminarUsuario } from "./usuario.mutations";
+import { useEliminarUsuario,useUploadUsersExcel } from "./usuario.mutations";
 import { Table } from "../../shared/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
@@ -15,6 +15,7 @@ export const PageUser = () => {
   const { open } = useExitModal();
   const { data, isLoading, error } = useQuery(useUserQueryOptions());
   const eliminarUsuario = useEliminarUsuario();
+  const uploadUsersExcel = useUploadUsersExcel();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState<number | null>(null);
@@ -121,13 +122,42 @@ const columns: ColumnDef<StudentForm, unknown>[] = [
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">Lista de Usuarios</h1>
 
-      <button
-        onClick={() => setIsModalOpen(true)}
-        type="button"
-        className="mb-6 bg-purple-600 text-white px-5 py-2.5 rounded-lg shadow hover:bg-purple-700"
-      >
-        Crear Usuario
-      </button>
+<div className="flex gap-4 mb-6">
+  <button
+    onClick={() => setIsModalOpen(true)}
+    type="button"
+    className="bg-purple-600 text-white px-5 py-2.5 rounded-lg shadow hover:bg-purple-700"
+  >
+    Crear Usuario
+  </button>
+
+<input
+  id="uploadExcelInput"
+  type="file"
+  accept=".xlsx"
+  className="hidden"
+  onChange={(e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file); // "file" debe coincidir con el nombre esperado en el backend
+
+      uploadUsersExcel.mutate(formData);
+      e.target.value = ""; // Reset input para permitir reselección
+    }
+  }}
+/>
+
+
+  <button
+    type="button"
+    onClick={() => document.getElementById("uploadExcelInput")?.click()}
+    className="bg-green-600 text-white px-5 py-2.5 rounded-lg shadow hover:bg-green-700"
+  >
+    Crear Usuarios por Excel
+  </button>
+</div>
+
 
       {isLoading && <p className="text-gray-500">Cargando usuarios...</p>}
       {error && <p className="text-red-500">Error al cargar usuarios</p>}
