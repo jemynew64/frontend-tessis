@@ -31,6 +31,7 @@ export const useEnviarEstadisticasMutation = () => {
       await VerificarLogros();                // 3. Verifica logros (nuevo)
       // Invalidamos el caché de las misiones actualizadas
       queryClient.invalidateQueries({ queryKey: ["missionsToday"] });
+      queryClient.invalidateQueries({ queryKey: ["userStatsdiary"] });
       queryClient.invalidateQueries({ queryKey: ["achievement"] }); // opcional: refrescar logros
     },
   });

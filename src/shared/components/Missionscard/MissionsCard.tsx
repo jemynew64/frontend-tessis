@@ -13,6 +13,8 @@ export const MissionsCard = () => {
   const { data: stats } = useQuery({
     queryKey: ["userStatsdiary"],
     queryFn: () => obtenerEstadisticasUsuario(),
+    staleTime: 1000 * 60 * 5, // cache por 5 minutos
+
   });
 
   // Verificamos si las estadísticas existen
